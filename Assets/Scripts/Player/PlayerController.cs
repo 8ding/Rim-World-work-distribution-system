@@ -50,22 +50,22 @@ public class PlayerController : MonoBehaviour
         //有移动才会对人物的朝向产生变化
         if(Mathf.Abs(_rigidbody2D.velocity.x) > 0.1f || Mathf.Abs(_rigidbody2D.velocity.y) > 0.1f)
         {
-            if(_rigidbody2D.velocity.x < 0.1f)
+            if(_rigidbody2D.velocity.x < -0.1f)
             {
-                transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-                faceDirection = 0f;
+                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+                faceDirection = 0.5f;
             
             }
             else if(_rigidbody2D.velocity.x > 0.1f)
             {
-                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-                faceDirection = 0f;
+                transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+                faceDirection = 0.5f;
             }
             else if(_rigidbody2D.velocity.y > 0.1f)
                 faceDirection = 1f;
             else if(_rigidbody2D.velocity.y < -0.1f)
             {
-                faceDirection = 0.5f;
+                faceDirection = 0f;
             }
             animator.SetFloat("FaceDirection",faceDirection);
             animator.SetBool("IsMove",true);
