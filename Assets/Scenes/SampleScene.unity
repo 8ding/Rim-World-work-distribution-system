@@ -1447,6 +1447,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1519,6 +1520,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd48722f6f1e4881afaf0009f670d2b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1018560371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,6 +1576,7 @@ GameObject:
   - component: {fileID: 1191039857}
   - component: {fileID: 1191039859}
   - component: {fileID: 1191039858}
+  - component: {fileID: 1191039860}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -1700,7 +1714,11 @@ MonoBehaviour:
     chasePoints:
     - {fileID: 1580716549}
     - {fileID: 814535493}
+    patrolPositon: -1
     animator: {fileID: 0}
+    FaceDirection: 0
+    seeker: {fileID: 0}
+    Target: {x: 0, y: 0, z: 0}
 --- !u!58 &1191039859
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1717,6 +1735,34 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.6887015}
   serializedVersion: 2
   m_Radius: 0.54755986
+--- !u!114 &1191039860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191039853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 3
+    exactEndPoint: 3
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
 --- !u!1 &1503225948
 GameObject:
   m_ObjectHideFlags: 0
