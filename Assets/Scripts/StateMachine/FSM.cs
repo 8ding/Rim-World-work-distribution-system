@@ -64,6 +64,8 @@ namespace StateMachine
 
             inputTest = Camera.main.GetComponent<InputCheck.InputCheck>();
             inputTest.OnMouseClick += handleMouseClick;
+            transform.position = new Vector3(Mathf.Floor(transform.position.x) + 0.5f,
+                Mathf.Floor(transform.position.y) + 0.01f, 0f);
             Transition(StateType.Idle);
         }
 

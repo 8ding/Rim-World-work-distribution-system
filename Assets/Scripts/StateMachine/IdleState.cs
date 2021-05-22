@@ -57,12 +57,10 @@ public class MoveState : IState
     private Path path;
     public float NextWayPointDistance = 0.1f;
     private int currentPoint = 0;
-
+    private Vector3 lastPoint;
     private bool reachedEndOfPath = false;
-    private Vector2 moveDirection;
     private Vector2 moveOffset;
     private Vector2 modifyDestination;
-    private bool ismodify = false;
     public MoveState(FSM _manager)
     {
         this.manager = _manager;
@@ -130,23 +128,33 @@ public class MoveState : IState
     void switchAnim()
     {
         //移动时的播放动画选择与状态机枚举修改，角色的朝向需要传递给Idle状态
-        if(Mathf.Abs(moveDirection.x) < Mathf.Abs(moveDirection.y))
+        if (currentPoint < path.vectorPath.Count)
         {
-            if(moveDirection.y > 0f)
+            if (path.vectorPath[currentPoint].x - lastPoint.x > 0f)
             {
-                parameter.animator.Play("WalkUp");
-                parameter.FaceDirection = FaceDirectionType.Up;
+                parameter.animator.Play("WalkSide");
+                parameter.FaceDirection = FaceDirectionType.Side;
+                manager.transform.localScale = new Vector3(-1, 1, 1);
             }
-            else if(moveDirection.y < 0f)
+            else if (path.vectorPath[currentPoint].x - lastPoint.x < 0f)
             {
-                parameter.animator.Play("WalkDown");
-                parameter.FaceDirection = FaceDirectionType.Down;
+                parameter.animator.Play("WalkSide");
+                parameter.FaceDirection = FaceDirectionType.Side;
+                manager.transform.localScale = new Vector3(1, 1, 1);
             }
-        }
-        else
-        {
-            parameter.animator.Play("WalkSide");
-            parameter.FaceDirection = FaceDirectionType.Side;
+            else
+            {
+                if (path.vectorPath[currentPoint].y - lastPoint.y > 0f)
+                {
+                    parameter.animator.Play("WalkUp");
+                    parameter.FaceDirection = FaceDirectionType.Up;
+                }
+                else if(path.vectorPath[currentPoint].y - lastPoint.y < 0f)
+                {
+                    parameter.animator.Play("WalkDown");
+                    parameter.FaceDirection = FaceDirectionType.Down;
+                }
+            }
         }
     }
     bool checkTransition()
@@ -165,12 +173,6 @@ public class MoveState : IState
     }
     private void handleMove()
     {
-        moveDirection = (path.vectorPath[currentPoint] - manager.transform.position);
-        //转向
-        if(moveDirection.x > 0)
-            manager.transform.localScale = new Vector3(-1, 1, 1);
-        else if(moveDirection.x < 0)
-            manager.transform.localScale = new Vector3(1,1,1);
         //向路径点移动
         manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint],
             parameter.moveSpeed * Time.deltaTime);
@@ -179,6 +181,7 @@ public class MoveState : IState
         if(distance < NextWayPointDistance)
         {
             manager.transform.position = path.vectorPath[currentPoint];
+            lastPoint = manager.transform.position;
             currentPoint++;
         }
     }
@@ -191,6 +194,8 @@ public class MoveState : IState
             manager.Transition(StateType.Idle);
             return;
         }
+
+        lastPoint = manager.transform.position;
     }
     
     public void OnUpdate()
