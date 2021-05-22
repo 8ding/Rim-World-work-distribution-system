@@ -1,5 +1,6 @@
 
 
+using System.Collections.Generic;
 using StateMachine;
 using UnityEngine;
 using Pathfinding;
@@ -59,6 +60,9 @@ public class MoveState : IState
 
     private bool reachedEndOfPath = false;
     private Vector2 moveDirection;
+    private Vector2 moveOffset;
+    private Vector2 modifyDestination;
+    private bool ismodify = false;
     public MoveState(FSM _manager)
     {
         this.manager = _manager;
@@ -72,7 +76,66 @@ public class MoveState : IState
             path = _path;
             currentPoint = 0;
         }
+        //检测路径点有无能够卡住角色的地方,利用射线检测并挪动路径点
+        for (int i = 0; i < path.vectorPath.Count; i++)
+        {
+            Vector3 origin = path.vectorPath[i];
+            path.vectorPath[i] =  CheckPoint(path.vectorPath[i]);
+            Vector3 end = path.vectorPath[i];
+
+            Debug.DrawRay(origin, end - origin, Color.red, 1f);
+        }
     }
+
+    Vector3 CheckPoint(Vector3  point)
+    {
+        RaycastHit2D rayUp;
+        RaycastHit2D rayDown;
+        if (rayUp = Physics2D.Raycast(point, Vector2.up, int.MaxValue,parameter.obstacle))
+        {
+            
+            if (rayUp.distance < parameter.Coll.bounds.size.y)
+            {
+                Debug.DrawRay(point, Vector3.up * rayUp.distance, Color.blue, 1f);
+                point.y += (rayUp.distance - parameter.Coll.bounds.size.y - 0.1f);
+            }
+
+            // // if (Physics2D.Raycast(point, Vector2.down, parameter.Coll.bounds.extents.y, parameter.obstacle) )
+            // // {
+            // //     Debug.DrawRay(point, Vector3.down * parameter.Coll.bounds.extents.y, Color.blue, 1f);
+            // //     point.y -= (parameter.Coll.bounds.extents.y - 0.2f);
+            // // }
+            // else
+            // {
+            //     point.y -= parameter.Coll.bounds.extents.y ;
+            // }
+        }
+        
+        // if (Physics2D.Raycast(point, Vector2.left, parameter.Coll.bounds.extents.x,
+        //     parameter.obstacle))
+        // {
+        //     point.x += parameter.Coll.bounds.extents.x + 0.1f;
+        // }
+        
+        // if (Physics2D.Raycast(point, Vector2.right, parameter.Coll.bounds.extents.x,
+        //     parameter.obstacle))
+        // {
+        //     point.x -= parameter.Coll.bounds.extents.x + 0.1f;
+        // }
+        
+        // if (Physics2D.Raycast(point, Vector2.left + Vector2.up, parameter.Coll.bounds.extents.magnitude,
+        //     parameter.obstacle))
+        // {
+        //     point += new Vector3(parameter.Coll.bounds.extents.x, -1 * parameter.Coll.bounds.extents.y, 0f);
+        // }
+        // if (Physics2D.Raycast(point, Vector2.right + Vector2.up, parameter.Coll.bounds.extents.magnitude,
+        //     parameter.obstacle))
+        // {
+        //     point += new Vector3(-1 * parameter.Coll.bounds.extents.x, -1 * parameter.Coll.bounds.extents.y, 0f);
+        // }
+        return point;
+    }
+
 
     void switchAnim()
     {
@@ -98,11 +161,6 @@ public class MoveState : IState
     }
     bool checkTransition()
     {
-        if(path == null)
-        {
-            manager.Transition(StateType.Idle);
-            return true;
-        }
         if(currentPoint >= path.vectorPath.Count)
         {
             reachedEndOfPath = true;
@@ -123,9 +181,15 @@ public class MoveState : IState
             manager.transform.localScale = new Vector3(-1, 1, 1);
         else if(moveDirection.x < 0)
             manager.transform.localScale = new Vector3(1,1,1);
-        //向路径点移动
-        manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint], parameter.moveSpeed * Time.deltaTime);
-
+        //向调整点移动
+        if (ismodify)
+        {
+        }
+        else
+        {
+            //向路径点移动
+            manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint], parameter.moveSpeed * Time.deltaTime);
+        }
         float distance = Vector2.Distance(manager.transform.position, path.vectorPath[currentPoint]);
         //路径点索引增加，向下一个路径点移动
         if(distance < NextWayPointDistance)
@@ -135,13 +199,20 @@ public class MoveState : IState
     }
     public void OnEnter()
     {
+        parameter.Target = CheckPoint(parameter.Target);
         parameter.seeker.StartPath(manager.transform.position, parameter.Target, OnPathComplete);
+        if(path == null)
+        {
+            manager.Transition(StateType.Idle);
+            return;
+        }
     }
     
     public void OnUpdate()
     {
         if(checkTransition())
             return;
+        //checkRay();
         handleMove();
         switchAnim();
     }

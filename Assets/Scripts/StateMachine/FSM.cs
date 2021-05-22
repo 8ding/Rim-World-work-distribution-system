@@ -32,10 +32,11 @@ namespace StateMachine
         public Transform[] chasePoints;
         public int patrolPositon = -1;
         public Animator animator;
-
+        public Collider2D Coll;
         public FaceDirectionType FaceDirection = FaceDirectionType.Side;
         public Seeker seeker;
         public Vector3 Target;
+        public LayerMask obstacle;
     }
     public class FSM : MonoBehaviour
     {
@@ -58,7 +59,9 @@ namespace StateMachine
             
             parameter.animator = GetComponent<Animator>();
             parameter.seeker = GetComponent<Seeker>();
+            parameter.Coll = GetComponent<Collider2D>();
             
+
             inputTest = Camera.main.GetComponent<InputCheck.InputCheck>();
             inputTest.OnMouseClick += handleMouseClick;
             Transition(StateType.Idle);
