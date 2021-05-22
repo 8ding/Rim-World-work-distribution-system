@@ -82,7 +82,6 @@ public class MoveState : IState
             Vector3 origin = path.vectorPath[i];
             path.vectorPath[i] =  CheckPoint(path.vectorPath[i]);
             Vector3 end = path.vectorPath[i];
-
             Debug.DrawRay(origin, end - origin, Color.red, 1f);
         }
     }
@@ -90,7 +89,6 @@ public class MoveState : IState
     Vector3 CheckPoint(Vector3  point)
     {
         RaycastHit2D rayUp;
-        RaycastHit2D rayDown;
         if (rayUp = Physics2D.Raycast(point, Vector2.up, int.MaxValue,parameter.obstacle))
         {
             
@@ -99,16 +97,6 @@ public class MoveState : IState
                 Debug.DrawRay(point, Vector3.up * rayUp.distance, Color.blue, 1f);
                 point.y += (rayUp.distance - parameter.Coll.bounds.size.y - 0.1f);
             }
-
-            // // if (Physics2D.Raycast(point, Vector2.down, parameter.Coll.bounds.extents.y, parameter.obstacle) )
-            // // {
-            // //     Debug.DrawRay(point, Vector3.down * parameter.Coll.bounds.extents.y, Color.blue, 1f);
-            // //     point.y -= (parameter.Coll.bounds.extents.y - 0.2f);
-            // // }
-            // else
-            // {
-            //     point.y -= parameter.Coll.bounds.extents.y ;
-            // }
         }
         
         // if (Physics2D.Raycast(point, Vector2.left, parameter.Coll.bounds.extents.x,
@@ -181,15 +169,9 @@ public class MoveState : IState
             manager.transform.localScale = new Vector3(-1, 1, 1);
         else if(moveDirection.x < 0)
             manager.transform.localScale = new Vector3(1,1,1);
-        //向调整点移动
-        if (ismodify)
-        {
-        }
-        else
-        {
-            //向路径点移动
-            manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint], parameter.moveSpeed * Time.deltaTime);
-        }
+        //向路径点移动
+        manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint],
+            parameter.moveSpeed * Time.deltaTime);
         float distance = Vector2.Distance(manager.transform.position, path.vectorPath[currentPoint]);
         //路径点索引增加，向下一个路径点移动
         if(distance < NextWayPointDistance)
@@ -212,7 +194,6 @@ public class MoveState : IState
     {
         if(checkTransition())
             return;
-        //checkRay();
         handleMove();
         switchAnim();
     }
