@@ -88,16 +88,18 @@ public class MoveState : IState
 
     Vector3 CheckPoint(Vector3  point)
     {
-        RaycastHit2D rayUp;
-        if (rayUp = Physics2D.Raycast(point, Vector2.up, int.MaxValue,parameter.obstacle))
-        {
-            
-            if (rayUp.distance < parameter.Coll.bounds.size.y)
-            {
-                Debug.DrawRay(point, Vector3.up * rayUp.distance, Color.blue, 1f);
-                point.y += (rayUp.distance - parameter.Coll.bounds.size.y - 0.1f);
-            }
-        }
+        point.x = Mathf.Floor(point.x) + 0.5f;
+        point.y = Mathf.Floor(point.y) + 0.01f;
+        // RaycastHit2D rayUp;
+        // if (rayUp = Physics2D.Raycast(point, Vector2.up, int.MaxValue,parameter.obstacle))
+        // {
+        //     
+        //     if (rayUp.distance < parameter.Coll.bounds.size.y)
+        //     {
+        //         Debug.DrawRay(point, Vector3.up * rayUp.distance, Color.blue, 1f);
+        //         point.y += (rayUp.distance - parameter.Coll.bounds.size.y - 0.1f);
+        //     }
+        // }
         
         // if (Physics2D.Raycast(point, Vector2.left, parameter.Coll.bounds.extents.x,
         //     parameter.obstacle))
@@ -176,6 +178,7 @@ public class MoveState : IState
         //路径点索引增加，向下一个路径点移动
         if(distance < NextWayPointDistance)
         {
+            manager.transform.position = path.vectorPath[currentPoint];
             currentPoint++;
         }
     }
