@@ -15,7 +15,8 @@ public class IdleState : IState
         this.manager = _manager;
         this.parameter = _manager.parameter;
     }
-    public void OnEnter()
+
+    void switchAnim()
     {
         if(parameter.FaceDirection == FaceDirectionType.Up)
         {
@@ -29,6 +30,10 @@ public class IdleState : IState
         {
             parameter.animator.Play("IdleSide");
         }
+    }
+    public void OnEnter()
+    {
+        switchAnim();
     }
 
     public void OnUpdate()
