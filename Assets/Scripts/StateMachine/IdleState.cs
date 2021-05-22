@@ -53,7 +53,7 @@ public class MoveState : IState
     private int currentPoint = 0;
 
     private bool reachedEndOfPath = false;
-    
+    private Vector2 moveDirection;
     public MoveState(FSM _manager)
     {
         this.manager = _manager;
@@ -68,35 +68,9 @@ public class MoveState : IState
             currentPoint = 0;
         }
     }
-    public void OnEnter()
+
+    void switchAnim()
     {
-        parameter.seeker.StartPath(manager.transform.position, parameter.Target, OnPathComplete);
-    }
-    
-    public void OnUpdate()
-    {
-        if(path == null)
-        {
-            manager.Transition(StateType.Idle);
-            return;
-        }
-        if(currentPoint >= path.vectorPath.Count)
-        {
-            reachedEndOfPath = true;
-            manager.Transition(StateType.Idle);
-            return;
-        }
-        else
-        {
-            reachedEndOfPath = false;
-        }
-        
-        Vector2 moveDirection = (path.vectorPath[currentPoint] - manager.transform.position);
-        //转向
-        if(moveDirection.x > 0)
-            manager.transform.localScale = new Vector3(-1, 1, 1);
-        else if(moveDirection.x < 0)
-            manager.transform.localScale = new Vector3(1,1,1);
         //移动时的播放动画选择与状态机枚举修改，角色的朝向需要传递给Idle状态
         if(Mathf.Abs(moveDirection.x) < Mathf.Abs(moveDirection.y))
         {
@@ -116,6 +90,34 @@ public class MoveState : IState
             parameter.animator.Play("WalkSide");
             parameter.FaceDirection = FaceDirectionType.Side;
         }
+    }
+    bool checkTransition()
+    {
+        if(path == null)
+        {
+            manager.Transition(StateType.Idle);
+            return true;
+        }
+        if(currentPoint >= path.vectorPath.Count)
+        {
+            reachedEndOfPath = true;
+            manager.Transition(StateType.Idle);
+            return true;
+        }
+        else
+        {
+            reachedEndOfPath = false;
+            return false;
+        }
+    }
+    private void handleMove()
+    {
+        moveDirection = (path.vectorPath[currentPoint] - manager.transform.position);
+        //转向
+        if(moveDirection.x > 0)
+            manager.transform.localScale = new Vector3(-1, 1, 1);
+        else if(moveDirection.x < 0)
+            manager.transform.localScale = new Vector3(1,1,1);
         //向路径点移动
         manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint], parameter.moveSpeed * Time.deltaTime);
 
@@ -125,6 +127,18 @@ public class MoveState : IState
         {
             currentPoint++;
         }
+    }
+    public void OnEnter()
+    {
+        parameter.seeker.StartPath(manager.transform.position, parameter.Target, OnPathComplete);
+    }
+    
+    public void OnUpdate()
+    {
+        if(checkTransition())
+            return;
+        handleMove();
+        switchAnim();
     }
     public void OnExit()
     {
