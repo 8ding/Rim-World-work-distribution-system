@@ -19,26 +19,26 @@ public class CameraController : MonoBehaviour
     {
         Vector3 pos = transform.position;
         moveInput.Set(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        mousePosition = Input.mousePosition;
-        if (mousePosition.x > Screen.width * 0.9f && mousePosition.x < Screen.width)
-        {
-            moveInput.x = 1;
-        }
-
-        if (mousePosition.x < Screen.width * 0.1f && mousePosition.x > 0f)
-        {
-            moveInput.x = -1;
-        }
-
-        if (mousePosition.y > Screen.height * 0.9f && mousePosition.y < Screen.height)
-        {
-            moveInput.y = 1;
-        }
-
-        if (mousePosition.y < Screen.height * 0.1f && mousePosition.y > 0f)
-        {
-            moveInput.y = -1;
-        }
+        // mousePosition = Input.mousePosition;
+        // if (mousePosition.x > Screen.width * 0.9f && mousePosition.x < Screen.width)
+        // {
+        //     moveInput.x = 1;
+        // }
+        //
+        // if (mousePosition.x < Screen.width * 0.1f && mousePosition.x > 0f)
+        // {
+        //     moveInput.x = -1;
+        // }
+        //
+        // if (mousePosition.y > Screen.height * 0.9f && mousePosition.y < Screen.height)
+        // {
+        //     moveInput.y = 1;
+        // }
+        //
+        // if (mousePosition.y < Screen.height * 0.1f && mousePosition.y > 0f)
+        // {
+        //     moveInput.y = -1;
+        // }
         pos.x += moveInput.normalized.x * panSpeed * Time.deltaTime;
         pos.y += moveInput.normalized.y * panSpeed * Time.deltaTime;
         pos.z += Input.GetAxisRaw("Mouse ScrollWheel") * scrollSpeed * Time.deltaTime;

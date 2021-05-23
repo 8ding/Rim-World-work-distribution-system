@@ -5,11 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d50941c1-65c9-41d1-a967-27fc04f5b275" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move/IMoveVelocity.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move/IMoveVelocity.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move/MoveTransformVelocity.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move/MoveTransformVelocity.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move/MoveVelocity.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Move/MoveVelocity.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Camera/CameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Camera/CameraController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InputCheck/InputCheck.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/InputCheck/InputCheck.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +55,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0CADAF24-E9D3-412C-A2C2-0CC519CF853A/0c/737f9aa5/RaycastHit2D.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AstarPathfindingProject/Core/GraphUpdateShape.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AstarPathfindingProject/PackageTools/VersionedMonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/4c/9a6239ac/Vector2.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/StateMachine/IState.cs" root0="FORCE_HIGHLIGHTING" />
@@ -57,9 +66,13 @@
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/Test.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/IState.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Camera/CameraController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/InputCheck/InputCheck.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Move/IMoveVelocity.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Move/MoveVelocity.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Move/MoveTransformVelocity.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -176,10 +189,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2948">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="2948" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -205,6 +218,7 @@
       <workItem from="1621599686526" duration="13577000" />
       <workItem from="1621691811438" duration="3000000" />
       <workItem from="1621737697386" duration="17904000" />
+      <workItem from="1621761825895" duration="7744000" />
     </task>
     <servers />
   </component>

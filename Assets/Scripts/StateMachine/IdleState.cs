@@ -83,7 +83,7 @@ public class MoveState : IState
     }
     public void OnExit()
     {
-        
+        manager.GetComponent<IMoveVelocity>().SetVelocity(Vector3.zero);
     }
     /// <summary>
     /// 寻路完成的回调
@@ -184,8 +184,8 @@ public class MoveState : IState
     private void handleMove()
     {
         //向路径点移动
-        manager.transform.position = Vector2.MoveTowards(manager.transform.position, path.vectorPath[currentPoint],
-            parameter.moveSpeed * Time.deltaTime);
+        Vector3 moveDir = (path.vectorPath[currentPoint] - manager.transform.position).normalized;
+        manager.GetComponent<IMoveVelocity>().SetVelocity(moveDir);
         float distance = Vector2.Distance(manager.transform.position, path.vectorPath[currentPoint]);
         //路径点索引增加，向下一个路径点移动
         if(distance < NextWayPointDistance)
