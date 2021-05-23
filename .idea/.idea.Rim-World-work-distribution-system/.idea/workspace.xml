@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d50941c1-65c9-41d1-a967-27fc04f5b275" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +40,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AI/AI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/InputCheck/InputCheck.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/20/bd1292d4/Mathf.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AstarPathfindingProject/Core/Path.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0CADAF24-E9D3-412C-A2C2-0CC519CF853A/8f/5c156dfb/Physics2D.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Camera/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0CADAF24-E9D3-412C-A2C2-0CC519CF853A/0c/737f9aa5/RaycastHit2D.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AstarPathfindingProject/Core/GraphUpdateShape.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AstarPathfindingProject/PackageTools/VersionedMonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
@@ -51,8 +56,10 @@
   <component name="IdeDocumentHistory">
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/Test.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/IState.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/StateMachine/FSM.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Camera/CameraController.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -197,7 +204,7 @@
       <workItem from="1621518762927" duration="8203000" />
       <workItem from="1621599686526" duration="13577000" />
       <workItem from="1621691811438" duration="3000000" />
-      <workItem from="1621737697386" duration="6592000" />
+      <workItem from="1621737697386" duration="17904000" />
     </task>
     <servers />
   </component>
@@ -280,32 +287,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs</url>
-          <line>72</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\Scripts\StateMachine\IdleState.cs" initialLine="71" containingFunctionPresentation="method 'OnPathComplete'">
-            <startOffsets>
-              <option value="1423" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1439" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/StateMachine/IdleState.cs</url>
-          <line>138</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\Scripts\StateMachine\IdleState.cs" initialLine="138" containingFunctionPresentation="method 'checkTransition'">
-            <startOffsets>
-              <option value="3670" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3711" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

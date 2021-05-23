@@ -44,6 +44,7 @@ namespace StateMachine
 
         public Parameter parameter;
 
+        public bool IsEntered = false;//在切换状态时，有时enter中会存在需要时间完成的操作，比如现在的寻路过程，因此需要这些过程完成以后再执行onUpdate，此标记用于此目的
         private InputCheck.InputCheck inputTest;
         //状态类型与状态对应的键值对
         private Dictionary<StateType,IState> states = new Dictionary<StateType, IState>();
@@ -71,21 +72,34 @@ namespace StateMachine
 
         private void Update()
         {
-            currentState.OnUpdate();
+            if(IsEntered)
+                currentState.OnUpdate();
         }
 
         private void handleMouseClick(Vector3 _target)
         {
-            parameter.Target = _target;
-            Transition(StateType.Move);
+            var rayUp = Physics2D.Raycast(_target, Vector2.up, 0.6f, parameter.obstacle);
+            var rayDown = Physics2D.Raycast(_target, Vector2.down, 0.6f, parameter.obstacle);
+            var rayLeft = Physics2D.Raycast(_target, Vector2.left, 0.6f, parameter.obstacle);
+            var rayRight = Physics2D.Raycast(_target, Vector2.right, 0.6f, parameter.obstacle);
+
+
+            if(!rayUp || !rayDown || !rayLeft || !rayRight)
+            {
+                parameter.Target = _target;
+                Transition(StateType.Move);
+            }
         }
         public void Transition(StateType _type)
         {
+
             //退出前一个状态
             if(currentState != null)
             {
                 currentState.OnExit();
             }
+            //此时旧状态已退出新状态还未进入完成
+            IsEntered = false;
             //取出传入的状态
             currentState = states[_type];
             //进入新的状态

@@ -67,41 +67,67 @@ public class MoveState : IState
         this.manager = _manager;
         this.parameter = _manager.parameter;
     }
-    //寻路完成，传递路径点数据
+    public void OnEnter()
+    {
+        parameter.seeker.StartPath(manager.transform.position, parameter.Target, OnPathComplete);
+    }
+    public void OnUpdate()
+    {
+        if (path != null)
+        {
+            if(checkTransition())
+                return;
+            handleMove();
+            switchAnim();
+        }
+    }
+    public void OnExit()
+    {
+        
+    }
+    /// <summary>
+    /// 寻路完成的回调
+    /// </summary>
+    /// <param name="_path"></param>
     void OnPathComplete(Path _path)
     {
         if(!_path.error)
         {
             path = _path;
             currentPoint = 0;
-            Debug.Log("onComplete");
         }
 
+        Mathf.Round(2);
+        
         lastPoint = manager.transform.position;
-        // 检测路径点，将路径点挪动至地图网格的路径点，起始位置不用挪动
+        Debug.Log("终点调整前的位置" + path.vectorPath[path.vectorPath.Count-1].x.ToString("0.000"));
+        // 检测路径点，将路径点挪动至地图网格的规定位置
         for (int i = 1; i < path.vectorPath.Count; i++)
          {
              Vector3 origin = path.vectorPath[i];
              path.vectorPath[i] =  CheckPoint(path.vectorPath[i]);
              Vector3 end = path.vectorPath[i];
+             //画出路径点变化情况
              Debug.DrawRay(origin, end - origin, Color.red, 1f);
          }
-        
-        // Debug.Log("第一个路径点与角色初始位置的横轴坐标差： " + (path.vectorPath[0].x - manager.transform.position.x));
-        // Debug.Log("第二个路径点与第一个路径点的横坐标差值：" + (path.vectorPath[1].x - path.vectorPath[0].x));
-        // Debug.Log("\n");
-
+        Debug.Log("终点调整后的位置" + path.vectorPath[path.vectorPath.Count-1].x.ToString("0.000"));
+        //move状态进入完成，可以进行onUpdate操作
+        manager.IsEntered = true;
     }
-
+    /// <summary>
+    /// 移动路径点的方式
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
     Vector3 CheckPoint(Vector3  point)
     {
         point.x = Mathf.Floor(point.x) + 0.5f;
         point.y = Mathf.Floor(point.y) + 0.01f;
-
         return point;
     }
-
-
+    /// <summary>
+    /// 根据路径点之间的方向切换动画
+    /// </summary>
     void switchAnim()
     {
         //移动时的播放动画选择与状态机枚举修改，角色的朝向需要传递给Idle状态
@@ -134,6 +160,10 @@ public class MoveState : IState
             }
         }
     }
+    /// <summary>
+    /// 检测是否需要切换状态
+    /// </summary>
+    /// <returns></returns>
     bool checkTransition()
     {
         if(currentPoint >= path.vectorPath.Count)
@@ -148,6 +178,9 @@ public class MoveState : IState
             return false;
         }
     }
+    /// <summary>
+    /// 处理移动
+    /// </summary>
     private void handleMove()
     {
         //向路径点移动
@@ -162,25 +195,7 @@ public class MoveState : IState
             currentPoint++;
         }
     }
-    public void OnEnter()
-    {
-        parameter.seeker.StartPath(manager.transform.position, parameter.Target, OnPathComplete);
-    }
     
-    public void OnUpdate()
-    {
-        if (path != null)
-        {
-            if(checkTransition())
-                return;
-            handleMove();
-            switchAnim();
-        }
-    }
-    public void OnExit()
-    {
-        currentPoint = 0;
-    }
 }
 
 public class ChaseState : IState
