@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
         pos.z += Input.GetAxisRaw("Mouse ScrollWheel") * scrollSpeed * Time.deltaTime;
         pos.x = Mathf.Clamp(pos.x, -5, 10);
         pos.y = Mathf.Clamp(pos.y, 0, 10);
-        pos.z = Mathf.Clamp(pos.z, -13, -5);
+        pos.z = Mathf.Clamp(pos.z, -8, -5);
         transform.position = pos;
     }
 }

@@ -198,6 +198,16 @@ public class MoveState : IState
     
 }
 
+public class WorkState : IState
+{
+    public void OnEnter()
+    {
+        
+    }
+    public void OnUpdate() { throw new System.NotImplementedException(); }
+    public void OnExit() { throw new System.NotImplementedException(); }
+}
+
 public class ChaseState : IState
 {
     private FSM manager;
