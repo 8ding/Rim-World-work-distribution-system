@@ -97,10 +97,8 @@ public class MoveState : IState
             currentPoint = 0;
         }
 
-        Mathf.Round(2);
-        
         lastPoint = manager.transform.position;
-        Debug.Log("终点调整前的位置" + path.vectorPath[path.vectorPath.Count-1].x.ToString("0.000"));
+
         // 检测路径点，将路径点挪动至地图网格的规定位置
         for (int i = 1; i < path.vectorPath.Count; i++)
          {
@@ -110,7 +108,7 @@ public class MoveState : IState
              //画出路径点变化情况
              Debug.DrawRay(origin, end - origin, Color.red, 1f);
          }
-        Debug.Log("终点调整后的位置" + path.vectorPath[path.vectorPath.Count-1].x.ToString("0.000"));
+
         //move状态进入完成，可以进行onUpdate操作
         manager.IsEntered = true;
     }
