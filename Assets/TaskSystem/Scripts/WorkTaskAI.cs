@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CodeMonkey;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class WorkerTaskAI : MonoBehaviour
@@ -46,7 +47,7 @@ public class WorkerTaskAI : MonoBehaviour
     private void RequestNextTask()
     {
         //方便的Debug方式，留着后面看怎么实现的
-
+        Debug.Log(gameObject.name + "Request");
         PL_TaskSystem.Task task = taskSystem.RequestTask();
         if (task == null)
         {
@@ -61,7 +62,7 @@ public class WorkerTaskAI : MonoBehaviour
 
     private void ExecuteTask(PL_TaskSystem.Task task)
     {
-        // CMDebug.TextPopupMouse("Excute Task");
+        CMDebug.TextPopupMouse("Excute Task");
         worker.moveTo(task.targetPosition,(() =>
         {
             state = State.WaitingForNextTask;

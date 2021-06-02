@@ -16,6 +16,10 @@ namespace TaskSystem
             woker = Woker.Create(new Vector3(0, 0));
             WorkerTaskAI workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
             workerTaskAI.setUp(woker, taskSystem);
+            
+            woker = Woker.Create(new Vector3(5, 5));
+            workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
+            workerTaskAI.setUp(woker, taskSystem);
 
            /* FunctionTimer.Create(() =>
             {

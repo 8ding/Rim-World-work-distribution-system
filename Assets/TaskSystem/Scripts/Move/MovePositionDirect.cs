@@ -21,13 +21,19 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     public Vector3 moveDir;
 
     public event Action OnMoveEnd;
+
+    private void Start()
+    {
+        movePosition = gameObject.transform.position;
+    }
+
     public void SetMovePosition(Vector3 movePosition) {
         this.movePosition = movePosition;
     }
 
     private void Update() {
         moveDir = (movePosition - transform.position).normalized;
-        if (Vector3.Distance(movePosition, transform.position) < 1f)
+        if (Vector3.Distance(movePosition, transform.position) < .1f)
         {
             moveDir = Vector3.zero; // Stop moving when near
             OnMoveEnd?.Invoke();
