@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: -2151818530499332596, guid: 9c447c54c8e0416e9446cadb88c48fd3, type: 3}
-  player: {fileID: 4108994616916464434, guid: 8a2d212640376de49949cd725e99b776, type: 3}
+  player: {fileID: 7250167417740361106, guid: c0e639a2e9114aa4ba1d7b3821a95ae1, type: 3}

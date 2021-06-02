@@ -21,6 +21,8 @@ public class Woker:IWorker
 
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
     {
-       
+        MovePositionDirect moveWay = gameObject.GetComponent<MovePositionDirect>();
+        moveWay.SetMovePosition(position);
+        moveWay.OnMoveEnd += onArriveAtPosition;
     }
 }

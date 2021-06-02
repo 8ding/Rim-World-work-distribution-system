@@ -6,7 +6,7 @@ public class PL_TaskSystem
 {
     public class Task
     {
-        
+        public Vector3 targetPosition;
     }
 
     private List<Task> taskList;
