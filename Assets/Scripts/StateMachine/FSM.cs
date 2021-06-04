@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Pathfinding;
+
 using UnityEngine;
 
 namespace StateMachine
@@ -34,7 +34,7 @@ namespace StateMachine
         public Animator animator;
         public Collider2D Coll;
         public FaceDirectionType FaceDirection = FaceDirectionType.Side;
-        public Seeker seeker;
+
         public Vector3 Target;
         public LayerMask obstacle;
     }
@@ -68,7 +68,6 @@ namespace StateMachine
             states.Add(StateType.React, new ReactState(this));
             
             parameter.animator = GetComponent<Animator>();
-            parameter.seeker = GetComponent<Seeker>();
             parameter.Coll = GetComponent<Collider2D>();
             
 

@@ -19,15 +19,19 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
 
     private Vector3 movePosition;
     public Vector3 moveDir;
-
+    private IMoveVelocity moveVelocity;
     public event Action OnMoveEnd;
 
     private void Start()
     {
         movePosition = gameObject.transform.position;
+        moveVelocity = GetComponent<IMoveVelocity>();
+        OnMoveEnd += Disable;
+        OnMoveEnd += moveVelocity.Disable;
     }
 
     public void SetMovePosition(Vector3 movePosition) {
+        moveVelocity.Enable();
         this.movePosition = movePosition;
     }
 
@@ -35,10 +39,18 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
         moveDir = (movePosition - transform.position).normalized;
         if (Vector3.Distance(movePosition, transform.position) < .1f)
         {
-            moveDir = Vector3.zero; // Stop moving when near
             OnMoveEnd?.Invoke();
         }
-        GetComponent<IMoveVelocity>().SetVelocity(moveDir);
+        moveVelocity.SetVelocity(moveDir);
     }
 
+    public void Disable()
+    {
+        this.enabled = false;
+    }
+
+    public void Enalbe()
+    {
+        this.enabled = true;
+    }
 }

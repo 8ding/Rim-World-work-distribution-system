@@ -17,9 +17,6 @@ namespace TaskSystem
             WorkerTaskAI workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
             workerTaskAI.setUp(woker, taskSystem);
             
-            woker = Woker.Create(new Vector3(5, 5));
-            workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
-            workerTaskAI.setUp(woker, taskSystem);
 
            /* FunctionTimer.Create(() =>
             {
@@ -34,9 +31,21 @@ namespace TaskSystem
             if (Input.GetMouseButtonDown(1))
             {
                 // CMDebug.TextPopupMouse("Task Added");
-                PL_TaskSystem.Task task = new PL_TaskSystem.Task {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
+                PL_TaskSystem.Task task = new PL_TaskSystem.Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
                 taskSystem.AddTask(task);
             }
+            if(Input.GetMouseButtonDown(0))
+            {
+                PL_TaskSystem.Task task = new PL_TaskSystem.Task.Victory();
+                taskSystem.AddTask(task);
+            }
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+//                MyClass.CreateWorldSprite(null, "垃圾", GameAssets.Instance.sprite,
+//                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z, Camera.main), new Vector3(0.1f, 0.1f, 1), 1, Color.white);
+                woker.gameObject.GetComponent<CharacterAnimation>().PlayCleanAnimation();
+            }
+            
         }
     }
 }

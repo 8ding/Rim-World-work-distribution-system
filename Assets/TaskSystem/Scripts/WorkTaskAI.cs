@@ -30,6 +30,7 @@ public class WorkerTaskAI : MonoBehaviour
         {
             case State.WaitingForNextTask:
                 //等待请求新任务
+                worker.Idle();
                 waitingTimer -= Time.deltaTime;
                 if (waitingTimer <= 0)
                 {
@@ -56,16 +57,31 @@ public class WorkerTaskAI : MonoBehaviour
         else
         {
             state = State.ExecutingTask;
-            ExecuteTask(task);
+            if(task is PL_TaskSystem.Task.MovePosition)
+            {
+                ExecuteTask_MovePosition(task as PL_TaskSystem.Task.MovePosition);
+            }
+            else if(task is PL_TaskSystem.Task.Victory)
+            {
+                ExecuteTask_Victory(task as PL_TaskSystem.Task.Victory);
+            }
         }
     }
 
-    private void ExecuteTask(PL_TaskSystem.Task task)
+    private void ExecuteTask_MovePosition(PL_TaskSystem.Task.MovePosition task)
     {
         CMDebug.TextPopupMouse("Excute Task");
         worker.moveTo(task.targetPosition,(() =>
         {
             state = State.WaitingForNextTask;
         }));
+    }
+    private void ExecuteTask_Victory(PL_TaskSystem.Task.Victory task)
+    {
+        CMDebug.TextPopupMouse("Excute Task");
+        worker.Victory(() =>
+        {
+            state = State.WaitingForNextTask;
+        });
     }
 }

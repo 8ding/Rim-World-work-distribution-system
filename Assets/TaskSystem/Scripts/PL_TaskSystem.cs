@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class PL_TaskSystem
 {
-    public class Task
+    public abstract class Task
     {
-        public Vector3 targetPosition;
+        public class MovePosition : Task
+        {
+            public Vector3 targetPosition;
+        }
+        public class Victory:Task
+        {
+        }
     }
 
     private List<Task> taskList;
