@@ -1,6 +1,7 @@
 using System;
 using CodeMonkey;
 using CodeMonkey.Utils;
+using StateMachine;
 using UnityEngine;
 
 namespace TaskSystem
@@ -9,6 +10,8 @@ namespace TaskSystem
     {
         private PL_TaskSystem taskSystem;
         private Woker woker;
+        private WeaponSlotManager weaponSlotManager;
+        private GameObject weaponSlotGameObject;
         private void Start()
         {
              taskSystem = new PL_TaskSystem();
@@ -17,31 +20,17 @@ namespace TaskSystem
             WorkerTaskAI workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
             workerTaskAI.setUp(woker, taskSystem);
             
-            GameObject weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
+            weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
                 GameAssets.Instance.WeaponSlot,
                 new Vector3(-5,-5,0),
                 new Vector3(1, 1, 1), 0, Color.white);
             
-            GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
-                GameAssets.Instance.rifle,
-                new Vector3(5,5,0),
-                new Vector3(1f, 1f, 1), 1, Color.white);
 
-            PL_TaskSystem.Task.CarryWeapon task = new PL_TaskSystem.Task.CarryWeapon
-            {
-                WeaponPosition = weaponGameObject.transform.position,
-                WeaponSlotPosition = weaponSlotGameObject.transform.position,
-                grabWeapon = (Transform transform) =>
-                {
-                    weaponGameObject.transform.SetParent(transform);
-                },
-                dropWeapon = (() =>
-                {
-                    weaponGameObject.transform.SetParent(null);
-                    weaponGameObject.transform.position = weaponSlotGameObject.transform.position;
-                })
-            };
-            taskSystem.AddTask(task);
+            weaponSlotManager = new WeaponSlotManager(weaponSlotGameObject.transform);
+
+            // FunctionTimer.Create((() => weaponSlotManager.setWeaponTransform(weaponGameObject.transform)), 2f);
+
+            // taskSystem.AddTask(task);
             
             // woker = Woker.Create(new Vector3(5, 5f));
             // workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
@@ -75,6 +64,46 @@ namespace TaskSystem
 
                 // PL_TaskSystem.Task task = new PL_TaskSystem.Task.Victory();
                 // taskSystem.AddTask(task);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
+                    GameAssets.Instance.rifle,
+                    new Vector3(5,5,0),
+                    new Vector3(1f, 1f, 1), 1, Color.white);
+                PL_TaskSystem.Task.CarryWeapon task = new PL_TaskSystem.Task.CarryWeapon
+                {
+                    WeaponPosition = weaponGameObject.transform.position,
+                    WeaponSlotPosition = weaponSlotGameObject.transform.position,
+                    grabWeapon = (Transform transform) =>
+                    {
+                        weaponGameObject.transform.SetParent(transform);
+                    },
+                    dropWeapon = (() =>
+                    {
+                        weaponGameObject.transform.SetParent(null);
+                        weaponSlotManager.setWeaponTransform(weaponGameObject.transform);
+                        weaponGameObject.transform.position = weaponSlotGameObject.transform.position;
+                    })
+                };
+                taskSystem.EnqueueTask((() =>
+                {
+                    if (weaponSlotManager.IsEmpty())
+                    {
+                        weaponSlotManager.SetWeaponInComing(true);
+                        return task;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }));
+            }
+
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                weaponSlotManager.setWeaponTransform(null);
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -121,6 +150,63 @@ namespace TaskSystem
             }
             
             
+        }
+    }
+    //武器槽放置管理类
+    public class WeaponSlotManager
+    {
+        private Transform weaponSlotTransform;
+        private Transform weaponTransform;
+        private bool isWeaponInComing;
+
+        public WeaponSlotManager(Transform weaponSlotTransform)
+        {
+            this.weaponSlotTransform = weaponSlotTransform;
+            setWeaponTransform(null);
+        }
+
+        public bool IsEmpty()
+        {
+            return weaponTransform == null && !isWeaponInComing;
+        }
+
+        public void SetWeaponInComing(bool isWeaponInComing)
+        {
+            this.isWeaponInComing = isWeaponInComing;
+            UpdateSprite();
+
+        }
+        public void setWeaponTransform(Transform weaponTransform)
+        {
+            if (weaponTransform == null)
+            {
+                if (this.weaponTransform != null)
+                {
+                    GameObject.Destroy(this.weaponTransform.gameObject);
+                }
+            }
+            this.weaponTransform = weaponTransform;
+            isWeaponInComing = false;
+            
+            UpdateSprite();
+            // FunctionTimer.Create((() =>
+            // {
+            //     if (weaponTransform != null)
+            //     {
+            //         GameObject.Destroy(weaponTransform.gameObject);
+            //         setWeaponTransform(null);
+            //     }
+            // }), 4f);
+        }
+
+        public void UpdateSprite()
+        {
+            weaponSlotTransform.gameObject.GetComponent<SpriteRenderer>().color = IsEmpty() ? Color.gray : Color.red;
+        }
+
+        public Vector3 GetPosition()
+        {
+            return weaponSlotTransform.position;
         }
     }
 }
