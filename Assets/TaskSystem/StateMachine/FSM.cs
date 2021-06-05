@@ -46,7 +46,7 @@ namespace StateMachine
         private GameObject selecteGameObject;
 
         public bool IsEntered = false;//在切换状态时，有时enter中会存在需要时间完成的操作，比如现在的寻路过程，因此需要这些过程完成以后再执行onUpdate，此标记用于此目的
-        private InputCheck.InputCheck inputTest;
+        // private InputCheck.InputCheck inputTest;
         //状态类型与状态对应的键值对
         private Dictionary<StateType,IState> states;
 
@@ -71,8 +71,8 @@ namespace StateMachine
             parameter.Coll = GetComponent<Collider2D>();
             
 
-            inputTest = Camera.main.GetComponent<InputCheck.InputCheck>();
-            inputTest.OnMouseClick += handleMouseClick;
+            // inputTest = Camera.main.GetComponent<InputCheck.InputCheck>();
+            // inputTest.OnMouseClick += handleMouseClick;
             transform.position = new Vector3(Mathf.Floor(transform.position.x) + 0.5f,
                 Mathf.Floor(transform.position.y) + 0.01f, 0f);
             Transition(StateType.Idle);
