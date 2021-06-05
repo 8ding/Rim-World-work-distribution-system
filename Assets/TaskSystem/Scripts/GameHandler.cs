@@ -8,13 +8,13 @@ namespace TaskSystem
 {
     public class GameHandler : MonoBehaviour
     {
-        private PL_TaskSystem taskSystem;
+        private PL_TaskSystem<Task> taskSystem;
         private Woker woker;
         private WeaponSlotManager weaponSlotManager;
         private GameObject weaponSlotGameObject;
         private void Start()
         {
-             taskSystem = new PL_TaskSystem();
+             taskSystem = new PL_TaskSystem<Task>();
             //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
             woker = Woker.Create(new Vector3(0, 0));
             WorkerTaskAI workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
@@ -42,7 +42,7 @@ namespace TaskSystem
                  PL_TaskSystem.Task task = new PL_TaskSystem.Task {targetPosition = new Vector3(10, 10)};
                  taskSystem.AddTask(task);
              }, 5f);*/
-            PL_TaskSystem.Task.MovePosition movePosition = new PL_TaskSystem.Task.MovePosition
+            Task.MovePosition movePosition = new Task.MovePosition
             {
                 targetPosition = new Vector3(0, 0, 0f)
             };
@@ -56,7 +56,7 @@ namespace TaskSystem
 
                 
                 // CMDebug.TextPopupMouse("Task Added");
-                PL_TaskSystem.Task task = new PL_TaskSystem.Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
+                Task.MovePosition task = new  Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
                 taskSystem.AddTask(task);
             }
             if(Input.GetMouseButtonDown(0))
@@ -72,7 +72,7 @@ namespace TaskSystem
                     GameAssets.Instance.rifle,
                     new Vector3(5,5,0),
                     new Vector3(1f, 1f, 1), 1, Color.white);
-                PL_TaskSystem.Task.CarryWeapon task = new PL_TaskSystem.Task.CarryWeapon
+                Task.CarryWeapon task = new Task.CarryWeapon
                 {
                     WeaponPosition = weaponGameObject.transform.position,
                     WeaponSlotPosition = weaponSlotGameObject.transform.position,
@@ -120,7 +120,7 @@ namespace TaskSystem
                     if (Time.time >= time)
                     {
                         //任务构造函数，传入事件参数，事件参数包含行为是调用FunctionUpdater.Create,这个方法是每帧调用一次它的事件参数，而传入的事件执行的是给sprite的alpha值减少一个帧的时间量。
-                        PL_TaskSystem.Task task = new PL_TaskSystem.Task.Clean(gameObject.transform.position, (() =>
+                        Task taskBase = new Task.Clean(gameObject.transform.position, (() =>
                         {
                             float alpha = 1f;
                             FunctionUpdater.Create((() =>
@@ -138,7 +138,7 @@ namespace TaskSystem
                                 }
                             }));
                         }));
-                        return task;
+                        return taskBase;
                     }
                     else
                     {
@@ -208,5 +208,34 @@ namespace TaskSystem
         {
             return weaponSlotTransform.position;
         }
+    }
+}
+
+public class Task : TaskBase
+{
+    public class MovePosition : Task
+    {
+        public Vector3 targetPosition;
+    }
+    public class Victory:Task
+    {
+    }
+    public class Clean : Task
+    {
+        public Vector3 TargetPosition;
+        public Action CleanOver;
+
+        public Clean(Vector3 targetPosition, Action action)
+        {
+            this.TargetPosition = targetPosition;
+            CleanOver = action;
+        }
+    }
+    public class CarryWeapon:Task
+    {
+        public Vector3 WeaponPosition;
+        public Vector3 WeaponSlotPosition;
+        public Action<Transform> grabWeapon;
+        public Action dropWeapon;
     }
 }

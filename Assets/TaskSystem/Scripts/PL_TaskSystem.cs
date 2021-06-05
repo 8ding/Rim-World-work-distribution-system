@@ -5,70 +5,49 @@ using CodeMonkey;
 using CodeMonkey.Utils;
 using UnityEngine;
 
-public class PL_TaskSystem
+public abstract class TaskBase
+{
+
+}
+
+public class QueueTask<TTask> where TTask : TaskBase
+{
+    private Func<TTask> tryGetTaskFunc;
+
+    public QueueTask(Func<TTask> tryGetTaskFunc)
+    {
+        this.tryGetTaskFunc = tryGetTaskFunc;
+    }
+
+    public TTask TryDequeueTask()
+    {
+        return this.tryGetTaskFunc();
+    }
+}
+public class PL_TaskSystem<TTask> where TTask : TaskBase
 {
     //队列任务，需要满足调节才能出队的任务
-    public class QueueTask
-    {
-        private Func<Task> tryGetTaskFunc;
 
-        public QueueTask(Func<Task> tryGetTaskFunc)
-        {
-            this.tryGetTaskFunc = tryGetTaskFunc;
-        }
+   
 
-        public Task TryDequeueTask()
-        {
-            return this.tryGetTaskFunc();
-        }
-    }
-    public abstract class Task
-    {
-        public class MovePosition : Task
-        {
-            public Vector3 targetPosition;
-        }
-        public class Victory:Task
-        {
-        }
-        public class Clean : Task
-        {
-            public Vector3 TargetPosition;
-            public Action CleanOver;
-
-            public Clean(Vector3 targetPosition, Action action)
-            {
-                this.TargetPosition = targetPosition;
-                CleanOver = action;
-            }
-        }
-        public class CarryWeapon:Task
-        {
-            public Vector3 WeaponPosition;
-            public Vector3 WeaponSlotPosition;
-            public Action<Transform> grabWeapon;
-            public Action dropWeapon;
-        }
-    }
-
-    private List<Task> taskList;
-    private List<QueueTask> queueTaskList;
+    private List<TTask> taskList;
+    private List<QueueTask<TTask>> queueTaskList;
     public PL_TaskSystem()
     {
-        taskList = new List<Task>();
-        queueTaskList = new List<QueueTask>();
+        taskList = new List<TTask>();
+        queueTaskList = new List<QueueTask<TTask>>();
         //每0.2s执行一次任务出队
         FunctionPeriodic.Create(dequeueTasks, 0.2f);
     }
 
-    public void EnqueueTask(QueueTask queueTask)
+    public void EnqueueTask(QueueTask<TTask> queueTask)
     {
         queueTaskList.Add(queueTask);
     }
 
-    public void EnqueueTask(Func<Task> tryGetTaskFunc)
+    public void EnqueueTask(Func<TTask> tryGetTaskFunc)
     {
-        QueueTask queueTask = new QueueTask(tryGetTaskFunc);
+        QueueTask<TTask> queueTask = new QueueTask<TTask>(tryGetTaskFunc);
         queueTaskList.Add(queueTask);
     }
     
@@ -76,11 +55,11 @@ public class PL_TaskSystem
     {
         for (int i = 0; i < queueTaskList.Count; i++)
         {
-            QueueTask queueTask = queueTaskList[i];
-            Task task = queueTask.TryDequeueTask();
-            if (task != null)
+            QueueTask<TTask> queueTask = queueTaskList[i];
+            TTask TTask = queueTask.TryDequeueTask();
+            if (TTask != null)
             {
-                AddTask(task);
+                AddTask(TTask);
                 queueTaskList.RemoveAt(i);
                 i--;
                 CMDebug.TextPopupMouse("Dequeue Task");
@@ -92,14 +71,14 @@ public class PL_TaskSystem
         }
     }
 
-    public Task RequestTask()
+    public TTask RequestTask()
     {
         if (taskList != null && taskList.Count > 0)
         {
             //给予请求者第一个任务
-            Task task = taskList[0];
-            taskList.Remove(task);
-            return task;
+            TTask TTask = taskList[0];
+            taskList.Remove(TTask);
+            return TTask;
         }
         else
         {
@@ -107,8 +86,8 @@ public class PL_TaskSystem
         }
     }
 
-    public void AddTask(Task task)
+    public void AddTask(TTask TTask)
     {
-        taskList.Add(task);
+        taskList.Add(TTask);
     }
 }

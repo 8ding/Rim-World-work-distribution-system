@@ -7,6 +7,8 @@
     <list default="true" id="d50941c1-65c9-41d1-a967-27fc04f5b275" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,11 +76,11 @@
       <option value="$PROJECT_DIR$/Assets/CodeMonkey/Utils/UtilsClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameAssets.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
