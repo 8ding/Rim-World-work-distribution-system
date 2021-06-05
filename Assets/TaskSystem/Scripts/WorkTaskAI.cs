@@ -48,7 +48,7 @@ public class WorkerTaskAI : MonoBehaviour
     private void RequestNextTask()
     {
         //方便的Debug方式，留着后面看怎么实现的
-        Debug.Log(gameObject.name + "Request");
+        CMDebug.TextPopupMouse("RequestTask");
         PL_TaskSystem.Task task = taskSystem.RequestTask();
         if (task == null)
         {
@@ -68,6 +68,10 @@ public class WorkerTaskAI : MonoBehaviour
             else if(task is PL_TaskSystem.Task.Clean)
             {
                 ExcuteTask_Clean(task as  PL_TaskSystem.Task.Clean);
+            }
+            else if(task is PL_TaskSystem.Task.CarryWeapon)
+            {
+                ExcuteTask_CarryWeapon(task as  PL_TaskSystem.Task.CarryWeapon);
             }
         }
     }
@@ -100,5 +104,18 @@ public class WorkerTaskAI : MonoBehaviour
                 state = State.WaitingForNextTask;
             });
         });
+    }
+
+    private void ExcuteTask_CarryWeapon(PL_TaskSystem.Task.CarryWeapon task)
+    {
+        worker.moveTo(task.WeaponPosition,(() =>
+        {
+            task.grabWeapon(transform);
+            worker.moveTo(task.WeaponSlotPosition,(() =>
+            {
+                task.dropWeapon();
+                state = State.WaitingForNextTask;
+            }));
+        }));
     }
 }

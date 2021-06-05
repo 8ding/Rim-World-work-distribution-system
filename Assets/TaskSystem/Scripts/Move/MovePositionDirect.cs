@@ -20,7 +20,8 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     private Vector3 movePosition;
     public Vector3 moveDir;
     private IMoveVelocity moveVelocity;
-    public  Action OnMovEnd;
+    public event Action OnMovEnd;//当移动停止,移动方式需要做的事情
+    public Action OnPostMoveEnd;//移动停止的后处理
 
     private void Start()
     {
@@ -30,17 +31,18 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     }
 
     public void SetMovePosition(Vector3 movePosition) {
-        moveVelocity.Enable();
         this.movePosition = movePosition;
         OnMovEnd += Disable;
-        OnMovEnd += moveVelocity.Disable;
     }
 
     private void Update() {
         moveDir = (movePosition - transform.position).normalized;
         if (Vector3.Distance(movePosition, transform.position) < .1f)
         {
+            moveDir = Vector3.zero;
+            moveVelocity.SetVelocity(moveDir);
             OnMovEnd?.Invoke();
+            OnPostMoveEnd?.Invoke();
         }
         moveVelocity.SetVelocity(moveDir);
     }

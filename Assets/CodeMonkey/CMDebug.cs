@@ -45,7 +45,7 @@ namespace CodeMonkey {
             if (offset == null) {
                 offset = Vector3.one;
             }
-            UtilsClass.CreateWorldTextPopup(text, UtilsClass.GetMouseWorldPosition() + (Vector3)offset);
+            UtilsClass.CreateWorldTextPopup(text, MyClass.GetMouseWorldPosition(0,Camera.main));
         }
 
         // World text pop up at mouse position

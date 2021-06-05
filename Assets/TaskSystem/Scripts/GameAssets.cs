@@ -22,6 +22,8 @@ public class GameAssets : MonoBehaviour
     private static GameAssets instance;
     public Sprite sprite;
     public GameObject player;
+    public Sprite rifle;
+    public Sprite WeaponSlot;
     [SerializeField]
     public List<Type_Object> AnimationObjects;
 

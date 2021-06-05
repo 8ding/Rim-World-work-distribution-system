@@ -106,6 +106,7 @@ namespace CodeMonkey.Utils {
             Transform transform = gameObject.transform;
             transform.SetParent(parent, false);
             transform.localPosition = localPosition;
+            transform.localScale = new Vector3(0.3f, 0.3f, 1);
             TextMesh textMesh = gameObject.GetComponent<TextMesh>();
             textMesh.anchor = textAnchor;
             textMesh.alignment = textAlignment;
@@ -118,8 +119,8 @@ namespace CodeMonkey.Utils {
 
 
         // Create a Text Popup in the World, no parent
-        public static void CreateWorldTextPopup(string text, Vector3 localPosition, float popupTime = 1f) {
-            CreateWorldTextPopup(null, text, localPosition, 40, Color.white, localPosition + new Vector3(0, 20), popupTime);
+        public static void CreateWorldTextPopup(string text, Vector3 localPosition, float popupTime = 0.5f) {
+            CreateWorldTextPopup(null, text, localPosition, 20, Color.white, localPosition + new Vector3(0, 5), popupTime);
         }
         
         // Create a Text Popup in the World

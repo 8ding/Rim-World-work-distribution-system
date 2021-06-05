@@ -45,6 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 2ba23bc65505da741a617496edaabbe0, type: 3}
   player: {fileID: 7250167417740361106, guid: c0e639a2e9114aa4ba1d7b3821a95ae1, type: 3}
+  rifle: {fileID: 8333481726314500824, guid: 23d536d6083344698e17aa8fc049b99f, type: 3}
+  WeaponSlot: {fileID: 4436693064181886209, guid: 9f30f35184729d64e9778f3a861945dc, type: 3}
   AnimationObjects:
   - objectAnimationType: 0
     animationGameObject: {fileID: 6786471212018373156, guid: c7e583ddd979548468758b0b040513fc, type: 3}

@@ -27,9 +27,9 @@ public class Woker:IWorker
     //worker的移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
     {
-        //启动移动方式,到达目标事件赋值给移动方式的结束移动事件,赋值而不是加,避免上次移动结束的事件仍会被触发
+        //启动移动方式,到达目标 事件赋值给移动方式的移动结束后处理,赋值而不是加,避免上次移动结束的事件仍会被触发
         moveWay.Enalbe();
-        moveWay.OnMovEnd = onArriveAtPosition;
+        moveWay.OnPostMoveEnd = onArriveAtPosition;
         moveWay.SetMovePosition(position);
         characterAnimation.PlayDirectMoveAnimation(position);
     }

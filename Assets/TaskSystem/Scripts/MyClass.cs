@@ -8,7 +8,7 @@ public static class MyClass
         return camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
             ScreenZ - camera.transform.position.z));
     }
-
+    
     public static GameObject CreateWorldSprite(Transform parent, string name, string LayerName,Sprite sprite, Vector3 localPosition, Vector3 localScale, int sortingOrder, Color color) {
         GameObject gameObject = new GameObject(name, typeof(SpriteRenderer));
         Transform transform = gameObject.transform;
