@@ -9,7 +9,7 @@ public static class MyClass
             ScreenZ - camera.transform.position.z));
     }
 
-    public static GameObject CreateWorldSprite(Transform parent, string name, Sprite sprite, Vector3 localPosition, Vector3 localScale, int sortingOrder, Color color) {
+    public static GameObject CreateWorldSprite(Transform parent, string name, string LayerName,Sprite sprite, Vector3 localPosition, Vector3 localScale, int sortingOrder, Color color) {
         GameObject gameObject = new GameObject(name, typeof(SpriteRenderer));
         Transform transform = gameObject.transform;
         transform.SetParent(parent, false);
@@ -18,6 +18,7 @@ public static class MyClass
         SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite;
         spriteRenderer.sortingOrder = sortingOrder;
+        spriteRenderer.sortingLayerName = LayerName;
         spriteRenderer.color = color;
         return gameObject;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,14 @@ public class PL_TaskSystem
         }
         public class Clean : Task
         {
-            public Transform rubbish;
+            public Vector3 TargetPosition;
+            public Action CleanOver;
+
+            public Clean(Vector3 targetPosition, Action action)
+            {
+                this.TargetPosition = targetPosition;
+                CleanOver = action;
+            }
         }
     }
 

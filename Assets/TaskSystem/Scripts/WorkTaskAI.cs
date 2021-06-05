@@ -92,11 +92,11 @@ public class WorkerTaskAI : MonoBehaviour
     private void ExcuteTask_Clean(PL_TaskSystem.Task.Clean task)
     {
         CMDebug.TextPopupMouse("Excute Task");
-        worker.moveTo(task.rubbish.position, () =>
+        worker.moveTo(task.TargetPosition, () =>
         {
             worker.CleanUp(() =>
             {
-                Destroy(task.rubbish.gameObject);
+                task.CleanOver();
                 state = State.WaitingForNextTask;
             });
         });

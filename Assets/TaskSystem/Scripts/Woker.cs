@@ -24,28 +24,30 @@ public class Woker:IWorker
        moveWay = gameObject.GetComponent<MovePositionDirect>();
        characterAnimation = gameObject.GetComponent<CharacterAnimation>();
     }
-
+    //worker的移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
     {
+        //启动移动方式,到达目标事件赋值给移动方式的结束移动事件,赋值而不是加,避免上次移动结束的事件仍会被触发
         moveWay.Enalbe();
-        moveWay.SetMovePosition(position,onArriveAtPosition);
+        moveWay.OnMovEnd = onArriveAtPosition;
+        moveWay.SetMovePosition(position);
         characterAnimation.PlayDirectMoveAnimation(position);
-        
     }
-
+    //worker的闲置行为
     public void Idle()
     {
         characterAnimation.PlayIdleAnimation();
     }
-
+    //worker的胜利行为
     public void Victory(Action onVictoryEnd)
-    { 
-        characterAnimation.PlayVictoryAnimation(onVictoryEnd);
+    {
+        characterAnimation.OnAnimationEnd = onVictoryEnd;
+        characterAnimation.PlayVictoryAnimation();
     }
-
+    //worker的清扫行为
     public void CleanUp(Action onCleanEnd)
     {
-        characterAnimation.PlayCleanAnimation(onCleanEnd);
-        
+        characterAnimation.OnAnimationEnd = onCleanEnd;
+        characterAnimation.PlayCleanAnimation();
     }
 }

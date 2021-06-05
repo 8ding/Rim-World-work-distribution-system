@@ -20,7 +20,7 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     private Vector3 movePosition;
     public Vector3 moveDir;
     private IMoveVelocity moveVelocity;
-    public event Action OnMovEnd;
+    public  Action OnMovEnd;
 
     private void Start()
     {
@@ -29,12 +29,11 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
 
     }
 
-    public void SetMovePosition(Vector3 movePosition,Action onArrivePosition) {
+    public void SetMovePosition(Vector3 movePosition) {
         moveVelocity.Enable();
         this.movePosition = movePosition;
-        onArrivePosition += Disable;
-        onArrivePosition += moveVelocity.Disable;
-        OnMovEnd = onArrivePosition;
+        OnMovEnd += Disable;
+        OnMovEnd += moveVelocity.Disable;
     }
 
     private void Update() {

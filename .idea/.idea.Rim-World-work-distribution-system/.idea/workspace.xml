@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d50941c1-65c9-41d1-a967-27fc04f5b275" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Prefab/hammer_down.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Prefab/hammer_down.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" afterDir="false" />
@@ -82,15 +81,16 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -352,10 +352,10 @@
           <line>84</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Character\CharacterAnimation.cs" initialLine="82" containingFunctionPresentation="method 'PlayCleanAnimation'">
             <startOffsets>
-              <option value="2240" />
+              <option value="2187" />
             </startOffsets>
             <endOffsets>
-              <option value="2370" />
+              <option value="2317" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="16" />
@@ -375,13 +375,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs</url>
-          <line>31</line>
+          <line>33</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Woker.cs" initialLine="31" containingFunctionPresentation="method 'moveTo'">
             <startOffsets>
-              <option value="890" />
+              <option value="1026" />
             </startOffsets>
             <endOffsets>
-              <option value="943" />
+              <option value="1079" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="19" />
