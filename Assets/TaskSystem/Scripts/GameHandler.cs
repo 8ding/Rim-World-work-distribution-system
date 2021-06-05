@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CodeMonkey;
 using CodeMonkey.Utils;
 using StateMachine;
@@ -9,24 +10,38 @@ namespace TaskSystem
     public class GameHandler : MonoBehaviour
     {
         private PL_TaskSystem<Task> taskSystem;
+        private static PL_TaskSystem<TransportTask> transportTaskSystem;
         private Woker woker;
         private WeaponSlotManager weaponSlotManager;
         private GameObject weaponSlotGameObject;
+        private List<WeaponSlotManager> weaponSlotManagerList;
         private void Start()
         {
              taskSystem = new PL_TaskSystem<Task>();
-            //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
+             transportTaskSystem = new PL_TaskSystem<TransportTask>();
+             weaponSlotManagerList = new List<WeaponSlotManager>();
+             //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
             woker = Woker.Create(new Vector3(0, 0));
             WorkerTaskAI workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
             workerTaskAI.setUp(woker, taskSystem);
+
+            woker = Woker.Create(new Vector3(5, 0));
+            WorkTransportTaskAI workTransportTaskAI = woker.gameObject.AddComponent<WorkTransportTaskAI>();
+            workTransportTaskAI.setUp(woker,transportTaskSystem);
+            
+
             
             weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
                 GameAssets.Instance.WeaponSlot,
-                new Vector3(-5,-5,0),
+                new Vector3(-5,0,0),
                 new Vector3(1, 1, 1), 0, Color.white);
+            weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
             
-
-            weaponSlotManager = new WeaponSlotManager(weaponSlotGameObject.transform);
+            weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
+                GameAssets.Instance.WeaponSlot,
+                new Vector3(-5,5,0),
+                new Vector3(1, 1, 1), 0, Color.white);
+            weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
 
             // FunctionTimer.Create((() => weaponSlotManager.setWeaponTransform(weaponGameObject.transform)), 2f);
 
@@ -53,16 +68,18 @@ namespace TaskSystem
         {
             if (Input.GetMouseButtonDown(1))
             {
-
-                
                 // CMDebug.TextPopupMouse("Task Added");
                 Task.MovePosition task = new  Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
                 taskSystem.AddTask(task);
             }
             if(Input.GetMouseButtonDown(0))
             {
-
-                // PL_TaskSystem.Task task = new PL_TaskSystem.Task.Victory();
+                weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
+                    GameAssets.Instance.WeaponSlot,
+                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main),
+                    new Vector3(1, 1, 1), 0, Color.white);
+                weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
+                // Task task = new Task.Victory();
                 // taskSystem.AddTask(task);
             }
 
@@ -70,40 +87,49 @@ namespace TaskSystem
             {
                 GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
                     GameAssets.Instance.rifle,
-                    new Vector3(5,5,0),
+                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main),
                     new Vector3(1f, 1f, 1), 1, Color.white);
-                Task.CarryWeapon task = new Task.CarryWeapon
-                {
-                    WeaponPosition = weaponGameObject.transform.position,
-                    WeaponSlotPosition = weaponSlotGameObject.transform.position,
-                    grabWeapon = (Transform transform) =>
-                    {
-                        weaponGameObject.transform.SetParent(transform);
-                    },
-                    dropWeapon = (() =>
-                    {
-                        weaponGameObject.transform.SetParent(null);
-                        weaponSlotManager.setWeaponTransform(weaponGameObject.transform);
-                        weaponGameObject.transform.position = weaponSlotGameObject.transform.position;
-                    })
-                };
                 taskSystem.EnqueueTask((() =>
                 {
-                    if (weaponSlotManager.IsEmpty())
+                    //遍历所有的武器槽管理类,若未发现有空的武器槽则返回null，队列任务不会出队列，woker就无法搬运散落的武器
+                    for (int i = 0; i < weaponSlotManagerList.Count; i++)
                     {
-                        weaponSlotManager.SetWeaponInComing(true);
-                        return task;
+                        if (weaponSlotManagerList[i].IsEmpty())
+                        {
+                            weaponSlotManagerList[i].SetWeaponInComing(true);
+                            Task.CarryWeapon task = new Task.CarryWeapon
+                            {
+                                WeaponPosition = weaponGameObject.transform.position,
+                                WeaponSlotPosition = weaponSlotManagerList[i].GetPosition(),
+                                grabWeapon = (Transform transform) =>
+                                {
+                                    weaponGameObject.transform.SetParent(transform);
+                                },
+                                dropWeapon = (() =>
+                                {
+                                    weaponGameObject.transform.SetParent(null);
+                                    weaponSlotManagerList[i].setWeaponTransform(weaponGameObject.transform);
+                                    weaponGameObject.transform.position = weaponSlotManagerList[i].GetPosition();
+                                })
+                            };
+                            return task;
+                        }
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return null;
                 }));
             }
 
             if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                weaponSlotManager.setWeaponTransform(null);
+                woker = Woker.Create(MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main));
+                WorkTransportTaskAI workTransportTaskAI = woker.gameObject.AddComponent<WorkTransportTaskAI>();
+                workTransportTaskAI.setUp(woker,transportTaskSystem);
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                woker = Woker.Create(MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main));
+                WorkerTaskAI workTransportTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
+                workTransportTaskAI.setUp(woker,taskSystem);
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -151,91 +177,118 @@ namespace TaskSystem
             
             
         }
-    }
-    //武器槽放置管理类
-    public class WeaponSlotManager
-    {
-        private Transform weaponSlotTransform;
-        private Transform weaponTransform;
-        private bool isWeaponInComing;
-
-        public WeaponSlotManager(Transform weaponSlotTransform)
+        public class WeaponSlotManager
         {
-            this.weaponSlotTransform = weaponSlotTransform;
-            setWeaponTransform(null);
-        }
+            private Transform weaponSlotTransform;
+            private Transform weaponTransform;
+            private bool isWeaponInComing;
+            private bool isEmpty;
 
-        public bool IsEmpty()
-        {
-            return weaponTransform == null && !isWeaponInComing;
-        }
-
-        public void SetWeaponInComing(bool isWeaponInComing)
-        {
-            this.isWeaponInComing = isWeaponInComing;
-            UpdateSprite();
-
-        }
-        public void setWeaponTransform(Transform weaponTransform)
-        {
-            if (weaponTransform == null)
+            public WeaponSlotManager(Transform weaponSlotTransform)
             {
+                this.weaponSlotTransform = weaponSlotTransform;
+                setWeaponTransform(null);
+            }
+
+            public bool IsEmpty()
+            {
+                return this.weaponTransform == null && !isWeaponInComing;
+            }
+
+            public void SetWeaponInComing(bool isWeaponInComing)
+            {
+                this.isWeaponInComing = isWeaponInComing;
+                UpdateSprite();
+
+            }
+            public void setWeaponTransform(Transform weaponTransform)
+            {
+                this.weaponTransform = weaponTransform;
                 if (this.weaponTransform != null)
                 {
-                    GameObject.Destroy(this.weaponTransform.gameObject);
+                    //有武器放置于武器槽位时，生成转运武器新任务
+                    TransportTask.TakeWeaponFromSlotPosition task = new TransportTask.TakeWeaponFromSlotPosition
+                    {
+                        
+                        weaponSlotPosition = GetPosition(),
+                        targetPosition = GetPosition() + new Vector3(15, 0, 0),
+                        GrabWeapon = (Transform transform) =>
+                        {
+                            weaponTransform.SetParent(transform); 
+                            setWeaponTransform(null);
+                        },
+                        dropWeapon = (() =>
+                        {
+                            weaponTransform.SetParent(null);
+                            weaponTransform.position = GetPosition() + new Vector3(15, 0, 0);
+                        })
+                    };
+                    transportTaskSystem.AddTask(task);
                 }
+                isWeaponInComing = false;
+                UpdateSprite();
+                
+                // FunctionTimer.Create((() =>
+                // {
+                //     if (weaponTransform != null)
+                //     {
+                //         GameObject.Destroy(weaponTransform.gameObject);
+                //         setWeaponTransform(null);
+                //     }
+                // }), 4f);
             }
-            this.weaponTransform = weaponTransform;
-            isWeaponInComing = false;
+
+            public void UpdateSprite()
+            {
+                weaponSlotTransform.gameObject.GetComponent<SpriteRenderer>().color = IsEmpty() ? Color.gray : Color.red;
+            }
+            public Vector3 GetPosition()
+            {
+                return weaponSlotTransform.position;
+            }
             
-            UpdateSprite();
-            // FunctionTimer.Create((() =>
-            // {
-            //     if (weaponTransform != null)
-            //     {
-            //         GameObject.Destroy(weaponTransform.gameObject);
-            //         setWeaponTransform(null);
-            //     }
-            // }), 4f);
         }
-
-        public void UpdateSprite()
+    }
+    //武器槽放置管理类
+    
+    public class Task : TaskBase
+    {
+        public class MovePosition : Task
         {
-            weaponSlotTransform.gameObject.GetComponent<SpriteRenderer>().color = IsEmpty() ? Color.gray : Color.red;
+            public Vector3 targetPosition;
         }
-
-        public Vector3 GetPosition()
+        public class Victory:Task
         {
-            return weaponSlotTransform.position;
+        }
+        public class Clean : Task
+        {
+            public Vector3 TargetPosition;
+            public Action CleanOver;
+
+            public Clean(Vector3 targetPosition, Action action)
+            {
+                this.TargetPosition = targetPosition;
+                CleanOver = action;
+            }
+        }
+        public class CarryWeapon:Task
+        {
+            public Vector3 WeaponPosition;
+            public Vector3 WeaponSlotPosition;
+            public Action<Transform> grabWeapon;
+            public Action dropWeapon;
+        }
+    }
+    public class TransportTask : TaskBase
+    {
+        public class TakeWeaponFromSlotPosition: TransportTask
+        {
+            public Vector3 weaponSlotPosition;
+            public Vector3 targetPosition;
+            public Action<Transform> GrabWeapon;
+            public Action dropWeapon;
         }
     }
 }
 
-public class Task : TaskBase
-{
-    public class MovePosition : Task
-    {
-        public Vector3 targetPosition;
-    }
-    public class Victory:Task
-    {
-    }
-    public class Clean : Task
-    {
-        public Vector3 TargetPosition;
-        public Action CleanOver;
 
-        public Clean(Vector3 targetPosition, Action action)
-        {
-            this.TargetPosition = targetPosition;
-            CleanOver = action;
-        }
-    }
-    public class CarryWeapon:Task
-    {
-        public Vector3 WeaponPosition;
-        public Vector3 WeaponSlotPosition;
-        public Action<Transform> grabWeapon;
-        public Action dropWeapon;
-    }
-}

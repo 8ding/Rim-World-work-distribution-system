@@ -5,6 +5,7 @@ using CodeMonkey;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
+
 public class WorkerTaskAI : MonoBehaviour
 {
     private enum State
@@ -13,11 +14,11 @@ public class WorkerTaskAI : MonoBehaviour
         ExecutingTask,
     }
     private IWorker worker;
-    private PL_TaskSystem<Task> taskSystem;
+    private PL_TaskSystem<TaskSystem.Task> taskSystem;
     private State state;
     private float waitingTimer;
     
-    public void setUp(IWorker worker, PL_TaskSystem<Task> taskSystem)
+    public void setUp(IWorker worker, PL_TaskSystem<TaskSystem.Task> taskSystem)
     {
         this.worker = worker;
         this.taskSystem = taskSystem;
@@ -49,7 +50,7 @@ public class WorkerTaskAI : MonoBehaviour
     {
         //方便的Debug方式，留着后面看怎么实现的
         CMDebug.TextPopupMouse("RequestTask");
-        Task task = taskSystem.RequestTask();
+        TaskSystem.Task task = taskSystem.RequestTask();
         if (task == null)
         {
             state = State.WaitingForNextTask;
@@ -57,26 +58,26 @@ public class WorkerTaskAI : MonoBehaviour
         else
         {
             state = State.ExecutingTask;
-            if(task is Task.MovePosition)
+            if(task is TaskSystem.Task.MovePosition)
             {
-                ExecuteTask_MovePosition(task as Task.MovePosition);
+                ExecuteTask_MovePosition(task as TaskSystem.Task.MovePosition);
             }
-            else if(task is Task.Victory)
+            else if(task is TaskSystem.Task.Victory)
             {
-                ExecuteTask_Victory(task as Task.Victory);
+                ExecuteTask_Victory(task as TaskSystem.Task.Victory);
             }
-            else if(task is Task.Clean)
+            else if(task is TaskSystem.Task.Clean)
             {
-                ExcuteTask_Clean(task as  Task.Clean);
+                ExcuteTask_Clean(task as  TaskSystem.Task.Clean);
             }
-            else if(task is Task.CarryWeapon)
+            else if(task is TaskSystem.Task.CarryWeapon)
             {
-                ExcuteTask_CarryWeapon(task as  Task.CarryWeapon);
+                ExcuteTask_CarryWeapon(task as  TaskSystem.Task.CarryWeapon);
             }
         }
     }
 
-    private void ExecuteTask_MovePosition(Task.MovePosition task)
+    private void ExecuteTask_MovePosition(TaskSystem.Task.MovePosition task)
     {
         CMDebug.TextPopupMouse("Excute Task");
         worker.moveTo(task.targetPosition,(() =>
@@ -84,7 +85,7 @@ public class WorkerTaskAI : MonoBehaviour
             state = State.WaitingForNextTask;
         }));
     }
-    private void ExecuteTask_Victory(Task.Victory task)
+    private void ExecuteTask_Victory(TaskSystem.Task.Victory task)
     {
         CMDebug.TextPopupMouse("Excute Task");
         worker.Victory(() =>
@@ -93,7 +94,7 @@ public class WorkerTaskAI : MonoBehaviour
         });
     }
 
-    private void ExcuteTask_Clean(Task.Clean task)
+    private void ExcuteTask_Clean(TaskSystem.Task.Clean task)
     {
         CMDebug.TextPopupMouse("Excute Task");
         worker.moveTo(task.TargetPosition, () =>
@@ -106,7 +107,7 @@ public class WorkerTaskAI : MonoBehaviour
         });
     }
 
-    private void ExcuteTask_CarryWeapon(Task.CarryWeapon task)
+    private void ExcuteTask_CarryWeapon(TaskSystem.Task.CarryWeapon task)
     {
         worker.moveTo(task.WeaponPosition,(() =>
         {
