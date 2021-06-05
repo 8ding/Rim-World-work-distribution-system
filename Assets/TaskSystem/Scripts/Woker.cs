@@ -28,9 +28,9 @@ public class Woker:IWorker
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
     {
         moveWay.Enalbe();
-        moveWay.SetMovePosition(position);
+        moveWay.SetMovePosition(position,onArriveAtPosition);
         characterAnimation.PlayDirectMoveAnimation(position);
-        moveWay.OnMoveEnd += onArriveAtPosition;
+        
     }
 
     public void Idle()
@@ -39,9 +39,13 @@ public class Woker:IWorker
     }
 
     public void Victory(Action onVictoryEnd)
-    {
-        characterAnimation.OnVictoryEnd += onVictoryEnd;
-        characterAnimation.PlayVictoryAnimation();
+    { 
+        characterAnimation.PlayVictoryAnimation(onVictoryEnd);
     }
-    
+
+    public void CleanUp(Action onCleanEnd)
+    {
+        characterAnimation.PlayCleanAnimation(onCleanEnd);
+        
+    }
 }

@@ -41,9 +41,10 @@ namespace TaskSystem
             }
             if(Input.GetKeyDown(KeyCode.Space))
             {
-//                MyClass.CreateWorldSprite(null, "垃圾", GameAssets.Instance.sprite,
-//                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z, Camera.main), new Vector3(0.1f, 0.1f, 1), 1, Color.white);
-                woker.gameObject.GetComponent<CharacterAnimation>().PlayCleanAnimation();
+                GameObject gameObject =  MyClass.CreateWorldSprite(null, "垃圾", GameAssets.Instance.sprite,
+                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z, Camera.main), new Vector3(0.1f, 0.1f, 1), 1, Color.white);
+                PL_TaskSystem.Task task = new PL_TaskSystem.Task.Clean{rubbish = gameObject.transform};
+                taskSystem.AddTask(task);
             }
             
         }

@@ -65,6 +65,10 @@ public class WorkerTaskAI : MonoBehaviour
             {
                 ExecuteTask_Victory(task as PL_TaskSystem.Task.Victory);
             }
+            else if(task is PL_TaskSystem.Task.Clean)
+            {
+                ExcuteTask_Clean(task as  PL_TaskSystem.Task.Clean);
+            }
         }
     }
 
@@ -82,6 +86,19 @@ public class WorkerTaskAI : MonoBehaviour
         worker.Victory(() =>
         {
             state = State.WaitingForNextTask;
+        });
+    }
+
+    private void ExcuteTask_Clean(PL_TaskSystem.Task.Clean task)
+    {
+        CMDebug.TextPopupMouse("Excute Task");
+        worker.moveTo(task.rubbish.position, () =>
+        {
+            worker.CleanUp(() =>
+            {
+                Destroy(task.rubbish.gameObject);
+                state = State.WaitingForNextTask;
+            });
         });
     }
 }

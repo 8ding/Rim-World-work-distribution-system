@@ -9,7 +9,8 @@ public class CharacterAnimation : MonoBehaviour
 {
     private Animator animator;
     private FaceDirectionType faceDirectionType;
-    public event Action OnVictoryEnd;
+    public event Action OnAnimationEnd;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -61,7 +62,7 @@ public class CharacterAnimation : MonoBehaviour
         }
     }
 
-    public void PlayVictoryAnimation()
+    public void PlayVictoryAnimation(Action OnAnimationEnd)
     {
         if(faceDirectionType == FaceDirectionType.Side)
         {
@@ -75,26 +76,29 @@ public class CharacterAnimation : MonoBehaviour
         {
             animator.Play("throw_up");
         }
+
+        this.OnAnimationEnd = OnAnimationEnd;
     }
 
-    public void PlayCleanAnimation()
+    public void PlayCleanAnimation(Action OnAnimationEnd)
     {
         GameObject animationobject = GameAssets.Instance.createAnimationGameObject(ObjectAnimationType.CleanUP, null, transform.position);
         AnimationObjectController animationObjectController =  animationobject.GetComponentInChildren<AnimationObjectController>();
-        animationObjectController.OnAnimationEnd += Enable;
+        animationObjectController.OnObjectAnimationEnd += Enable;
+        animationObjectController.OnObjectAnimationEnd += HandleCleanUpEnd;
+        this.OnAnimationEnd = OnAnimationEnd;
+        
         gameObject.SetActive(false);
-
-
     }
 
     public void VictoryEnd()
     {
-        OnVictoryEnd?.Invoke();
+        OnAnimationEnd?.Invoke();
     }
 
     public void HandleCleanUpEnd()
     {
-        
+        OnAnimationEnd?.Invoke();
     }
 
     public void Enable()

@@ -20,26 +20,28 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     private Vector3 movePosition;
     public Vector3 moveDir;
     private IMoveVelocity moveVelocity;
-    public event Action OnMoveEnd;
+    public event Action OnMovEnd;
 
     private void Start()
     {
         movePosition = gameObject.transform.position;
         moveVelocity = GetComponent<IMoveVelocity>();
-        OnMoveEnd += Disable;
-        OnMoveEnd += moveVelocity.Disable;
+
     }
 
-    public void SetMovePosition(Vector3 movePosition) {
+    public void SetMovePosition(Vector3 movePosition,Action onArrivePosition) {
         moveVelocity.Enable();
         this.movePosition = movePosition;
+        onArrivePosition += Disable;
+        onArrivePosition += moveVelocity.Disable;
+        OnMovEnd = onArrivePosition;
     }
 
     private void Update() {
         moveDir = (movePosition - transform.position).normalized;
         if (Vector3.Distance(movePosition, transform.position) < .1f)
         {
-            OnMoveEnd?.Invoke();
+            OnMovEnd?.Invoke();
         }
         moveVelocity.SetVelocity(moveDir);
     }
@@ -53,4 +55,11 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     {
         this.enabled = true;
     }
+
+    public void OnDestroy()
+    {
+        OnMovEnd -= Disable;
+        OnMovEnd -= moveVelocity.Disable;
+    }
+    
 }

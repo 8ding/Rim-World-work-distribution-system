@@ -13,6 +13,10 @@ public class PL_TaskSystem
         public class Victory:Task
         {
         }
+        public class Clean : Task
+        {
+            public Transform rubbish;
+        }
     }
 
     private List<Task> taskList;

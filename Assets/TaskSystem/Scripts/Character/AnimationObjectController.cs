@@ -5,12 +5,11 @@ namespace TaskSystem.Character
 {
     public class AnimationObjectController : MonoBehaviour
     {
-        public event Action OnAnimationEnd;
+        public event Action OnObjectAnimationEnd;
 
         public void AnimationEnd()
         {
-            OnAnimationEnd?.Invoke();
-            Animator animator;
+            OnObjectAnimationEnd?.Invoke();
             Destroy(transform.parent.gameObject);
         }
     }

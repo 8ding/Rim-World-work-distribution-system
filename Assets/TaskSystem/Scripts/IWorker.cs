@@ -7,5 +7,7 @@ public interface IWorker
 {
     void moveTo(Vector3 position, Action onArriveAtPosition = null);
     void Idle();
-    void Victory(Action onVictoryEnd);
+    void Victory(Action onVictoryEnd = null);
+
+    void CleanUp(Action onCleanEnd = null);
 }
