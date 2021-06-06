@@ -5,63 +5,58 @@ using CodeMonkey.Utils;
 using StateMachine;
 using UnityEngine;
 
+
 namespace TaskSystem
 {
+    public enum WokerType
+    {
+        TranPorter,
+        Grocer
+    }
     public class GameHandler : MonoBehaviour
     {
-        private PL_TaskSystem<Task> taskSystem;
-        private static PL_TaskSystem<TransportTask> transportTaskSystem;
+        private PL_TaskSystem<TaskBase> taskSystem;
+        private static PL_TaskSystem<TaskBase> transportTaskSystem;
         private Woker woker;
+        private ITaskAI taskAI;
         private WeaponSlotManager weaponSlotManager;
         private GameObject weaponSlotGameObject;
         private List<WeaponSlotManager> weaponSlotManagerList;
         private void Start()
         {
-             taskSystem = new PL_TaskSystem<Task>();
-             transportTaskSystem = new PL_TaskSystem<TransportTask>();
+             taskSystem = new PL_TaskSystem<TaskBase>();
+             transportTaskSystem = new PL_TaskSystem<TaskBase>();
              weaponSlotManagerList = new List<WeaponSlotManager>();
              //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
-            woker = Woker.Create(new Vector3(0, 0));
-            WorkerTaskAI workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
-            workerTaskAI.setUp(woker, taskSystem);
+             createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
+             createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
 
-            woker = Woker.Create(new Vector3(5, 0));
-            WorkTransportTaskAI workTransportTaskAI = woker.gameObject.AddComponent<WorkTransportTaskAI>();
-            workTransportTaskAI.setUp(woker,transportTaskSystem);
-            
 
-            
+             createWeaponSlot(new Vector3(-5, 0, 0));
+             createWeaponSlot(new Vector3(-5, 5, 0));
+        }
+
+        private void createWeaponSlot(Vector3 position)
+        {
             weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
-                GameAssets.Instance.WeaponSlot,
-                new Vector3(-5,0,0),
-                new Vector3(1, 1, 1), 0, Color.white);
+                GameAssets.Instance.WeaponSlot, position, new Vector3(1, 1, 1), 0, Color.white);
             weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
-            
-            weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
-                GameAssets.Instance.WeaponSlot,
-                new Vector3(-5,5,0),
-                new Vector3(1, 1, 1), 0, Color.white);
-            weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
+        }
 
-            // FunctionTimer.Create((() => weaponSlotManager.setWeaponTransform(weaponGameObject.transform)), 2f);
-
-            // taskSystem.AddTask(task);
-            
-            // woker = Woker.Create(new Vector3(5, 5f));
-            // workerTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
-            // workerTaskAI.setUp(woker,taskSystem);
-
-            /* FunctionTimer.Create(() =>
-             {
-                 CMDebug.TextPopupMouse("Task Added");
-                 PL_TaskSystem.Task task = new PL_TaskSystem.Task {targetPosition = new Vector3(10, 10)};
-                 taskSystem.AddTask(task);
-             }, 5f);*/
-            Task.MovePosition movePosition = new Task.MovePosition
+        private void createWorker(Vector3 position,WokerType wokerType)
+        {
+            woker = Woker.Create(position);
+            switch (wokerType)
             {
-                targetPosition = new Vector3(0, 0, 0f)
-            };
-            taskSystem.AddTask(movePosition);
+                case WokerType.TranPorter:
+                    taskAI =  woker.gameObject.AddComponent<WorkTransportTaskAI>();
+                    taskAI.setUp(woker,transportTaskSystem);
+                    break;
+                case WokerType.Grocer:
+                    taskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
+                    taskAI.setUp(woker, taskSystem);
+                    break;
+            }
         }
 
         private void Update()
@@ -69,26 +64,19 @@ namespace TaskSystem
             if (Input.GetMouseButtonDown(1))
             {
                 // CMDebug.TextPopupMouse("Task Added");
-                Task.MovePosition task = new  Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
+                Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
                 taskSystem.AddTask(task);
             }
             if(Input.GetMouseButtonDown(0))
             {
-                weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
-                    GameAssets.Instance.WeaponSlot,
-                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main),
-                    new Vector3(1, 1, 1), 0, Color.white);
-                weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
+                createWeaponSlot(MyClass.GetMouseWorldPosition(0, Camera.main));
                 // Task task = new Task.Victory();
                 // taskSystem.AddTask(task);
             }
-
+            
             if (Input.GetKeyDown(KeyCode.E))
             {
-                GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
-                    GameAssets.Instance.rifle,
-                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main),
-                    new Vector3(1f, 1f, 1), 1, Color.white);
+                var weaponGameObject = createWeapon(MyClass.GetMouseWorldPosition(0,Camera.main));
                 taskSystem.EnqueueTask((() =>
                 {
                     //遍历所有的武器槽管理类,若未发现有空的武器槽则返回null，队列任务不会出队列，woker就无法搬运散落的武器
@@ -118,20 +106,16 @@ namespace TaskSystem
                     return null;
                 }));
             }
-
+            
             if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                woker = Woker.Create(MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main));
-                WorkTransportTaskAI workTransportTaskAI = woker.gameObject.AddComponent<WorkTransportTaskAI>();
-                workTransportTaskAI.setUp(woker,transportTaskSystem);
+                createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.TranPorter);
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                woker = Woker.Create(MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main));
-                WorkerTaskAI workTransportTaskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
-                workTransportTaskAI.setUp(woker,taskSystem);
+                createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.Grocer);
             }
-
+            
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 GameObject gameObject = MyClass.CreateWorldSprite(null, "垃圾", "Environment", GameAssets.Instance.sprite,
@@ -171,12 +155,22 @@ namespace TaskSystem
                         return null;
                     }
                 }));
-
+            
                 // taskSystem.AddTask(task);
             }
             
             
         }
+
+        private GameObject createWeapon(Vector3 position)
+        {
+            GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
+                GameAssets.Instance.rifle,
+                position,
+                new Vector3(1f, 1f, 1), 1, Color.white);
+            return weaponGameObject;
+        }
+
         public class WeaponSlotManager
         {
             private Transform weaponSlotTransform;
@@ -227,15 +221,6 @@ namespace TaskSystem
                 }
                 isWeaponInComing = false;
                 UpdateSprite();
-                
-                // FunctionTimer.Create((() =>
-                // {
-                //     if (weaponTransform != null)
-                //     {
-                //         GameObject.Destroy(weaponTransform.gameObject);
-                //         setWeaponTransform(null);
-                //     }
-                // }), 4f);
             }
 
             public void UpdateSprite()

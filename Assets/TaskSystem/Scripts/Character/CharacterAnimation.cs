@@ -77,7 +77,6 @@ public class CharacterAnimation : MonoBehaviour
         {
             animator.Play("throw_up");
         }
-        
     }
 
     public void PlayCleanAnimation()

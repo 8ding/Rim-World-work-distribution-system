@@ -5,58 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d50941c1-65c9-41d1-a967-27fc04f5b275" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Prefab/Enemy.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Enemy.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Selected.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Prefab/Selected.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Selected.prefab.meta" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ITaskAI.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ITaskAI.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Rim-World-work-distribution-system/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/PhysicalMaterial.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/PhysicalMaterial/wallPhysic.physicsMaterial2D" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/PhysicalMaterial/wallPhysic.physicsMaterial2D.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Camera.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Camera/CameraController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Camera/CameraController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Grid.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Grid.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Grid/Grid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Grid/Grid.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Grid/Grid.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Grid/Grid.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Grid/Testing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Grid/Testing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Grid/Testing.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Grid/Testing.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/InputCheck.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/InputCheck/InputCheck.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/InputCheck/InputCheck.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move/IMoveVelocity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMoveVelocity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move/IMoveVelocity.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMoveVelocity.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move/MoveTransformVelocity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveTransformVelocity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move/MoveTransformVelocity.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveTransformVelocity.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move/MoveVelocity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveVelocity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Move/MoveVelocity.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveVelocity.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/PathFInding.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/PathFInding/PathFinding.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/PathFInding/PathFinding.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/PathFInding/PathNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/PathFInding/PathNode.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Player.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Player/PlayerController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/Player/PlayerController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/FSM.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/FSM.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/FSM.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/FSM.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/IState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/IState.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IState.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/IdleState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IdleState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/IdleState.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IdleState.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Dungeon_Tileset.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Dungeon_Tileset.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-1.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-1.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-1.png.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-2.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-2.png.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-3.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-3.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-3.png.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-4.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Enemy/eagle-attack-4.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Sprites/Enemy/eagle-attack-4.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scenes/New Scene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scenes/New Scene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTransportTaskAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTransportTaskAI.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +61,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTransportTaskAI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/dd/61f0c59a/Camera.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GatrherResource/GatherAI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/36/de82cb4f/Behaviour.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -121,18 +85,19 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/CodeMonkey/CMDebug.cs" />
       <option value="$PROJECT_DIR$/Assets/CodeMonkey/Utils/UtilsClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameAssets.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/FSM.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ITaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTransportTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scenes/Scripts/StateMachine/FSM.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -256,10 +221,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="20648">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="21992">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="20648" />
+      <option name="pid" value="21992" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -391,13 +356,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs</url>
-          <line>84</line>
+          <line>83</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Character\CharacterAnimation.cs" initialLine="82" containingFunctionPresentation="method 'PlayCleanAnimation'">
             <startOffsets>
-              <option value="2187" />
+              <option value="2178" />
             </startOffsets>
             <endOffsets>
-              <option value="2317" />
+              <option value="2308" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="16" />
@@ -427,6 +392,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs</url>
+          <line>62</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\WorkTaskAI.cs" initialLine="62" containingFunctionPresentation="method 'RequestNextTask'">
+            <startOffsets>
+              <option value="1485" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1513" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
+          <line>67</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="66" containingFunctionPresentation="method 'Update'">
+            <startOffsets>
+              <option value="2502" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2527" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PL_TaskSystem.cs</url>
+          <line>75</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PL_TaskSystem.cs" initialLine="75" containingFunctionPresentation="method 'RequestTask'">
+            <startOffsets>
+              <option value="1693" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1736" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

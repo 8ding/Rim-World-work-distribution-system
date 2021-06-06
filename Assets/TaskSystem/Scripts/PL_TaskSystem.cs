@@ -7,7 +7,7 @@ using UnityEngine;
 
 public abstract class TaskBase
 {
-
+    
 }
 
 public class QueueTask<TTask> where TTask : TaskBase

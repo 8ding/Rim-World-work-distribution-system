@@ -2,23 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CodeMonkey;
+using TaskSystem;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 
-public class WorkTransportTaskAI : MonoBehaviour
+public class WorkTransportTaskAI : MonoBehaviour,ITaskAI
 {
-    private enum State
-    {
-        WaitingForNextTask,
-        ExecutingTask,
-    }
     private IWorker worker;
-    private PL_TaskSystem<TaskSystem.TransportTask> taskSystem;
+    private PL_TaskSystem<TaskBase> taskSystem;
     private State state;
     private float waitingTimer;
     
-    public void setUp(IWorker worker, PL_TaskSystem<TaskSystem.TransportTask> taskSystem)
+    public void setUp(IWorker worker, PL_TaskSystem<TaskBase> taskSystem)
     {
         this.worker = worker;
         this.taskSystem = taskSystem;
@@ -46,11 +42,11 @@ public class WorkTransportTaskAI : MonoBehaviour
         }
     }
 
-    private void RequestNextTask()
+    public void RequestNextTask()
     {
         //方便的Debug方式，留着后面看怎么实现的
         CMDebug.TextPopupMouse("RequestTask");
-        TaskSystem.TransportTask task = taskSystem.RequestTask();
+        TaskSystem.TransportTask task = taskSystem.RequestTask() as TransportTask;
         if (task == null)
         {
             state = State.WaitingForNextTask;
