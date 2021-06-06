@@ -30,8 +30,7 @@ namespace TaskSystem
              //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
              createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
              createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
-
-
+             
              createWeaponSlot(new Vector3(-5, 0, 0));
              createWeaponSlot(new Vector3(-5, 5, 0));
         }
@@ -42,7 +41,14 @@ namespace TaskSystem
                 GameAssets.Instance.WeaponSlot, position, new Vector3(1, 1, 1), 0, Color.white);
             weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
         }
-
+        private GameObject createWeapon(Vector3 position)
+        {
+            GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
+                GameAssets.Instance.rifle,
+                position,
+                new Vector3(1f, 1f, 1), 1, Color.white);
+            return weaponGameObject;
+        }
         private void createWorker(Vector3 position,WokerType wokerType)
         {
             woker = Woker.Create(position);
@@ -58,20 +64,24 @@ namespace TaskSystem
                     break;
             }
         }
+        private GameObject createRubbishGameObject(Vector3 vector3)
+        {
+            GameObject rubbish = MyClass.CreateWorldSprite(null, "垃圾", "Environment", GameAssets.Instance.sprite, vector3,
+                new Vector3(1f, 1f, 1), 1, Color.white);
+            return rubbish;
+        }
 
         private void Update()
         {
             if (Input.GetMouseButtonDown(1))
             {
-                // CMDebug.TextPopupMouse("Task Added");
                 Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
                 taskSystem.AddTask(task);
             }
-            if(Input.GetMouseButtonDown(0))
+            
+            if (Input.GetMouseButtonDown(0))
             {
                 createWeaponSlot(MyClass.GetMouseWorldPosition(0, Camera.main));
-                // Task task = new Task.Victory();
-                // taskSystem.AddTask(task);
             }
             
             if (Input.GetKeyDown(KeyCode.E))
@@ -111,16 +121,15 @@ namespace TaskSystem
             {
                 createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.TranPorter);
             }
+            
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.Grocer);
             }
-            
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                GameObject gameObject = MyClass.CreateWorldSprite(null, "垃圾", "Environment", GameAssets.Instance.sprite,
-                    MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z, Camera.main),
-                    new Vector3(1f, 1f, 1), 1, Color.white);
+                var gameObject = createRubbishGameObject(MyClass.GetMouseWorldPosition(0, Camera.main));
                 SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
                 float time = Time.time + 5f;
                 //任务入队,EnqueueTask接收的是一个事件参数,它生成一个queueTask，保存这个事件，而每0.2s执行一次的出队操作会调用一次这个事件，
@@ -155,22 +164,9 @@ namespace TaskSystem
                         return null;
                     }
                 }));
-            
-                // taskSystem.AddTask(task);
             }
-            
-            
         }
-
-        private GameObject createWeapon(Vector3 position)
-        {
-            GameObject weaponGameObject = MyClass.CreateWorldSprite(null, "手枪", "Item",
-                GameAssets.Instance.rifle,
-                position,
-                new Vector3(1f, 1f, 1), 1, Color.white);
-            return weaponGameObject;
-        }
-
+        //武器槽管理类
         public class WeaponSlotManager
         {
             private Transform weaponSlotTransform;
@@ -234,7 +230,7 @@ namespace TaskSystem
             
         }
     }
-    //武器槽放置管理类
+
     
     public class Task : TaskBase
     {
