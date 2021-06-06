@@ -11,6 +11,8 @@ public class Woker:IWorker
     private MovePositionDirect moveWay;
 
     private CharacterAnimation characterAnimation;
+
+    private int carryAmount;
     // Start is called before the first frame update
     public static Woker Create(Vector3 position)
     {
@@ -23,6 +25,7 @@ public class Woker:IWorker
        gameObject = unit;
        moveWay = gameObject.GetComponent<MovePositionDirect>();
        characterAnimation = gameObject.GetComponent<CharacterAnimation>();
+       carryAmount = 0;
     }
     //worker的移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
@@ -49,5 +52,24 @@ public class Woker:IWorker
     {
         characterAnimation.OnAnimationEnd = onCleanEnd;
         characterAnimation.PlayCleanAnimation();
+    }
+
+    public void Grab(Action OnGrabEnd = null)
+    {
+        carryAmount++;
+        OnGrabEnd?.Invoke();
+    }
+
+    //worker的挖矿行为
+    public void Mine(Action OnMineEnd = null)
+    {
+        characterAnimation.OnAnimationEnd = OnMineEnd;
+        characterAnimation.PlayMineAnimation();
+    }
+
+    public void Drop(Action OnDropEnd = null)
+    {
+        carryAmount--;
+        OnDropEnd?.Invoke();
     }
 }

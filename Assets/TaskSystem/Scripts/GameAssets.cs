@@ -8,6 +8,7 @@ using UnityEngine.Networking.PlayerConnection;
 public enum ObjectAnimationType
 {
     CleanUP,
+    Mine,
 }
 
 [Serializable]
@@ -24,6 +25,8 @@ public class GameAssets : MonoBehaviour
     public GameObject player;
     public Sprite rifle;
     public Sprite WeaponSlot;
+    public Sprite gold;
+    public Sprite GoldPoint;
     [SerializeField]
     public List<Type_Object> AnimationObjects;
 
@@ -52,7 +55,6 @@ public class GameAssets : MonoBehaviour
                 if(AnimationObjects[i].objectAnimationType == _objectAnimationType)
                 {
                     return Instantiate(AnimationObjects[i].animationGameObject, position, Quaternion.identity);
-                    break;
                 }
             }
         }

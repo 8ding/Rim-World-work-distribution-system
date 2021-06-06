@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CodeMonkey;
 using CodeMonkey.Utils;
 using StateMachine;
@@ -11,35 +12,54 @@ namespace TaskSystem
     public enum WokerType
     {
         TranPorter,
-        Grocer
+        Grocer,
+        Miner
     }
     public class GameHandler : MonoBehaviour
     {
         private PL_TaskSystem<TaskBase> taskSystem;
         private static PL_TaskSystem<TaskBase> transportTaskSystem;
+        private PL_TaskSystem<TaskBase> gatherTaskSystem;
         private Woker woker;
         private ITaskAI taskAI;
-        private WeaponSlotManager weaponSlotManager;
         private GameObject weaponSlotGameObject;
+        private GameObject minePointGameObject;
         private List<WeaponSlotManager> weaponSlotManagerList;
+        private List<MineManager> mineManagerList;
+
         private void Start()
         {
              taskSystem = new PL_TaskSystem<TaskBase>();
              transportTaskSystem = new PL_TaskSystem<TaskBase>();
+             gatherTaskSystem = new PL_TaskSystem<TaskBase>();
              weaponSlotManagerList = new List<WeaponSlotManager>();
+             mineManagerList = new List<MineManager>();
              //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
-             createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
-             createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
+             // createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
+             // createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
+             createWorker(new Vector3(0,6,0),WokerType.Miner);
              
              createWeaponSlot(new Vector3(-5, 0, 0));
              createWeaponSlot(new Vector3(-5, 5, 0));
         }
 
+        private void handldeMinePointIncrease()
+        {
+
+        }
         private void createWeaponSlot(Vector3 position)
         {
             weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
                 GameAssets.Instance.WeaponSlot, position, new Vector3(1, 1, 1), 0, Color.white);
             weaponSlotManagerList.Add(new WeaponSlotManager(weaponSlotGameObject.transform));
+        }
+
+        private GameObject createMinePoint(Vector3 position)
+        {
+            minePointGameObject = MyClass.CreateWorldSprite(null, "矿点", "Environment", GameAssets.Instance.GoldPoint,
+                position, new Vector3(1, 1, 1), 0, Color.white);
+            mineManagerList.Add(new MineManager(minePointGameObject.transform));
+            return minePointGameObject;
         }
         private GameObject createWeapon(Vector3 position)
         {
@@ -62,6 +82,10 @@ namespace TaskSystem
                     taskAI = woker.gameObject.AddComponent<WorkerTaskAI>();
                     taskAI.setUp(woker, taskSystem);
                     break;
+                case WokerType.Miner:
+                    taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
+                    taskAI.setUp(woker,gatherTaskSystem);
+                    break;
             }
         }
         private GameObject createRubbishGameObject(Vector3 vector3)
@@ -75,13 +99,19 @@ namespace TaskSystem
         {
             if (Input.GetMouseButtonDown(1))
             {
-                Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(woker.gameObject.transform.position.z,Camera.main))};
+                Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(0,Camera.main))};
                 taskSystem.AddTask(task);
             }
             
             if (Input.GetMouseButtonDown(0))
             {
-                createWeaponSlot(MyClass.GetMouseWorldPosition(0, Camera.main));
+                var goldMineObjdect = createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
+                for (int i = 0; i < MineManager.MaxAmount; i++)
+                {
+                    GatherTask.GatherGold task = new GatherTask.GatherGold(mineManagerList.Last().GetGoldPointTransform(),
+                        mineManagerList.Last());
+                    gatherTaskSystem.AddTask(task);
+                }
             }
             
             if (Input.GetKeyDown(KeyCode.E))
@@ -99,11 +129,11 @@ namespace TaskSystem
                             {
                                 WeaponPosition = weaponGameObject.transform.position,
                                 WeaponSlotPosition = weaponSlotManagerList[i].GetPosition(),
-                                grabWeapon = (Transform transform) =>
+                                weaponGrabed = (Transform transform) =>
                                 {
                                     weaponGameObject.transform.SetParent(transform);
                                 },
-                                dropWeapon = (() =>
+                                weaponDroped = (() =>
                                 {
                                     weaponGameObject.transform.SetParent(null);
                                     weaponSlotManagerList[i].setWeaponTransform(weaponGameObject.transform);
@@ -166,7 +196,7 @@ namespace TaskSystem
                 }));
             }
         }
-        //武器槽管理类
+        //武器槽管理对象
         public class WeaponSlotManager
         {
             private Transform weaponSlotTransform;
@@ -229,6 +259,38 @@ namespace TaskSystem
             }
             
         }
+        
+        //矿点管理类对象
+        public class MineManager
+        {
+            private Transform minePointTransform;
+            private int GoldAmount;
+            public static int MaxAmount = 3;
+            public MineManager(Transform minePointTransform)
+            {
+                this.minePointTransform = minePointTransform;
+                GoldAmount = MaxAmount;
+            }
+
+            public bool IsHasGold()
+            {
+                return GoldAmount > 0;
+            }
+
+            public Transform GetGoldPointTransform()
+            {
+                return minePointTransform;
+            }
+
+            public void giveGold()
+            {
+                GoldAmount--;
+                if (GoldAmount < 1)
+                {
+                    GameObject.Destroy(GetGoldPointTransform().gameObject);
+                }
+            }
+        }
     }
 
     
@@ -256,8 +318,8 @@ namespace TaskSystem
         {
             public Vector3 WeaponPosition;
             public Vector3 WeaponSlotPosition;
-            public Action<Transform> grabWeapon;
-            public Action dropWeapon;
+            public Action<Transform> weaponGrabed;
+            public Action weaponDroped;
         }
     }
     public class TransportTask : TaskBase
@@ -268,6 +330,33 @@ namespace TaskSystem
             public Vector3 targetPosition;
             public Action<Transform> GrabWeapon;
             public Action dropWeapon;
+        }
+    }
+
+    public class GatherTask : TaskBase
+    {
+        public class GatherGold : GatherTask
+        {
+            public Vector3 GoldPosition;
+            public Vector3 StorePosition;
+            public Action<Transform> GoldGrabed;
+            public Action GoldDropde;
+            public Transform goldTransform;
+            public  GatherGold(Transform goldTransform, GameHandler.MineManager mineManager)
+            {
+                GoldPosition = goldTransform.position;
+                StorePosition = GameObject.Find("Crate").transform.position;
+                GoldGrabed = (Transform transform) =>
+                {
+                    mineManager.giveGold();
+                    goldTransform = MyClass.CreateWorldSprite(transform, "Gold", "Item", GameAssets.Instance.gold,
+                        new Vector3(0, 0.5f, 0), new Vector3(.5f, .5f, 1), 1, Color.white).transform;
+                };
+                GoldDropde = () =>
+                {
+                    GameObject.Destroy(goldTransform.gameObject);
+                };
+            }
         }
     }
 }

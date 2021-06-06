@@ -17,6 +17,16 @@ public class CharacterAnimation : MonoBehaviour
         animator = GetComponent<Animator>();
         faceDirectionType = FaceDirectionType.Side;
     }
+    private void CreateobjectAnimaiton(ObjectAnimationType objectAnimationType)
+    {
+        GameObject animationobject =
+            GameAssets.Instance.createAnimationGameObject(objectAnimationType, null, transform.position);
+        AnimationObjectController animationObjectController =
+            animationobject.GetComponentInChildren<AnimationObjectController>();
+        animationObjectController.OnObjectAnimationEnd += Enable;
+        animationObjectController.OnObjectAnimationEnd += HandleObjectAnimationEnd;
+        gameObject.SetActive(false);
+    }
 
     public void PlayDirectMoveAnimation(Vector3 Position)
     {
@@ -81,20 +91,20 @@ public class CharacterAnimation : MonoBehaviour
 
     public void PlayCleanAnimation()
     {
-        GameObject animationobject = GameAssets.Instance.createAnimationGameObject(ObjectAnimationType.CleanUP, null, transform.position);
-        AnimationObjectController animationObjectController =  animationobject.GetComponentInChildren<AnimationObjectController>();
-        animationObjectController.OnObjectAnimationEnd += Enable;
-        animationObjectController.OnObjectAnimationEnd += HandleCleanUpEnd;
-
-        gameObject.SetActive(false);
+        CreateobjectAnimaiton(ObjectAnimationType.CleanUP);
     }
 
+
+    public void PlayMineAnimation()
+    {
+        CreateobjectAnimaiton(ObjectAnimationType.Mine);
+    }
     public void VictoryEnd()
     {
         OnAnimationEnd?.Invoke();
     }
 
-    public void HandleCleanUpEnd()
+    public void HandleObjectAnimationEnd()
     {
         OnAnimationEnd?.Invoke();
     }

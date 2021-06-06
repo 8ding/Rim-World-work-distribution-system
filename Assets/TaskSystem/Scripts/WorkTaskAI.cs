@@ -114,11 +114,19 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
     {
         worker.moveTo(task.WeaponPosition,(() =>
         {
-            task.grabWeapon(transform);
-            worker.moveTo(task.WeaponSlotPosition,(() =>
+            //两个对象,task中存储的是客体被抓起的执行，而worker这边是主体执行的抓取行为
+            task.weaponGrabed(transform);
+            worker.Grab((() =>
             {
-                task.dropWeapon();
-                state = State.WaitingForNextTask;
+                worker.moveTo(task.WeaponSlotPosition,(() =>
+                {
+                    //两个对象,task中存储的是客体被放下的执行，而worker这边是主体执行的放下行为
+                    task.weaponDroped();
+                    worker.Drop((() =>
+                    {
+                        state = State.WaitingForNextTask;
+                    }));
+                }));
             }));
         }));
     }

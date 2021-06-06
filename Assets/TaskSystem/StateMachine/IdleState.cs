@@ -57,9 +57,8 @@ public class MoveState : IState
     private Parameter parameter;
 
     public float NextWayPointDistance = 0.1f;
-    private int currentPoint = 0;
+
     private Vector3 lastPoint;
-    private bool reachedEndOfPath = false;
     private Vector2 moveOffset;
     private Vector2 modifyDestination;
     public MoveState(FSM _manager)
