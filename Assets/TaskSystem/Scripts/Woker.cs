@@ -7,12 +7,13 @@ using UnityEngine;
 
 public class Woker:IWorker
 {
+    public const int MaxCarryAmount = 3;
     public GameObject gameObject;
 
     private MovePositionDirect moveWay;
 
     private CharacterAnimation characterAnimation;
-
+    
     private int carryAmount;
     // Start is called before the first frame update
     public static Woker Create(Vector3 position)
@@ -55,9 +56,9 @@ public class Woker:IWorker
         characterAnimation.PlayCleanAnimation();
     }
 
-    public void Grab(Action OnGrabEnd = null)
+    public void Grab(int grabTimes,Action OnGrabEnd = null)
     {
-        carryAmount++;
+        carryAmount += grabTimes;
         OnGrabEnd?.Invoke();
     }
     
@@ -75,7 +76,22 @@ public class Woker:IWorker
 
     public void Drop(Action OnDropEnd = null)
     {
-        carryAmount--;
+        carryAmount = 0;
         OnDropEnd?.Invoke();
+    }
+    public void Drop(GameObject gameObject,Action OnDropEnd = null)
+    {
+        GameObject.Destroy(gameObject);
+        Drop(OnDropEnd);
+    }
+
+    public int GetMaxCarryAmount()
+    {
+        return MaxCarryAmount;
+    }
+
+    public int GetCarryAmount()
+    {
+        return carryAmount;
     }
 }

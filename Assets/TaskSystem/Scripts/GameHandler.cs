@@ -26,6 +26,7 @@ namespace TaskSystem
         private GameObject minePointGameObject;
         private List<WeaponSlotManager> weaponSlotManagerList;
         private List<MineManager> mineManagerList;
+        private int idleMinerAmount;
 
         private void Start()
         {
@@ -38,15 +39,13 @@ namespace TaskSystem
              // createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
              // createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
              createWorker(new Vector3(0,6,0),WokerType.Miner);
+             idleMinerAmount++;
+             
              
              createWeaponSlot(new Vector3(-5, 0, 0));
              createWeaponSlot(new Vector3(-5, 5, 0));
         }
-
-        private void handldeMinePointIncrease()
-        {
-
-        }
+        
         private void createWeaponSlot(Vector3 position)
         {
             weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
@@ -108,12 +107,31 @@ namespace TaskSystem
                 var goldMineObjdect = createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
                 for (int i = 0; i < MineManager.MaxAmount; i++)
                 {
-                    GatherTask.GatherGold task = new GatherTask.GatherGold(mineManagerList.Last().GetGoldPointTransform(),
-                        mineManagerList.Last());
-                    gatherTaskSystem.AddTask(task);
+
                 }
             }
-            
+
+            if (idleMinerAmount > 0 && mineManagerList.Count > 0)
+            {
+                idleMinerAmount--;
+                MineManager mineManager = mineManagerList[0];
+                mineManagerList.RemoveAt(0);
+                GatherTask.GatherGold task = new GatherTask.GatherGold
+                {
+                    mineManagerList = this.mineManagerList,
+                    mineManager =  mineManager,
+                    StorePosition = GameObject.Find("Crate").transform.position,
+                    GoldGrabed = (amount,minemanager) =>
+                    {
+                        minemanager.giveGold(amount);
+                    },
+                    GoldDropde = () =>
+                    {
+                        idleMinerAmount++;
+                    },
+                };
+                gatherTaskSystem.AddTask(task);
+            }
             if (Input.GetKeyDown(KeyCode.E))
             {
                 var weaponGameObject = createWeapon(MyClass.GetMouseWorldPosition(0,Camera.main));
@@ -265,7 +283,7 @@ namespace TaskSystem
         {
             private Transform minePointTransform;
             private int GoldAmount;
-            public static int MaxAmount = 3;
+            public static int MaxAmount = 2;
             public MineManager(Transform minePointTransform)
             {
                 this.minePointTransform = minePointTransform;
@@ -282,13 +300,18 @@ namespace TaskSystem
                 return minePointTransform;
             }
 
-            public void giveGold()
+            public void giveGold(int amount)
             {
-                GoldAmount--;
+                GoldAmount -= amount;
                 if (GoldAmount < 1)
                 {
                     GameObject.Destroy(GetGoldPointTransform().gameObject);
                 }
+            }
+
+            public int getGoldAmount()
+            {
+                return GoldAmount;
             }
         }
     }
@@ -339,24 +362,12 @@ namespace TaskSystem
         {
             public Vector3 GoldPosition;
             public Vector3 StorePosition;
-            public Action<Transform> GoldGrabed;
+            public Action<int,GameHandler.MineManager> GoldGrabed;
+            public GameHandler.MineManager mineManager;
             public Action GoldDropde;
             public Transform goldTransform;
-            public  GatherGold(Transform goldTransform, GameHandler.MineManager mineManager)
-            {
-                GoldPosition = goldTransform.position;
-                StorePosition = GameObject.Find("Crate").transform.position;
-                GoldGrabed = (Transform transform) =>
-                {
-                    mineManager.giveGold();
-                    goldTransform = MyClass.CreateWorldSprite(transform, "Gold", "Item", GameAssets.Instance.gold,
-                        new Vector3(0, 0.5f, 0), new Vector3(.5f, .5f, 1), 1, Color.white).transform;
-                };
-                GoldDropde = () =>
-                {
-                    GameObject.Destroy(goldTransform.gameObject);
-                };
-            }
+            public List<GameHandler.MineManager> mineManagerList;
+            
         }
     }
 }

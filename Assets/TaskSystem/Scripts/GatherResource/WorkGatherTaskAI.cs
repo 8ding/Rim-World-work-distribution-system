@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 {
-    private IWorker worker;
+    private Woker worker;
     private PL_TaskSystem<TaskBase> taskSystem;
     private State state;
     private float waitingTimer;
@@ -34,7 +34,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 
     public void setUp(IWorker worker, PL_TaskSystem<TaskBase> taskSystem)
     {
-        this.worker = worker;
+        this.worker = worker as Woker;
         this.taskSystem = taskSystem;
         state = State.WaitingForNextTask;
     }
@@ -58,25 +58,60 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 
     private void ExecuteTask_GatherGold(GatherTask.GatherGold task)
     {
-        worker.moveTo(task.GoldPosition, () =>
+        List<GameHandler.MineManager> mineManagers = task.mineManagerList;
+        GameHandler.MineManager mineManager = task.mineManager;
+        int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
+
+        worker.moveTo(mineManager.GetGoldPointTransform().position, () =>
         {
-            worker.Mine(3,() =>
+            int mineTimes = mineManager.getGoldAmount() < canCarryAmount ? mineManager.getGoldAmount() : canCarryAmount;
+            worker.Mine(mineTimes, () =>
             {
-                task.GoldGrabed(transform);
-                worker.Grab((() =>
+                task.GoldGrabed(mineTimes,mineManager);
+                worker.Grab(mineTimes,(() =>
                 {
-                    worker.moveTo(task.StorePosition,(() =>
+                    if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1 || mineManagers.Count < 1)
                     {
-                        task.GoldDropde();
-                        worker.Drop((() =>
+                        if (mineManager.IsHasGold())
                         {
-                            GameResource.AddAmount(1);
-                            state = State.WaitingForNextTask;
+                            mineManagers.Add(mineManager);
+                        }
+                        GameObject goldGameObject = MyClass.CreateWorldSprite(worker.gameObject.transform, "gold", "Item", GameAssets.Instance.gold,
+                            new Vector3(0, 0.5f, 0), new Vector3(1, 1, 1), 1, Color.white);
+                        worker.moveTo(task.StorePosition, (() =>
+                        {
+                            task.GoldDropde();
+                            worker.Drop(goldGameObject,(() =>
+                            {
+                                GameResource.AddAmount(worker.GetCarryAmount());
+                                state = State.WaitingForNextTask;
+                            }));
                         }));
-                    }));
+                    }
+                    else
+                    {
+                        if (mineManagers.Count > 0)
+                        {
+                            mineManager = mineManagers[0];
+                            mineManagers.RemoveAt(0);
+                            GatherTask.GatherGold gatherGold = new GatherTask.GatherGold
+                            {
+                                mineManagerList = mineManagers,
+                                mineManager = mineManager,
+                                StorePosition = GameObject.Find("Crate").transform.position,
+                                GoldGrabed = (amount, minemanager) =>
+                                {
+                                    minemanager.giveGold(amount);
+                                },
+                                GoldDropde = task.GoldDropde
+                            };
+                            ExecuteTask_GatherGold(gatherGold);
+                        }
+                    }
                 }));
 
             });
         });
     }
+    
 }

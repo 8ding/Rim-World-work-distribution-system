@@ -116,7 +116,7 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
         {
             //两个对象,task中存储的是客体被抓起的执行，而worker这边是主体执行的抓取行为
             task.weaponGrabed(transform);
-            worker.Grab((() =>
+            worker.Grab(1,(() =>
             {
                 worker.moveTo(task.WeaponSlotPosition,(() =>
                 {

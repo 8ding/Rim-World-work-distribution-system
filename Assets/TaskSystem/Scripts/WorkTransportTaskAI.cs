@@ -67,7 +67,7 @@ public class WorkTransportTaskAI : MonoBehaviour,ITaskAI
         worker.moveTo(task.weaponSlotPosition,(() =>
         {
             task.GrabWeapon(transform);
-            worker.Grab((() =>
+            worker.Grab(1,(() =>
             {
                 worker.moveTo(task.targetPosition,(() =>
                 {
