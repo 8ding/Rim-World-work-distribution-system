@@ -27,6 +27,7 @@ namespace TaskSystem
         private List<WeaponSlotManager> weaponSlotManagerList;
         private List<MineManager> mineManagerList;
         private int idleMinerAmount;
+        private MineManager oneMineManager;
 
         private void Start()
         {
@@ -35,6 +36,7 @@ namespace TaskSystem
              gatherTaskSystem = new PL_TaskSystem<TaskBase>();
              weaponSlotManagerList = new List<WeaponSlotManager>();
              mineManagerList = new List<MineManager>();
+             MineManager.OnMinePointClicked += handleMinePointClicked;
              //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
              // createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
              // createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
@@ -44,6 +46,12 @@ namespace TaskSystem
              
              createWeaponSlot(new Vector3(-5, 0, 0));
              createWeaponSlot(new Vector3(-5, 5, 0));
+        }
+
+        private void handleMinePointClicked(MineManager mineManager)
+        {
+            mineManagerList.Add(mineManager);
+            Destroy(mineManager.GetGoldPointTransform().gameObject.GetComponent<Button_Sprite>());
         }
         
         private void createWeaponSlot(Vector3 position)
@@ -55,9 +63,9 @@ namespace TaskSystem
 
         private GameObject createMinePoint(Vector3 position)
         {
-            minePointGameObject = MyClass.CreateWorldSprite(null, "矿点", "Environment", GameAssets.Instance.GoldPoint,
-                position, new Vector3(1, 1, 1), 0, Color.white);
-            mineManagerList.Add(new MineManager(minePointGameObject.transform));
+            minePointGameObject = GameAssets.Instance.createItem(null, MyClass.GetMouseWorldPosition(0, Camera.main),
+                ItemType.MinePoint);
+            oneMineManager = new MineManager(minePointGameObject.transform);
             return minePointGameObject;
         }
         private GameObject createWeapon(Vector3 position)
@@ -99,14 +107,15 @@ namespace TaskSystem
         {
             if (Input.GetMouseButtonDown(1))
             {
-                Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(0,Camera.main))};
-                taskSystem.AddTask(task);
+                // Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(0,Camera.main))};
+                // taskSystem.AddTask(task);
+                createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
             }
             
-            if (Input.GetMouseButtonDown(0))
-            {
-                var goldMineObjdect = createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
-            }
+            // if (Input.GetMouseButtonDown(0))
+            // {
+            //     
+            // }
 
             if (idleMinerAmount > 0 && mineManagerList.Count > 0)
             {
@@ -286,10 +295,15 @@ namespace TaskSystem
             private Transform minePointTransform;
             private int GoldAmount;
             public static int MaxAmount = 2;
+            public static Action<MineManager> OnMinePointClicked;
             public MineManager(Transform minePointTransform)
             {
                 this.minePointTransform = minePointTransform;
                 GoldAmount = MaxAmount;
+                minePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
+                {
+                    OnMinePointClicked?.Invoke(this);
+                };
             }
 
             public bool IsHasGold()

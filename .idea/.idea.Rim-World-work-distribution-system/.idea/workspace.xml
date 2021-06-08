@@ -79,16 +79,16 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GatherResource/GameResource.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UI/Window_GameResource.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameAssets.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IdleState.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTransportTaskAI.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GatherResource/WorkGatherTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameAssets.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -250,7 +250,7 @@
       <workItem from="1622626787678" duration="10084000" />
       <workItem from="1622973934324" duration="6906000" />
       <workItem from="1623121560414" duration="15981000" />
-      <workItem from="1623141385825" duration="1752000" />
+      <workItem from="1623141385825" duration="8474000" />
     </task>
     <servers />
   </component>

@@ -54,3 +54,6 @@ MonoBehaviour:
     animationGameObject: {fileID: 6786471212018373156, guid: c7e583ddd979548468758b0b040513fc, type: 3}
   - objectAnimationType: 1
     animationGameObject: {fileID: 5216748400040948979, guid: b5faeca4f5da22f4c90dc90e5782335f, type: 3}
+  ItemTypeObjects:
+  - itemType: 0
+    itemGameObject: {fileID: 7869986127268172203, guid: c2818acc4c3f2fc4abac34e13792dc46, type: 3}
