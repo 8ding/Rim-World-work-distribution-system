@@ -13,7 +13,7 @@ public interface IWorker
     void CleanUp(Action onCleanEnd = null);
 
     void Grab(Action OnGrabEnd = null);
-    void Mine(Action OnMineEnd = null);
+    void Mine(int mineTimes,Action OnMineEnd = null);
 
     void Drop(Action OnDropEnd = null);
 }

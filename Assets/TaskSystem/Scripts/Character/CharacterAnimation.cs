@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CodeMonkey;
 using StateMachine;
 using TaskSystem.Character;
 using UnityEngine;
@@ -11,11 +12,13 @@ public class CharacterAnimation : MonoBehaviour
     private FaceDirectionType faceDirectionType;
     //加event就只能在这个类内被调用被赋值,封闭安全
     public  Action OnAnimationEnd;
+    public int LoopTimes;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         faceDirectionType = FaceDirectionType.Side;
+        LoopTimes = 0;
     }
     private void CreateobjectAnimaiton(ObjectAnimationType objectAnimationType)
     {
@@ -23,8 +26,9 @@ public class CharacterAnimation : MonoBehaviour
             GameAssets.Instance.createAnimationGameObject(objectAnimationType, null, transform.position);
         AnimationObjectController animationObjectController =
             animationobject.GetComponentInChildren<AnimationObjectController>();
+        animationObjectController.LoopTimes = LoopTimes;
         animationObjectController.OnObjectAnimationEnd += Enable;
-        animationObjectController.OnObjectAnimationEnd += HandleObjectAnimationEnd;
+        animationObjectController.OnObjectAnimationEnd += handleObjectAnimationEnd;
         gameObject.SetActive(false);
     }
 
@@ -95,8 +99,9 @@ public class CharacterAnimation : MonoBehaviour
     }
 
 
-    public void PlayMineAnimation()
+    public void PlayMineAnimation(int looptimes)
     {
+        this.LoopTimes = looptimes;
         CreateobjectAnimaiton(ObjectAnimationType.Mine);
     }
     public void VictoryEnd()
@@ -104,11 +109,10 @@ public class CharacterAnimation : MonoBehaviour
         OnAnimationEnd?.Invoke();
     }
 
-    public void HandleObjectAnimationEnd()
+    private void handleObjectAnimationEnd()
     {
         OnAnimationEnd?.Invoke();
     }
-
     public void Enable()
     {
         gameObject.SetActive(true);

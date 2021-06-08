@@ -60,7 +60,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     {
         worker.moveTo(task.GoldPosition, () =>
         {
-            worker.Mine(() =>
+            worker.Mine(3,() =>
             {
                 task.GoldGrabed(transform);
                 worker.Grab((() =>

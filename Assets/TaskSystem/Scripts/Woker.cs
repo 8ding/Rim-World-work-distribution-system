@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CodeMonkey;
 using CodeMonkey.Utils;
 using UnityEngine;
 
@@ -59,12 +60,17 @@ public class Woker:IWorker
         carryAmount++;
         OnGrabEnd?.Invoke();
     }
+    
 
-    //worker的挖矿行为
-    public void Mine(Action OnMineEnd = null)
+    /// <summary>
+    /// Woker的挖矿行为，mineTImes为挖矿的动作次数
+    /// </summary>
+    /// <param name="mineTimes"></param>
+    /// <param name="OnMineEnd"></param>
+    public void Mine(int mineTimes,Action OnMineEnd = null)
     {
         characterAnimation.OnAnimationEnd = OnMineEnd;
-        characterAnimation.PlayMineAnimation();
+        characterAnimation.PlayMineAnimation(mineTimes);
     }
 
     public void Drop(Action OnDropEnd = null)
