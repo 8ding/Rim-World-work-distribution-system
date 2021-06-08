@@ -61,35 +61,41 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         List<GameHandler.MineManager> mineManagers = task.mineManagerList;
         GameHandler.MineManager mineManager = task.mineManager;
         int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
-
+        //工人前往采矿点
         worker.moveTo(mineManager.GetGoldPointTransform().position, () =>
         {
             int mineTimes = mineManager.getGoldAmount() < canCarryAmount ? mineManager.getGoldAmount() : canCarryAmount;
+            //工人挥舞采矿镰刀
             worker.Mine(mineTimes, () =>
             {
+                //黄金被工人捡起
                 task.GoldGrabed(mineTimes,mineManager);
+                //工人把黄金捡起
                 worker.Grab(mineTimes,(() =>
                 {
+                    //工人背满了或者矿点没有了
                     if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1 || mineManagers.Count < 1)
                     {
+                        //工人回储存点
                         if (mineManager.IsHasGold())
                         {
-                            mineManagers.Add(mineManager);
+                            mineManagers.Insert(0,mineManager);
                         }
                         GameObject goldGameObject = MyClass.CreateWorldSprite(worker.gameObject.transform, "gold", "Item", GameAssets.Instance.gold,
                             new Vector3(0, 0.5f, 0), new Vector3(1, 1, 1), 1, Color.white);
                         worker.moveTo(task.StorePosition, (() =>
                         {
                             task.GoldDropde();
+                            GameResource.AddAmount(worker.GetCarryAmount());
                             worker.Drop(goldGameObject,(() =>
                             {
-                                GameResource.AddAmount(worker.GetCarryAmount());
                                 state = State.WaitingForNextTask;
                             }));
                         }));
                     }
                     else
                     {
+                        //工人没背满建立新任务,寻找下一个矿点
                         if (mineManagers.Count > 0)
                         {
                             mineManager = mineManagers[0];

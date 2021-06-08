@@ -93,8 +93,9 @@ public class CharacterAnimation : MonoBehaviour
         }
     }
 
-    public void PlayCleanAnimation()
+    public void PlayCleanAnimation(int looptimes)
     {
+        this.LoopTimes = looptimes;
         CreateobjectAnimaiton(ObjectAnimationType.CleanUP);
     }
 

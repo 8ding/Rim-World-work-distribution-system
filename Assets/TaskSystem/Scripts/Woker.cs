@@ -53,7 +53,7 @@ public class Woker:IWorker
     public void CleanUp(Action onCleanEnd)
     {
         characterAnimation.OnAnimationEnd = onCleanEnd;
-        characterAnimation.PlayCleanAnimation();
+        characterAnimation.PlayCleanAnimation(2);
     }
 
     public void Grab(int grabTimes,Action OnGrabEnd = null)

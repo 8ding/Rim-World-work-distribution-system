@@ -39,7 +39,7 @@ namespace TaskSystem
              // createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
              // createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
              createWorker(new Vector3(0,6,0),WokerType.Miner);
-             idleMinerAmount++;
+             
              
              
              createWeaponSlot(new Vector3(-5, 0, 0));
@@ -84,6 +84,7 @@ namespace TaskSystem
                 case WokerType.Miner:
                     taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
                     taskAI.setUp(woker,gatherTaskSystem);
+                    idleMinerAmount++;
                     break;
             }
         }
@@ -105,10 +106,6 @@ namespace TaskSystem
             if (Input.GetMouseButtonDown(0))
             {
                 var goldMineObjdect = createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
-                for (int i = 0; i < MineManager.MaxAmount; i++)
-                {
-
-                }
             }
 
             if (idleMinerAmount > 0 && mineManagerList.Count > 0)
@@ -212,6 +209,11 @@ namespace TaskSystem
                         return null;
                     }
                 }));
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.Miner);
             }
         }
         //武器槽管理对象
