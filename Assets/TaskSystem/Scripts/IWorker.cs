@@ -16,4 +16,5 @@ public interface IWorker
     void Mine(int mineTimes,Action OnMineEnd = null);
 
     void Drop(Action OnDropEnd = null);
+    void Cut(int cutTimes,Action OnCutEnd = null);
 }

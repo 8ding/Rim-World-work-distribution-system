@@ -19,6 +19,7 @@ public class WorkTransportTaskAI : MonoBehaviour,ITaskAI
         this.worker = worker;
         this.taskSystem = taskSystem;
         state = State.WaitingForNextTask;
+        worker.Idle();
     }
 
     private void Update()
@@ -27,7 +28,6 @@ public class WorkTransportTaskAI : MonoBehaviour,ITaskAI
         {
             case State.WaitingForNextTask:
                 //等待请求新任务
-                worker.Idle();
                 waitingTimer -= Time.deltaTime;
                 if (waitingTimer <= 0)
                 {
@@ -74,6 +74,7 @@ public class WorkTransportTaskAI : MonoBehaviour,ITaskAI
                     task.dropWeapon();
                     worker.Drop((() =>
                     {
+                        worker.Idle();
                         state = State.WaitingForNextTask;
                     }));
                 }));

@@ -18,7 +18,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         {
             case State.WaitingForNextTask:
                 //等待请求新任务
-                worker.Idle();
                 waitingTimer -= Time.deltaTime;
                 if (waitingTimer <= 0)
                 {
@@ -37,6 +36,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         this.worker = worker as Woker;
         this.taskSystem = taskSystem;
         state = State.WaitingForNextTask;
+        worker.Idle();
     }
 
     public void RequestNextTask()
@@ -89,6 +89,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                             GameResource.AddAmount(worker.GetCarryAmount());
                             worker.Drop(goldGameObject,(() =>
                             {
+                                worker.Idle();
                                 state = State.WaitingForNextTask;
                             }));
                         }));

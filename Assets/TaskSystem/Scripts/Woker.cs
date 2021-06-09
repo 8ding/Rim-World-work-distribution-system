@@ -79,6 +79,13 @@ public class Woker:IWorker
         carryAmount = 0;
         OnDropEnd?.Invoke();
     }
+
+    public void Cut(int cutTimes,Action OnCutEnd = null)
+    {
+        characterAnimation.OnAnimationEnd = OnCutEnd;
+        characterAnimation.PlayCutAnimation(cutTimes);
+    }
+
     public void Drop(GameObject gameObject,Action OnDropEnd = null)
     {
         GameObject.Destroy(gameObject);

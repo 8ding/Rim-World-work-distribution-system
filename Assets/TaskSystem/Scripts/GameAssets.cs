@@ -1,27 +1,41 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using StateMachine;
 using UnityEngine;
 using UnityEngine.Networking.PlayerConnection;
 
 [Serializable]
 public enum ObjectAnimationType
 {
-    CleanUP,
+    Clean,
     Mine,
+    Cut,
+    Walk,
+    Idle,
+    Throw
 }
+
+[Serializable]
+public struct FaceType_Object
+{
+    public FaceDirectionType faceDirectionType;
+    public GameObject animatiGameObject;
+}
+
+[Serializable]
+public struct AnimationType_Struct
+{
+    public ObjectAnimationType objectAnimationType;
+    public List<FaceType_Object> faceTypeObjects;
+}
+
+
 [Serializable]
 public enum ItemType
 {
     MinePoint,
 }
-[Serializable]
-public struct Type_Object
-{
-    public ObjectAnimationType objectAnimationType;
-    public GameObject animationGameObject;
-}
-
 [Serializable]
 public struct ItemType_Object
 {
@@ -40,7 +54,7 @@ public class GameAssets : MonoBehaviour
     public Sprite GoldPoint;
     
     [SerializeField]
-    public List<Type_Object> AnimationObjects;
+    public List<AnimationType_Struct> AnimationObjects;
     [SerializeField]
     public List<ItemType_Object> ItemTypeObjects;
 
@@ -71,20 +85,30 @@ public class GameAssets : MonoBehaviour
         return null;
     }
 
-    public GameObject createAnimationGameObject(ObjectAnimationType _objectAnimationType,Transform parent, Vector3 position)
+    public GameObject createAnimationGameObject(ObjectAnimationType _objectAnimationType,
+        FaceDirectionType faceDirectionType, Transform parent, Vector3 position)
     {
-        
-        if(AnimationObjects != null)
+
+        if (AnimationObjects != null)
         {
             for (int i = 0; i < AnimationObjects.Count; i++)
             {
-                if(AnimationObjects[i].objectAnimationType == _objectAnimationType)
+                if (AnimationObjects[i].objectAnimationType == _objectAnimationType)
                 {
-                    return Instantiate(AnimationObjects[i].animationGameObject, position, Quaternion.identity);
+                    for (int j = 0; j < AnimationObjects[i].faceTypeObjects.Count; j++)
+                    {
+                        if (faceDirectionType == AnimationObjects[i].faceTypeObjects[j].faceDirectionType)
+                        {
+                            return Instantiate(AnimationObjects[i].faceTypeObjects[j].animatiGameObject, position,
+                                Quaternion.identity, parent);
+                        }
+                    }
                 }
             }
         }
-        return null;
+        return null; 
     }
-
 }
+    
+
+

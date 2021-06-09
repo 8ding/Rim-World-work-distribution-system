@@ -24,6 +24,7 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
         this.worker = worker;
         this.taskSystem = taskSystem;
         state = State.WaitingForNextTask;
+    
     }
 
     private void Update()
@@ -32,7 +33,6 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
         {
             case State.WaitingForNextTask:
                 //等待请求新任务
-                worker.Idle();
                 waitingTimer -= Time.deltaTime;
                 if (waitingTimer <= 0)
                 {
@@ -85,6 +85,7 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
         CMDebug.TextPopupMouse("Excute Task");
         worker.moveTo(task.targetPosition,(() =>
         {
+            worker.Idle();
             state = State.WaitingForNextTask;
         }));
     }
@@ -93,6 +94,7 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
         CMDebug.TextPopupMouse("Excute Task");
         worker.Victory(() =>
         {
+            worker.Idle();
             state = State.WaitingForNextTask;
         });
     }
@@ -104,6 +106,7 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
         {
             worker.CleanUp(() =>
             {
+                worker.Idle();
                 task.CleanOver();
                 state = State.WaitingForNextTask;
             });
@@ -124,6 +127,7 @@ public class WorkerTaskAI : MonoBehaviour,ITaskAI
                     task.weaponDroped();
                     worker.Drop((() =>
                     {
+                        worker.Idle();
                         state = State.WaitingForNextTask;
                     }));
                 }));

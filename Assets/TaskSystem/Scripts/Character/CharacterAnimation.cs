@@ -10,6 +10,8 @@ public class CharacterAnimation : MonoBehaviour
 {
     private Animator animator;
     private FaceDirectionType faceDirectionType;
+
+    private GameObject animationobject;
     //加event就只能在这个类内被调用被赋值,封闭安全
     public  Action OnAnimationEnd;
     public int LoopTimes;
@@ -18,31 +20,33 @@ public class CharacterAnimation : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         faceDirectionType = FaceDirectionType.Side;
-        LoopTimes = 0;
+        LoopTimes = 1;
     }
     private void CreateobjectAnimaiton(ObjectAnimationType objectAnimationType)
-    {
-        GameObject animationobject =
-            GameAssets.Instance.createAnimationGameObject(objectAnimationType, null, transform.position);
+    { 
+        if(animationobject != null)
+            Destroy(animationobject);
+        animationobject =
+            GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
         AnimationObjectController animationObjectController =
             animationobject.GetComponentInChildren<AnimationObjectController>();
+        if (animationObjectController == null)
+        {
+            animationObjectController = GetComponent<AnimationObjectController>();
+        }
         animationObjectController.LoopTimes = LoopTimes;
-        animationObjectController.OnObjectAnimationEnd += Enable;
         animationObjectController.OnObjectAnimationEnd += handleObjectAnimationEnd;
-        gameObject.SetActive(false);
     }
 
     public void PlayDirectMoveAnimation(Vector3 Position)
     {
         if (Position.x - transform.position.x > 0.1f)
         {
-            animator.Play("walk_side");
             faceDirectionType = FaceDirectionType.Side;
             transform.localScale = new Vector3(-1, 1, 1);
         }
         else if (Position.x - transform.position.x  < -0.1f)
         {
-            animator.Play("walk_side");
             faceDirectionType = FaceDirectionType.Side;
             transform.localScale = new Vector3(1, 1, 1);
         }
@@ -50,53 +54,54 @@ public class CharacterAnimation : MonoBehaviour
         {
             if (Position.y - transform.position.y > 0f)
             {
-                animator.Play("walk_up");
                 faceDirectionType= FaceDirectionType.Up;
             }
             else if(Position.y - transform.position.y< 0f)
             {
-                animator.Play("walk_down");
                 faceDirectionType = FaceDirectionType.Down;
             }
         }
+        CreateobjectAnimaiton(ObjectAnimationType.Walk);
     }
 
     public void PlayIdleAnimation()
     {
-        if(faceDirectionType == FaceDirectionType.Side)
-        {
-            animator.Play("idle_side");
-        }
-        else if(faceDirectionType == FaceDirectionType.Down)
-        {
-            animator.Play("idle_down");
-        }
-        else
-        {
-            animator.Play("idle_up");
-        }
+        // if(faceDirectionType == FaceDirectionType.Side)
+        // {
+        //     animator.Play("idle_side");
+        // }
+        // else if(faceDirectionType == FaceDirectionType.Down)
+        // {
+        //     animator.Play("idle_down");
+        // }
+        // else
+        // {
+        //     animator.Play("idle_up");
+        // }
+        CreateobjectAnimaiton(ObjectAnimationType.Idle);
     }
 
     public void PlayVictoryAnimation()
     {
-        if(faceDirectionType == FaceDirectionType.Side)
-        {
-            animator.Play("throw_side");
-        }
-        else if(faceDirectionType == FaceDirectionType.Down)
-        {
-            animator.Play("throw_down");
-        }
-        else
-        {
-            animator.Play("throw_up");
-        }
+        // if(faceDirectionType == FaceDirectionType.Side)
+        // {
+        //     animator.Play("throw_side");
+        // }
+        // else if(faceDirectionType == FaceDirectionType.Down)
+        // {
+        //     animator.Play("throw_down");
+        // }
+        // else
+        // {
+        //     animator.Play("throw_up");
+        // }
+        CreateobjectAnimaiton(ObjectAnimationType.Throw);
     }
 
     public void PlayCleanAnimation(int looptimes)
     {
         this.LoopTimes = looptimes;
-        CreateobjectAnimaiton(ObjectAnimationType.CleanUP);
+        CreateobjectAnimaiton(ObjectAnimationType.Clean);
     }
 
 
@@ -104,6 +109,12 @@ public class CharacterAnimation : MonoBehaviour
     {
         this.LoopTimes = looptimes;
         CreateobjectAnimaiton(ObjectAnimationType.Mine);
+    }
+
+    public void PlayCutAnimation(int looptimes)
+    {
+        this.LoopTimes = looptimes;
+        CreateobjectAnimaiton(ObjectAnimationType.Cut);
     }
     public void VictoryEnd()
     {
