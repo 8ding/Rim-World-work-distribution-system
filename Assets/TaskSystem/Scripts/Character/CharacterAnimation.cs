@@ -14,6 +14,7 @@ public class CharacterAnimation : MonoBehaviour
     private GameObject animationobject;
     //加event就只能在这个类内被调用被赋值,封闭安全
     public  Action OnAnimationEnd;
+    public Action OneTimeAction;
     public int LoopTimes;
 
     void Start()
@@ -35,6 +36,7 @@ public class CharacterAnimation : MonoBehaviour
             animationObjectController = GetComponent<AnimationObjectController>();
         }
         animationObjectController.LoopTimes = LoopTimes;
+        animationObjectController.OnLoopOneTime = OneTimeAction;
         animationObjectController.OnObjectAnimationEnd += handleObjectAnimationEnd;
     }
 
@@ -105,9 +107,10 @@ public class CharacterAnimation : MonoBehaviour
     }
 
 
-    public void PlayMineAnimation(int looptimes)
+    public void PlayMineAnimation(int looptimes,Action onetimeAction)
     {
         this.LoopTimes = looptimes;
+        this.OneTimeAction = onetimeAction;
         CreateobjectAnimaiton(ObjectAnimationType.Mine);
     }
 

@@ -81,13 +81,13 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UI/Window_GameResource.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/MyClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IdleState.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameAssets.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GatherResource/WorkGatherTaskAI.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/IWorker.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/WorkTransportTaskAI.cs" />
     </changedPaths>
@@ -357,13 +357,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs</url>
-          <line>36</line>
+          <line>37</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Character\CharacterAnimation.cs" initialLine="28" containingFunctionPresentation="method 'CreateobjectAnimaiton'">
             <startOffsets>
-              <option value="1202" />
+              <option value="1235" />
             </startOffsets>
             <endOffsets>
-              <option value="1250" />
+              <option value="1283" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="25" />
@@ -373,10 +373,10 @@
           <line>13</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Character\AnimationObjectController.cs" initialLine="13" containingFunctionPresentation="method 'LoopOneTimeEnd'">
             <startOffsets>
-              <option value="285" />
+              <option value="313" />
             </startOffsets>
             <endOffsets>
-              <option value="286" />
+              <option value="314" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="26" />

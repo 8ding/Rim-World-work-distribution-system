@@ -9,7 +9,7 @@ public class Woker:IWorker
 {
     public const int MaxCarryAmount = 3;
     public GameObject gameObject;
-
+        
     private MovePositionDirect moveWay;
 
     private CharacterAnimation characterAnimation;
@@ -56,9 +56,14 @@ public class Woker:IWorker
         characterAnimation.PlayCleanAnimation(2);
     }
 
-    public void Grab(int grabTimes,Action OnGrabEnd = null)
+    public void Grab(int Grabtimes, Action OnGrabEnd = null)
     {
-        carryAmount += grabTimes;
+        throw new NotImplementedException();
+    }
+
+    public void Grab(Action OnGrabEnd = null)
+    {
+        carryAmount++;
         OnGrabEnd?.Invoke();
     }
     
@@ -68,10 +73,10 @@ public class Woker:IWorker
     /// </summary>
     /// <param name="mineTimes"></param>
     /// <param name="OnMineEnd"></param>
-    public void Mine(int mineTimes,Action OnMineEnd = null)
+    public void Mine(int mineTimes,Action OnMineOnce,Action OnMineEnd = null)
     {
         characterAnimation.OnAnimationEnd = OnMineEnd;
-        characterAnimation.PlayMineAnimation(mineTimes);
+        characterAnimation.PlayMineAnimation(mineTimes,OnMineOnce);
     }
 
     public void Drop(Action OnDropEnd = null)
@@ -100,5 +105,10 @@ public class Woker:IWorker
     public int GetCarryAmount()
     {
         return carryAmount;
+    }
+
+    public void AddCarryAomunt()
+    {
+        carryAmount++;
     }
 }
