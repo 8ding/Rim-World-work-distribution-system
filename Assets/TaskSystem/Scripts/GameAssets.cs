@@ -52,6 +52,7 @@ public class GameAssets : MonoBehaviour
     public Sprite WeaponSlot;
     public Sprite gold;
     public Sprite GoldPoint;
+    public Sprite MiningShovel;
     
     [SerializeField]
     public List<AnimationType_Struct> AnimationObjects;

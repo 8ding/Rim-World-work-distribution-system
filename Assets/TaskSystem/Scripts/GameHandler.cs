@@ -15,6 +15,12 @@ namespace TaskSystem
         Grocer,
         Miner
     }
+
+    public enum MouseType
+    {
+        None,
+        HitMine,
+    }
     public class GameHandler : MonoBehaviour
     {
         private PL_TaskSystem<TaskBase> taskSystem;
@@ -28,7 +34,9 @@ namespace TaskSystem
         private List<MineManager> mineManagerList;
         private int idleMinerAmount;
         private MineManager oneMineManager;
-
+        private Transform MineButton;
+        private MouseType mouseType;
+        private GameObject attachMouseSprite;
         private void Start()
         {
              taskSystem = new PL_TaskSystem<TaskBase>();
@@ -36,24 +44,45 @@ namespace TaskSystem
              gatherTaskSystem = new PL_TaskSystem<TaskBase>();
              weaponSlotManagerList = new List<WeaponSlotManager>();
              mineManagerList = new List<MineManager>();
+             
              MineManager.OnMinePointClicked += handleMinePointClicked;
-             //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
+             
+             MineButton = GameObject.Find("MineButton").transform;
+             MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
+                 //Woker.Create创造了一个新的Woker对象,在setUp里面TaskAI绑定了这个实例对象，因此是两个实例对象，也绑定了两个实例对象
              // createWorker(new Vector3(3, 0, 0), WokerType.TranPorter);
              // createWorker(new Vector3(0, 3, 0), WokerType.Grocer);
              createWorker(new Vector3(0,6,0),WokerType.Miner);
+
+             mouseType = MouseType.None;
              
-             
-             
-             createWeaponSlot(new Vector3(-5, 0, 0));
-             createWeaponSlot(new Vector3(-5, 5, 0));
+//             createWeaponSlot(new Vector3(-5, 0, 0));
+//             createWeaponSlot(new Vector3(-5, 5, 0));
         }
 
+        private void cancleHitMine()
+        {
+            mouseType = MouseType.None;
+            Destroy(attachMouseSprite);
+        }
         private void handleMinePointClicked(MineManager mineManager)
         {
-            mineManagerList.Add(mineManager);
-            Destroy(mineManager.GetGoldPointTransform().gameObject.GetComponent<Button_Sprite>());
+            if(mouseType == MouseType.HitMine)
+            {
+                mineManagerList.Add(mineManager);
+                Destroy(mineManager.GetGoldPointTransform().gameObject.GetComponent<Button_Sprite>());
+            }
         }
-        
+
+        private void handleMineButtonClick()
+        {
+            mouseType = MouseType.HitMine;
+            if(attachMouseSprite == null)
+            {
+                attachMouseSprite = MyClass.CreateWorldSprite(null, "mineAttachMouse", "AttachIcon", GameAssets.Instance.MiningShovel,
+                    MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
+            }
+        }
         private void createWeaponSlot(Vector3 position)
         {
             weaponSlotGameObject = MyClass.CreateWorldSprite(null, "武器存储", "Environment",
@@ -109,14 +138,19 @@ namespace TaskSystem
             {
                 // Task.MovePosition task = new Task.MovePosition {targetPosition = (MyClass.GetMouseWorldPosition(0,Camera.main))};
                 // taskSystem.AddTask(task);
-                createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
+                switch (mouseType)
+                {
+                    case MouseType.None:
+                        break;
+                    case MouseType.HitMine:
+                        cancleHitMine();
+                        break;
+                }
             }
             
-            // if (Input.GetMouseButtonDown(0))
-            // {
-            //     
-            // }
-
+            if(attachMouseSprite != null)
+                attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
+            
             if (idleMinerAmount > 0 && mineManagerList.Count > 0)
             {
                 idleMinerAmount--;
@@ -170,7 +204,7 @@ namespace TaskSystem
                     return null;
                 }));
             }
-            
+
             if (Input.GetKeyDown(KeyCode.Backspace))
             {
                 createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.TranPorter);
@@ -183,41 +217,43 @@ namespace TaskSystem
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                var gameObject = createRubbishGameObject(MyClass.GetMouseWorldPosition(0, Camera.main));
-                SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-                float time = Time.time + 5f;
-                //任务入队,EnqueueTask接收的是一个事件参数,它生成一个queueTask，保存这个事件，而每0.2s执行一次的出队操作会调用一次这个事件，
-                //如果调节未达成就不会出队反之会出队变成正常的task，而这个事件里的条件就可以由你任意定义，队列任务那边是不管的，只由这个事件函数来控制是不是出队
-                taskSystem.EnqueueTask((() =>
-                {
-                    if (Time.time >= time)
-                    {
-                        //任务构造函数，传入事件参数，事件参数包含行为是调用FunctionUpdater.Create,这个方法是每帧调用一次它的事件参数，而传入的事件执行的是给sprite的alpha值减少一个帧的时间量。
-                        Task taskBase = new Task.Clean(gameObject.transform.position, (() =>
-                        {
-                            float alpha = 1f;
-                            FunctionUpdater.Create((() =>
-                            {
-                                alpha -= Time.deltaTime;
-                                spriteRenderer.color = new Color(1f, 1, 1, alpha);
-                                if (alpha <= 0f)
-                                {
-                                    GameObject.Destroy(gameObject);
-                                    return true;
-                                }
-                                else
-                                {
-                                    return false;
-                                }
-                            }));
-                        }));
-                        return taskBase;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }));
+                
+                createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
+//                var gameObject = createRubbishGameObject(MyClass.GetMouseWorldPosition(0, Camera.main));
+//                SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+//                float time = Time.time + 5f;
+//                //任务入队,EnqueueTask接收的是一个事件参数,它生成一个queueTask，保存这个事件，而每0.2s执行一次的出队操作会调用一次这个事件，
+//                //如果调节未达成就不会出队反之会出队变成正常的task，而这个事件里的条件就可以由你任意定义，队列任务那边是不管的，只由这个事件函数来控制是不是出队
+//                taskSystem.EnqueueTask((() =>
+//                {
+//                    if (Time.time >= time)
+//                    {
+//                        //任务构造函数，传入事件参数，事件参数包含行为是调用FunctionUpdater.Create,这个方法是每帧调用一次它的事件参数，而传入的事件执行的是给sprite的alpha值减少一个帧的时间量。
+//                        Task taskBase = new Task.Clean(gameObject.transform.position, (() =>
+//                        {
+//                            float alpha = 1f;
+//                            FunctionUpdater.Create((() =>
+//                            {
+//                                alpha -= Time.deltaTime;
+//                                spriteRenderer.color = new Color(1f, 1, 1, alpha);
+//                                if (alpha <= 0f)
+//                                {
+//                                    GameObject.Destroy(gameObject);
+//                                    return true;
+//                                }
+//                                else
+//                                {
+//                                    return false;
+//                                }
+//                            }));
+//                        }));
+//                        return taskBase;
+//                    }
+//                    else
+//                    {
+//                        return null;
+//                    }
+//                }));
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))

@@ -56,3 +56,6 @@ TagManager:
   - name: Item
     uniqueID: 1386514293
     locked: 0
+  - name: AttachIcon
+    uniqueID: 3406526985
+    locked: 0
