@@ -4,6 +4,7 @@ using System.Linq;
 using CodeMonkey;
 using CodeMonkey.Utils;
 using StateMachine;
+using TaskSystem.GatherResource;
 using UnityEngine;
 
 
@@ -37,6 +38,12 @@ namespace TaskSystem
         private Transform MineButton;
         private MouseType mouseType;
         private GameObject attachMouseSprite;
+
+        private void Awake()
+        {
+            GameResource.Init();
+        }
+
         private void Start()
         {
              taskSystem = new PL_TaskSystem<TaskBase>();

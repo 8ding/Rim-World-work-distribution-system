@@ -10,14 +10,14 @@ public class Window_GameResource : MonoBehaviour
     // Start is called before the first frame update
     public Text GoldAmount;
 
-    private void Awake()
+    private void Start()
     {
         GameResource.OnGoldAmountChanged += handldeGoldAmountChanged;
         handldeGoldAmountChanged();
-    }
+     }
 
     private void handldeGoldAmountChanged()
     {
-        GoldAmount.text = "Gold Amount:" + GameResource.GetGoldAmount();
-    }
+        GoldAmount.text = "Gold Amount:" + GameResource.GetAmount(GameResource.ResourceType.Gold);
+    } 
 }

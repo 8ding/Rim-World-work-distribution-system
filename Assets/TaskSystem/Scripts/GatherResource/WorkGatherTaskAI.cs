@@ -94,7 +94,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                     worker.moveTo(task.StorePosition, (() =>
                     {
                         task.GoldDropde();
-                        GameResource.AddAmount(worker.GetCarryAmount());
+                        GameResource.AddAmount(GameResource.ResourceType.Gold,worker.GetCarryAmount());
                         worker.Drop(goldGameObject,(() =>
                         {
                             inventoryTextMesh.text = "";
