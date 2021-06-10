@@ -55,7 +55,7 @@ public class CharacterAnimation : MonoBehaviour
         }
         animationObjectController.LoopTimes = LoopTimes;
         animationObjectController.OnLoopOneTime = OneTimeAction;
-        animationObjectController.OnObjectAnimationEnd += handleObjectAnimationEnd;
+        animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
     }
 
     public void PlayDirectMoveAnimation(Vector3 Position)

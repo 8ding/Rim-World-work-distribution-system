@@ -93,7 +93,7 @@ public class Woker:IWorker
 
     public void Drop(GameObject gameObject,Action OnDropEnd = null)
     {
-        GameObject.Destroy(gameObject);
+        gameObject.SetActive(false);
         Drop(OnDropEnd);
     }
 

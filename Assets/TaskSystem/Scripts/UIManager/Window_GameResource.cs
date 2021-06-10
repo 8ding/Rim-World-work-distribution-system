@@ -12,7 +12,7 @@ public class Window_GameResource : MonoBehaviour
 
     private void Start()
     {
-        GameResource.OnGoldAmountChanged += handldeGoldAmountChanged;
+        GameResource.resourceActionPairDictionary[GameResource.ResourceType.Gold]+= handldeGoldAmountChanged;
         handldeGoldAmountChanged();
      }
 

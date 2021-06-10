@@ -12,7 +12,7 @@ namespace TaskSystem.GatherResource
         public static Action OnWoodAmountChange;
         private static int goldAmount;
         private static Dictionary<ResourceType, int> resourceTypeDictionary = new Dictionary<ResourceType, int>();
-        private static Dictionary<ResourceType, Action> resourceActionPairDictionary = new Dictionary<ResourceType, Action>();
+        public static Dictionary<ResourceType, Action> resourceActionPairDictionary;
         public enum ResourceType
         {
             Gold,

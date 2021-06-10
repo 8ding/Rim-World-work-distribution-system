@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using CodeMonkey;
 using CodeMonkey.Utils;
+using TaskSystem;
 using UnityEngine;
 
-public abstract class TaskBase
-{
-    
-}
+
 
 public class QueueTask<TTask> where TTask : TaskBase
 {

@@ -7,7 +7,7 @@ namespace TaskSystem.Character
     public class AnimationObjectController : MonoBehaviour
     {
         public int LoopTimes;
-        public event Action OnObjectAnimationEnd;
+        public Action OnObjectAnimationEnd;
         public Action OnLoopOneTime;
 
         public void LoopOneTimeEnd()

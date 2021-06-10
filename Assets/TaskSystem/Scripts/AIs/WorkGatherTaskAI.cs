@@ -4,13 +4,19 @@ using TaskSystem;
 using TaskSystem.GatherResource;
 using UnityEngine;
 
+public enum TaskType
+{
+    GatherGold,
+    GatherWood,
+}
 public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 {
     private Woker worker;
     private PL_TaskSystem<TaskBase> taskSystem;
     private State state;
     private float waitingTimer;
-
+    private GameObject goldGameObject;
+    private Dictionary<TaskType, int> tasktypeOrderDictionary;
     private TextMesh inventoryTextMesh;
     // Update is called once per frame
     void Update()
@@ -39,6 +45,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         state = State.WaitingForNextTask;
         worker.Idle();
         inventoryTextMesh = transform.Find("CarryAmount").GetComponent<TextMesh>();
+        tasktypeOrderDictionary = new Dictionary<TaskType, int>();
     }
 
     private void updateInventory()
@@ -89,8 +96,13 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                     {
                         mineManagers.Insert(0,mineManager);
                     }
-                    GameObject goldGameObject = MyClass.CreateWorldSprite(worker.gameObject.transform, "gold", "Item", GameAssets.Instance.gold,
-                        new Vector3(0, 0.5f, 0), new Vector3(1, 1, 1), 1, Color.white);
+                    if(goldGameObject == null)
+                        goldGameObject = MyClass.CreateWorldSprite(worker.gameObject.transform, "gold", "Item", GameAssets.Instance.gold,
+                            new Vector3(0, 0.5f, 0), new Vector3(1, 1, 1), 1, Color.white);
+                    else
+                    {
+                        goldGameObject.SetActive(true);
+                    }
                     worker.moveTo(task.StorePosition, (() =>
                     {
                         task.GoldDropde();
@@ -117,7 +129,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                             StorePosition = GameObject.Find("Crate").transform.position,
                             GoldGrabed = (amount, minemanager) =>
                             {
-                                minemanager.giveGold(amount);
+                                minemanager.GiveGold(amount);
                             },
                             GoldDropde = task.GoldDropde
                         };
