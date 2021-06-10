@@ -17,7 +17,6 @@ namespace TaskSystem.Character
             if (LoopTimes <= 0)
             {
                 OnObjectAnimationEnd?.Invoke();
-                GameObject.Destroy(gameObject.transform.parent.gameObject);
             }
         }
 

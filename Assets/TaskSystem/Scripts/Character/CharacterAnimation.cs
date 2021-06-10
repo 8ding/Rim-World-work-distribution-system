@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class CharacterAnimation : MonoBehaviour
 {
-    private Animator animator;
     private FaceDirectionType faceDirectionType;
 
     private GameObject animationobject;
@@ -16,24 +15,43 @@ public class CharacterAnimation : MonoBehaviour
     public  Action OnAnimationEnd;
     public Action OneTimeAction;
     public int LoopTimes;
+    private Dictionary<FaceDirectionType, GameObject> faceDirectionGameObjectDictionary;
 
-    void Start()
+    private Dictionary<ObjectAnimationType, Dictionary<FaceDirectionType, GameObject>>
+        animationTypDirectionDictionaryDictionary;
+    void Awake()
     {
-        animator = GetComponent<Animator>();
+        animationTypDirectionDictionaryDictionary =
+            new Dictionary<ObjectAnimationType, Dictionary<FaceDirectionType, GameObject>>();
+        faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>();
         faceDirectionType = FaceDirectionType.Side;
-        LoopTimes = 1;
+        LoopTimes = 0;
     }
     private void CreateobjectAnimaiton(ObjectAnimationType objectAnimationType)
-    { 
-        if(animationobject != null)
-            Destroy(animationobject);
-        animationobject =
-            GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
+    {
+        if(animationobject != null && animationobject.activeSelf)
+            animationobject.SetActive(false);
+        if (!animationTypDirectionDictionaryDictionary.TryGetValue(objectAnimationType,out faceDirectionGameObjectDictionary))
+        {
+            animationobject =
+                GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
+            faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>
+                {{faceDirectionType, animationobject}};
+            animationTypDirectionDictionaryDictionary[objectAnimationType] = faceDirectionGameObjectDictionary;
+        }
+        else if(!faceDirectionGameObjectDictionary.TryGetValue(faceDirectionType, out animationobject))
+        {
+            animationobject =
+                GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
+            animationTypDirectionDictionaryDictionary[objectAnimationType][faceDirectionType] = animationobject;
+        }
+
+        animationobject.SetActive(true);
         AnimationObjectController animationObjectController =
             animationobject.GetComponentInChildren<AnimationObjectController>();
         if (animationObjectController == null)
         {
-            animationObjectController = GetComponent<AnimationObjectController>();
+            animationObjectController = animationobject.GetComponent<AnimationObjectController>();
         }
         animationObjectController.LoopTimes = LoopTimes;
         animationObjectController.OnLoopOneTime = OneTimeAction;
@@ -64,7 +82,7 @@ public class CharacterAnimation : MonoBehaviour
             }
         }
         CreateobjectAnimaiton(ObjectAnimationType.Walk);
-    }
+     }
 
     public void PlayIdleAnimation()
     {
