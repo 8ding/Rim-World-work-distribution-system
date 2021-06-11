@@ -69,9 +69,9 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/PL_TaskSystem.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/TaskBase.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -243,7 +243,7 @@
       <workItem from="1623248027140" duration="3990000" />
       <workItem from="1623293503364" duration="13852000" />
       <workItem from="1623333278483" duration="7801000" />
-      <workItem from="1623378653717" duration="18776000" />
+      <workItem from="1623378653717" duration="22704000" />
     </task>
     <servers />
   </component>
@@ -336,17 +336,17 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs</url>
-          <line>18</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" initialLine="18">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs</url>
+          <line>138</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\WorkGatherTaskAI.cs" initialLine="138" containingFunctionPresentation="lambda expression inside method 'ExecuteTask_Gather'">
             <startOffsets>
-              <option value="427" />
+              <option value="4111" />
             </startOffsets>
             <endOffsets>
-              <option value="458" />
+              <option value="4160" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="36" />
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

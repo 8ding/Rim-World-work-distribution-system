@@ -93,7 +93,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
             if (task != null)
             {
                 break;
-            }
+            } 
         }
             
         if (task == null)

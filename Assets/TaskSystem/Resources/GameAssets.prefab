@@ -49,6 +49,7 @@ MonoBehaviour:
   WeaponSlot: {fileID: 4436693064181886209, guid: 9f30f35184729d64e9778f3a861945dc, type: 3}
   GoldPoint: {fileID: 21300000, guid: b5069404e18b35a479f15710158f92e4, type: 3}
   MiningShovel: {fileID: -8149644795044491681, guid: 859caa1337f1497c857b71771e7c5295, type: 3}
+  CutKnife: {fileID: -253428081577774302, guid: a1925e7d73214f63a8ddcce6bea40954, type: 3}
   AnimationObjects:
   - objectAnimationType: 0
     faceTypeObjects:

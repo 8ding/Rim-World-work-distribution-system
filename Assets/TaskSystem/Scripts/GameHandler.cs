@@ -38,6 +38,7 @@ namespace TaskSystem
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
         
         private Transform MineButton;
+        private Transform cutButton;
         private MouseType mouseType;
         private GameObject attachMouseSprite;
 
@@ -59,7 +60,8 @@ namespace TaskSystem
              
             MineButton = GameObject.Find("MineButton").transform;
             MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
-
+            cutButton = GameObject.Find("CutButton").transform;
+            cutButton.GetComponent<Button_UI>().ClickFunc += handleCutButtonClick;
 
             createWorker(new Vector3(0,0,0),WokerType.Miner);
 
@@ -72,7 +74,7 @@ namespace TaskSystem
             mouseType = MouseType.None;
             Destroy(attachMouseSprite);
         }
-        //处理点击矿点事件
+        //处理点击资源点事件
         private void handleMinePointClicked(ResourceManager resourceManager)
         {
             switch (resourceManager.ResourceType)
@@ -93,6 +95,22 @@ namespace TaskSystem
                         Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                     }
                     break;
+                case ResourceType.Wood:
+                    if (mouseType == MouseType.HitWood)
+                    {
+                        GatherResourceTask task = new GatherResourceTask
+                        {
+                            resourceManager = resourceManager,
+                            StorePosition = GameObject.Find("Crate").transform.position,
+                            ResourceGrabed = ((amount, woodManager) =>
+                            {
+                                woodManager.GiveResource(amount);
+                            })
+                        };
+                        gatherWoodTaskSystem.AddTask(task);
+                        Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
+                    }
+                    break;
             }
 
         }
@@ -100,11 +118,14 @@ namespace TaskSystem
         private void handleMineButtonClick()
         {
             mouseType = MouseType.HitMine;
-            if(attachMouseSprite == null)
-            {
-                attachMouseSprite = MyClass.CreateWorldSprite(null, "mineAttachMouse", "AttachIcon", GameAssets.Instance.MiningShovel,
+            attachMouseSprite = MyClass.CreateWorldSprite(null, "mineAttachMouse", "AttachIcon", GameAssets.Instance.MiningShovel,
                     MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
-            }
+        }
+        private void handleCutButtonClick()
+        {
+            mouseType = MouseType.HitWood;
+            attachMouseSprite = MyClass.CreateWorldSprite(null, "cutAttachMouse", "AttachIcon", GameAssets.Instance.CutKnife,
+                    MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
         }
 
 
@@ -148,13 +169,6 @@ namespace TaskSystem
             if(attachMouseSprite != null)
                 attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
             
-            if ( mineManagerList.Count > 0)
-            {
-                ResourceManager resourceManager = mineManagerList[0];
-                mineManagerList.RemoveAt(0);
-
-            }
-
             
             //生成矿点的操作
             if (Input.GetKeyDown(KeyCode.Space))
@@ -179,7 +193,7 @@ namespace TaskSystem
             private ResourceType resourceType;
             private Transform ResourcePointTransform;
             private int resourceAmount;
-            public static int MaxAmount = 2;
+            public static int MaxAmount = 4;
             public static Action<ResourceManager> OnResourceClicked;
             public ResourceManager(Transform resourcePointTransform, ResourceType resourceType)
             {
