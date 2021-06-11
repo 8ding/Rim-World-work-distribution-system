@@ -19,20 +19,23 @@ namespace TaskSystem
     {
         None,
         HitMine,
+        HitWood,
     }
     public class GameHandler : MonoBehaviour
     {
-        private PL_TaskSystem<TaskBase> taskSystem;
-        private static PL_TaskSystem<TaskBase> transportTaskSystem;
-        private PL_TaskSystem<TaskBase> gatherTaskSystem;
+     
+        private GameObject weaponSlotGameObject;
+        private GameObject resourcePointGameObject;
+
+        private static PL_TaskSystem<TaskBase> gatherWoodTaskSystem;
+        private PL_TaskSystem<TaskBase> gatherGoldTaskSystem;
         private Woker woker;
         private ITaskAI taskAI;
-        private GameObject weaponSlotGameObject;
-        private GameObject minePointGameObject;
 
-        private List<MineManager> mineManagerList;
+        private List<ResourceManager> mineManagerList;
+        private List<ResourceManager> woodManagerList;
         private int idleMinerAmount;
-        private MineManager oneMineManager;
+        public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
         
         private Transform MineButton;
         private MouseType mouseType;
@@ -41,27 +44,28 @@ namespace TaskSystem
         private void Awake()
         {
             GameResource.Init();
+            gatherWoodTaskSystem = new PL_TaskSystem<TaskBase>();
+            gatherGoldTaskSystem = new PL_TaskSystem<TaskBase>();
+            JobTypeTaskSystemDictionary = new Dictionary<JobType, PL_TaskSystem<TaskBase>>
+            {
+                {JobType.GatherGold, gatherGoldTaskSystem},
+                {JobType.GatherWood, gatherWoodTaskSystem}
+            };
+                         
+            mineManagerList = new List<ResourceManager>();
+            woodManagerList = new List<ResourceManager>();
+
+            ResourceManager.OnResourceClicked += handleMinePointClicked;
+             
+            MineButton = GameObject.Find("MineButton").transform;
+            MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
+
+
+            createWorker(new Vector3(0,0,0),WokerType.Miner);
+
+            mouseType = MouseType.None;
         }
 
-        private void Start()
-        {
-             taskSystem = new PL_TaskSystem<TaskBase>();
-             transportTaskSystem = new PL_TaskSystem<TaskBase>();
-             gatherTaskSystem = new PL_TaskSystem<TaskBase>();
-
-             mineManagerList = new List<MineManager>();
-             
-             MineManager.OnMinePointClicked += handleMinePointClicked;
-             
-             MineButton = GameObject.Find("MineButton").transform;
-             MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
-
-
-             createWorker(new Vector3(0,0,0),WokerType.Miner);
-
-             mouseType = MouseType.None;
-             
-        }
         //取消点击采矿按钮的状态
         private void cancleHitMine()
         {
@@ -69,13 +73,28 @@ namespace TaskSystem
             Destroy(attachMouseSprite);
         }
         //处理点击矿点事件
-        private void handleMinePointClicked(MineManager mineManager)
+        private void handleMinePointClicked(ResourceManager resourceManager)
         {
-            if(mouseType == MouseType.HitMine)
+            switch (resourceManager.ResourceType)
             {
-                mineManagerList.Add(mineManager);
-                Destroy(mineManager.GetGoldPointTransform().gameObject.GetComponent<Button_Sprite>());
+                case ResourceType.Gold:
+                    if(mouseType == MouseType.HitMine)
+                    {
+                        GatherResourceTask task = new GatherResourceTask
+                        {
+                            resourceManager =  resourceManager,
+                            StorePosition = GameObject.Find("Crate").transform.position,
+                            ResourceGrabed = (amount,minemanager) =>
+                            {
+                                minemanager.GiveResource(amount);
+                            }
+                        };
+                        gatherGoldTaskSystem.AddTask(task);
+                        Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
+                    }
+                    break;
             }
+
         }
         //处理点击采矿按钮事件
         private void handleMineButtonClick()
@@ -89,12 +108,12 @@ namespace TaskSystem
         }
 
 
-        private GameObject createMinePoint(Vector3 position)
+        private GameObject createResourcePoint(Vector3 position,ResourceType resourceType)
         {
-            minePointGameObject = GameAssets.Instance.createItem(null, MyClass.GetMouseWorldPosition(0, Camera.main),
-                ItemType.MinePoint);
-            oneMineManager = new MineManager(minePointGameObject.transform);
-            return minePointGameObject;
+            resourcePointGameObject = GameAssets.Instance.createResource(null, MyClass.GetMouseWorldPosition(0, Camera.main),
+                resourceType);
+            new ResourceManager(resourcePointGameObject.transform, resourceType);
+            return resourcePointGameObject;
         }
 
         private void createWorker(Vector3 position,WokerType wokerType)
@@ -104,7 +123,7 @@ namespace TaskSystem
             {
                 case WokerType.Miner:
                     taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
-                    taskAI.setUp(woker,gatherTaskSystem);
+                    taskAI.setUp(woker);
                     idleMinerAmount++;
                     break;
             }
@@ -124,84 +143,88 @@ namespace TaskSystem
                         break;
                 }
             }
+
             //采矿图标跟随鼠标
             if(attachMouseSprite != null)
                 attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
             
-            if (idleMinerAmount > 0 && mineManagerList.Count > 0)
+            if ( mineManagerList.Count > 0)
             {
-                idleMinerAmount--;
-                MineManager mineManager = mineManagerList[0];
+                ResourceManager resourceManager = mineManagerList[0];
                 mineManagerList.RemoveAt(0);
-                GatherTask.GatherGold task = new GatherTask.GatherGold
-                {
-                    mineManagerList = this.mineManagerList,
-                    mineManager =  mineManager,
-                    StorePosition = GameObject.Find("Crate").transform.position,
-                    GoldGrabed = (amount,minemanager) =>
-                    {
-                        minemanager.GiveGold(amount);
-                    },
-                    GoldDropde = () =>
-                    {
-                        idleMinerAmount++;
-                    },
-                };
-                gatherTaskSystem.AddTask(task);
+
             }
 
             
             //生成矿点的操作
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                createMinePoint(MyClass.GetMouseWorldPosition(0, Camera.main));
+                createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Gold);
             }
             //生成工人操作
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.Miner);
             }
-        }
-        
-        //矿点管理类对象
-        public class MineManager
-        {
-            private Transform minePointTransform;
-            private int GoldAmount;
-            public static int MaxAmount = 2;
-            public static Action<MineManager> OnMinePointClicked;
-            public MineManager(Transform minePointTransform)
+            //生成树木操作
+            if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                this.minePointTransform = minePointTransform;
-                GoldAmount = MaxAmount;
-                minePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
+                createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Wood);
+            }
+        }
+
+        //资源点管理类对象
+        public class ResourceManager
+        {
+            private ResourceType resourceType;
+            private Transform ResourcePointTransform;
+            private int resourceAmount;
+            public static int MaxAmount = 2;
+            public static Action<ResourceManager> OnResourceClicked;
+            public ResourceManager(Transform resourcePointTransform, ResourceType resourceType)
+            {
+                this.ResourceType = resourceType;
+                this.ResourcePointTransform = resourcePointTransform;
+                resourceAmount = MaxAmount;
+                resourcePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
                 {
-                    OnMinePointClicked?.Invoke(this);
+                    OnResourceClicked?.Invoke(this);
                 };
             }
 
-            public bool IsHasGold()
+            public ResourceType ResourceType
             {
-                return GoldAmount > 0;
-            }
-
-            public Transform GetGoldPointTransform()
-            {
-                return minePointTransform;
-            }
-
-            public void GiveGold(int amount)
-            {
-                GoldAmount -= amount;
-                if (GoldAmount < 1)
+                set
                 {
-                    GameObject.Destroy(GetGoldPointTransform().gameObject);
+                    resourceType = value;
+                }
+                get
+                {
+                    return resourceType;
+                }
+            }
+            public bool IsHasResource()
+            {
+                return resourceAmount > 0;
+            }
+
+            public Transform GetResourcePointTransform()
+            {
+                return ResourcePointTransform;
+            }
+
+            public void GiveResource(int amount)
+            {
+                resourceAmount -= amount;
+                if (resourceAmount < 1)
+                {
+                    GameObject.Destroy(GetResourcePointTransform().gameObject);
                 }
             }
 
-            public int getGoldAmount()
+            public int GetResourceAmount()
             {
-                return GoldAmount;
+                return resourceAmount;
             }
         }
     }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace TaskSystem
 {
     public enum State
@@ -7,7 +9,7 @@ namespace TaskSystem
     }
     public interface ITaskAI
     {
-        void setUp(IWorker worker, PL_TaskSystem<TaskBase> taskSystem); 
+        void setUp(IWorker worker); 
         void RequestNextTask();
     }
 }

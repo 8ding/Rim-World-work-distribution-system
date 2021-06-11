@@ -5,239 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d50941c1-65c9-41d1-a967-27fc04f5b275" name="Default Changelist" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="47" column="66" selection-start-line="47" selection-start-column="66" selection-end-line="47" selection-end-column="66" />
-              <folding>
-                <marker date="1623341538702" expanded="true" signature="6:129" ph="..." />
-                <marker date="1623341538702" expanded="true" signature="151:187" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="241:5055" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="573:1044" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="602:1038" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="768:944" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="1119:1424" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="1460:1541" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="1575:1997" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="1684:1750" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="1763:1991" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="1871:1981" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="2066:5048" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="2395:5040" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="2595:2680" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="2701:5028" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="2921:4071" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="3017:3121" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="3423:3523" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="3605:4050" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="3836:4025" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="4092:5014" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="4199:4996" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="4436:4913" ph="{...}" />
-                <marker date="1623341538702" expanded="true" signature="4736:4829" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/IWorker.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-              <folding>
-                <marker date="1623247002258" expanded="false" signature="6:110" ph="..." />
-                <marker date="1623247002258" expanded="true" signature="136:529" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-              <folding>
-                <marker date="1623336420682" expanded="false" signature="6:134" ph="..." />
-                <marker date="1623336420682" expanded="true" signature="162:2944" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="476:524" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="561:836" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="958:1217" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="1258:1318" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="1381:1502" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="1563:1681" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="1743:1800" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="1847:1911" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="1922:2073" ph="/// Woker的挖矿行为，mineTImes为挖矿的动作次数 ... " />
-                <marker date="1623336420682" expanded="true" signature="2151:2286" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="2333:2399" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="2457:2578" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="2647:2721" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="2757:2800" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="2833:2873" ph="{...}" />
-                <marker date="1623336420682" expanded="true" signature="2907:2942" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameResource.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="33" column="9" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
-              <folding>
-                <marker date="1623334857068" expanded="false" signature="6:47" ph="..." />
-                <marker date="1623334857068" expanded="true" signature="84:1382" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="127:1380" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="504:560" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="595:1012" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="696:778" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="872:1001" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="1087:1233" ph="{...}" />
-                <marker date="1623334857068" expanded="true" signature="1297:1374" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-270">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
-              <folding>
-                <marker date="1623341538834" expanded="false" signature="6:180" ph="..." />
-                <marker date="1623341538834" expanded="true" signature="203:6564" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="231:257" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="284:327" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="372:6557" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="1007:1060" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="1090:1726" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="1785:1885" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="1973:2221" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="2030:2211" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="2287:2666" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="2382:2656" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="2729:3021" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="3094:3459" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="3179:3449" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="3490:5317" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="3545:3866" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="3628:3852" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="4125:4923" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="4369:4860" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="4637:4714" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="4775:4841" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="5008:5116" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="5187:5307" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="5377:6551" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="5645:5949" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="5861:5934" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="5986:6053" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="6107:6178" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="6224:6438" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="6312:6424" ph="{...}" />
-                <marker date="1623341538834" expanded="true" signature="6478:6541" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/taskmanager/PL_TaskSystem.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="6" selection-start-column="6" selection-end-column="6" />
-              <folding>
-                <marker date="1623337719343" expanded="true" signature="6:152" ph="..." />
-                <marker date="1623337719343" expanded="true" signature="208:445" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="300:358" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="393:443" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="502:2006" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="646:827" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="884:934" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="991:1116" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1153:1625" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1213:1619" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1367:1547" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1564:1609" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1657:1925" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1715:1861" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1874:1919" ph="{...}" />
-                <marker date="1623337719343" expanded="true" signature="1963:2004" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/Window_GameResource.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="23" selection-start-line="23" selection-end-line="23" />
-              <folding>
-                <marker date="1623334562737" expanded="false" signature="6:147" ph="..." />
-                <marker date="1623334562737" expanded="true" signature="197:624" ph="{...}" />
-                <marker date="1623334562737" expanded="true" signature="306:465" ph="{...}" />
-                <marker date="1623334562737" expanded="true" signature="510:621" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/JobOrderPanel.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-              <folding>
-                <marker date="1623339593427" expanded="true" signature="63:72" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/OrderHolder.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-              <folding>
-                <marker date="1623341538426" expanded="false" signature="6:78" ph="..." />
-                <marker date="1623341538426" expanded="true" signature="120:146" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/taskmanager/TaskBase.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
-              <folding>
-                <marker date="1623337719520" expanded="true" signature="6:66" ph="..." />
-                <marker date="1623337719520" expanded="true" signature="88:627" ph="{...}" />
-                <marker date="1623337719520" expanded="true" signature="125:142" ph="{...}" />
-                <marker date="1623337719520" expanded="true" signature="181:625" ph="{...}" />
-                <marker date="1623337719520" expanded="true" signature="232:619" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -266,52 +37,42 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/JobOrderPanel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/StateMachine/CM_Worker.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/OrderHolder.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/CodeMonkey/CMDebug.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveVelocity.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveTransformVelocity.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../CodeMonkey/pathFinding/Assets/Pathfinding/Scripts/Grid.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://C:/Program Files/Unity/Hub/Editor/2020.3.8f1c1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Runtime/EventSystem/EventData/PointerEventData.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/taskmanager/TaskBase.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0CEB49B8-3EB4-4B0F-B18E-ECCB446E5747/5d/b5c008ba/Canvas.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://C:/Program Files/Unity/Hub/Editor/2020.3.8f1c1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Runtime/EventSystem/UIBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/taskmanager/PL_TaskSystem.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/Window_GameResource.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Work/GolfSceneEdit/Assets/Scripts/YX/Tool 击球测试/DrawGizmos.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/CodeMonkey/CMDebug.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Utils/Button_UI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Utils/Button_Sprite.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/IWorker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://C:/Program Files/Unity/Hub/Editor/2020.3.8f1c1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Runtime/EventSystem/UIBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/OrderHolder.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveTransformVelocity.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Utils/Button_UI.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveVelocity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameResource.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/5c/89d8f3b4/UnitySynchronizationContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/PL_TaskSystem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/IWorker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/Window_GameResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/StateMachine/CM_Worker.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameResource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../CodeMonkey/PathFinding/Assets/Pathfinding/Scripts/Grid.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/TaskBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/JobOrderPanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UI/Window_GameResource.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GatherResource/GameResource.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GatherResource/WorkGatherTaskAI.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Woker.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkTaskAI.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/taskmanager/TaskBase.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/taskmanager/PL_TaskSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/JobOrderPanel.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/OrderHolder.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" />
-        <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
-      </list>
-    </option>
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/PL_TaskSystem.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/TaskBase.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
+    </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="230" />
@@ -429,35 +190,29 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
-      <option name="userSelectedPid" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" pid="8884">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12824">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="8884" />
-      <option name="userSelectedPid" value="false" />
+      <option name="pid" value="12824" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -488,6 +243,7 @@
       <workItem from="1623248027140" duration="3990000" />
       <workItem from="1623293503364" duration="13852000" />
       <workItem from="1623333278483" duration="7801000" />
+      <workItem from="1623378653717" duration="18776000" />
     </task>
     <servers />
   </component>
@@ -533,7 +289,7 @@
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
@@ -542,14 +298,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -568,6 +317,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
@@ -590,10 +340,10 @@
           <line>18</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" initialLine="18">
             <startOffsets>
-              <option value="433" />
+              <option value="427" />
             </startOffsets>
             <endOffsets>
-              <option value="464" />
+              <option value="458" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="36" />

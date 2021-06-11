@@ -12,7 +12,7 @@ public class CharacterAnimation : MonoBehaviour
 
     private GameObject animationobject;
     //加event就只能在这个类内被调用被赋值,封闭安全
-    public  Action OnAnimationEnd;
+    public Action OnAnimationEnd;
     public Action OneTimeAction;
     public int LoopTimes;
     private Dictionary<FaceDirectionType, GameObject> faceDirectionGameObjectDictionary;
@@ -86,35 +86,11 @@ public class CharacterAnimation : MonoBehaviour
 
     public void PlayIdleAnimation()
     {
-        // if(faceDirectionType == FaceDirectionType.Side)
-        // {
-        //     animator.Play("idle_side");
-        // }
-        // else if(faceDirectionType == FaceDirectionType.Down)
-        // {
-        //     animator.Play("idle_down");
-        // }
-        // else
-        // {
-        //     animator.Play("idle_up");
-        // }
         CreateobjectAnimaiton(ObjectAnimationType.Idle);
     }
 
     public void PlayVictoryAnimation()
     {
-        // if(faceDirectionType == FaceDirectionType.Side)
-        // {
-        //     animator.Play("throw_side");
-        // }
-        // else if(faceDirectionType == FaceDirectionType.Down)
-        // {
-        //     animator.Play("throw_down");
-        // }
-        // else
-        // {
-        //     animator.Play("throw_up");
-        // }
         CreateobjectAnimaiton(ObjectAnimationType.Throw);
     }
 

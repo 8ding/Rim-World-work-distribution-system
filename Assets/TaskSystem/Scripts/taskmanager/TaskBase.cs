@@ -8,18 +8,17 @@ namespace TaskSystem
     {
     
     }
-    public class GatherTask : TaskBase
+    
+    public class GatherResourceTask : TaskBase
     {
-        public class GatherGold : GatherTask
-        {
-            public Vector3 GoldPosition;
-            public Vector3 StorePosition;
-            public Action<int,GameHandler.MineManager> GoldGrabed;
-            public GameHandler.MineManager mineManager;
-            public Action GoldDropde;
-            public Transform goldTransform;
-            public List<GameHandler.MineManager> mineManagerList;
-            
-        }
+        public Vector3 StorePosition;
+        public Action<int,GameHandler.ResourceManager> ResourceGrabed;
+        public GameHandler.ResourceManager resourceManager;
     }
+
+    public class GatherWoodTask : TaskBase
+    {
+        
+    }
+    
 }

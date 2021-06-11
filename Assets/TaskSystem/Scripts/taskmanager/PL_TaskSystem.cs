@@ -77,6 +77,7 @@ public class PL_TaskSystem<TTask> where TTask : TaskBase
             TTask TTask = taskList[0];
             taskList.Remove(TTask);
             return TTask;
+
         }
         else
         {
@@ -87,5 +88,10 @@ public class PL_TaskSystem<TTask> where TTask : TaskBase
     public void AddTask(TTask TTask)
     {
         taskList.Add(TTask);
+    }
+
+    public void InsertTask(int index, TTask ttTask)
+    {
+        taskList.Insert(index,ttTask);
     }
 }

@@ -2,12 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using TaskSystem;
 using TaskSystem.GatherResource;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
-public enum TaskType
+public enum JobType
 {
     GatherGold,
     GatherWood,
+}
+
+public struct JobOrder
+{
+    public JobType type;
+    private int order;
+
+    public JobOrder(JobType jobType, int order)
+    {
+        this.type = jobType;
+        this.order = order;
+    }
 }
 public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 {
@@ -15,9 +28,12 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     private PL_TaskSystem<TaskBase> taskSystem;
     private State state;
     private float waitingTimer;
-    private GameObject goldGameObject;
-    private Dictionary<TaskType, int> tasktypeOrderDictionary;
+    private GameObject ResourceGameObject;
     private TextMesh inventoryTextMesh;
+    
+    private List<JobOrder> jobOrderList;
+    private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
+    
     // Update is called once per frame
     void Update()
     {
@@ -38,23 +54,48 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         }
     }
 
-    public void setUp(IWorker worker, PL_TaskSystem<TaskBase> taskSystem)
+    public void setUp(IWorker worker)
     {
         this.worker = worker as Woker;
-        this.taskSystem = taskSystem;
         state = State.WaitingForNextTask;
         worker.Idle();
         inventoryTextMesh = transform.Find("CarryAmount").GetComponent<TextMesh>();
-        tasktypeOrderDictionary = new Dictionary<TaskType, int>();
+        jobOrderList = new List<JobOrder>
+        {
+            new JobOrder(JobType.GatherGold, 4),
+            new JobOrder(JobType.GatherWood, 4)
+        };
+        resourceTypeIconDictionary = new Dictionary<ResourceType, GameObject>();
     }
 
     private void updateInventory()
     {
         inventoryTextMesh.text = worker.GetCarryAmount().ToString();
     }
+
+    
     public void RequestNextTask()
     {
-        TaskSystem.GatherTask task = taskSystem.RequestTask() as GatherTask;
+        TaskBase task = null;
+        for (int i = 0; i < jobOrderList.Count; i++)
+        {
+            switch (jobOrderList[i].type)
+            {
+                case JobType.GatherGold:
+                    task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold]
+                        .RequestTask();
+                    break;
+                case JobType.GatherWood:
+                    task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
+                        .RequestTask();
+                    break;
+            }
+            if (task != null)
+            {
+                break;
+            }
+        }
+            
         if (task == null)
         {
             state = State.WaitingForNextTask;
@@ -62,82 +103,128 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         else
         {
             state = State.ExecutingTask;
-            if(task is TaskSystem.GatherTask.GatherGold)
+            if(task is TaskSystem.GatherResourceTask)
             {
-                ExecuteTask_GatherGold(task as TaskSystem.GatherTask.GatherGold);
+                ExecuteTask_Gather(task as TaskSystem.GatherResourceTask);
             }
         }
     }
 
-    private void ExecuteTask_GatherGold(GatherTask.GatherGold task)
+    private void ExecuteTask_Gather(GatherResourceTask task)
     {
-        List<GameHandler.MineManager> mineManagers = task.mineManagerList;
-        GameHandler.MineManager mineManager = task.mineManager;
+        GameHandler.ResourceManager resourceManager = task.resourceManager;
+        Vector3 storePosition = task.StorePosition;
         int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
-        //工人前往采矿点
-        worker.moveTo(mineManager.GetGoldPointTransform().position, () =>
+        //工人前往资源点
+        worker.moveTo(resourceManager.GetResourcePointTransform().position, () =>
         {
-            int mineTimes = mineManager.getGoldAmount() < canCarryAmount ? mineManager.getGoldAmount() : canCarryAmount;
-            //工人挥舞采矿镰刀
+            int mineTimes = resourceManager.GetResourceAmount() < canCarryAmount ? resourceManager.GetResourceAmount() : canCarryAmount;
+            //工人采集资源
             worker.Mine(mineTimes, (() =>
             {
                 worker.Grab(null);
-                updateInventory();
             }), () =>
             {
-                //黄金被工人捡起
-                task.GoldGrabed(mineTimes,mineManager);
-
-                //工人背满了或者矿点没有了
-                if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1 || mineManagers.Count < 1)
+                //资源被工人捡起
+                task.ResourceGrabed(mineTimes,resourceManager);
+                //工人背满了
+                if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1)
                 {
-                    //工人回储存点
-                    if (mineManager.IsHasGold())
+                    //如果资源点仍有剩余资源则回收资源点
+                    if (resourceManager.IsHasResource())
                     {
-                        mineManagers.Insert(0,mineManager);
+                        restoreResource(resourceManager);
                     }
-                    if(goldGameObject == null)
-                        goldGameObject = MyClass.CreateWorldSprite(worker.gameObject.transform, "gold", "Item", GameAssets.Instance.gold,
-                            new Vector3(0, 0.5f, 0), new Vector3(1, 1, 1), 1, Color.white);
-                    else
-                    {
-                        goldGameObject.SetActive(true);
-                    }
-                    worker.moveTo(task.StorePosition, (() =>
-                    {
-                        task.GoldDropde();
-                        GameResource.AddAmount(GameResource.ResourceType.Gold,worker.GetCarryAmount());
-                        worker.Drop(goldGameObject,(() =>
-                        {
-                            inventoryTextMesh.text = "";
-                            worker.Idle();
-                            state = State.WaitingForNextTask;
-                        }));
-                    }));
+                    //生成资源物品，工人回储存点
+                    CreateResourceIcon(resourceManager.ResourceType);
+                    ExcuteGatherBack(storePosition);
                 }
+                //工人没背满,继续请求当前收集资源的相关任务
                 else
                 {
-                    //工人没背满建立新任务,寻找下一个矿点
-                    if (mineManagers.Count > 0)
+                    switch (resourceManager.ResourceType)
                     {
-                        mineManager = mineManagers[0];
-                        mineManagers.RemoveAt(0);
-                        GatherTask.GatherGold gatherGold = new GatherTask.GatherGold
-                        {
-                            mineManagerList = mineManagers,
-                            mineManager = mineManager,
-                            StorePosition = GameObject.Find("Crate").transform.position,
-                            GoldGrabed = (amount, minemanager) =>
-                            {
-                                minemanager.GiveGold(amount);
-                            },
-                            GoldDropde = task.GoldDropde
-                        };
-                        ExecuteTask_GatherGold(gatherGold);
+                        case ResourceType.Gold:
+                            task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold]
+                                .RequestTask() as GatherResourceTask;
+                            break;
+                        case ResourceType.Wood:
+                            task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
+                                .RequestTask() as  GatherResourceTask;
+                            break;
+                    }
+                    //仍有相关任务则执行，无任务返回存储点
+                    if (task != null)
+                    {
+                        ExecuteTask_Gather(task);
+                    }
+                    else
+                    {
+                        CreateResourceIcon(resourceManager.ResourceType);
+                        ExcuteGatherBack(storePosition);
                     }
                 }
             });
         });
     }
-    
+    /// <summary>
+    /// 回收资源点生成新任务,并插入任务队列头部
+    /// </summary>
+    /// <param name="resourceManager"></param>
+    private  void restoreResource(GameHandler.ResourceManager resourceManager)
+    {
+        //资源点仍剩余资源,生成新任务,插入任务系统头部
+        GatherResourceTask task = new GatherResourceTask
+        {
+            resourceManager = resourceManager,
+            StorePosition = GameObject.Find("Crate").transform.position,
+            ResourceGrabed = (amount, minemanager) => { minemanager.GiveResource(amount); }
+        };
+        GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold].InsertTask(0, task);
+        
+    }
+    /// <summary>
+    /// 生成与资源对应的物品图标
+    /// </summary>
+    /// <param name="resourceType"></param>
+    private void CreateResourceIcon(ResourceType resourceType)
+    {
+        if (!resourceTypeIconDictionary.TryGetValue(resourceType,
+            out ResourceGameObject))
+        {
+            switch (resourceType)
+            {
+                case ResourceType.Gold:
+                    ResourceGameObject = GameAssets.Instance.createItemSprite(worker.gameObject.transform,
+                        new Vector3(0, 0.5f, 0), ItemType.Gold);
+                    break;
+                case ResourceType.Wood:
+                    ResourceGameObject = GameAssets.Instance.createItemSprite(worker.gameObject.transform,
+                        new Vector3(0, 0.5f, 0), ItemType.Wood);
+                    break;
+            }
+            resourceTypeIconDictionary[resourceType] = ResourceGameObject;
+        }
+        else
+        {
+            ResourceGameObject.SetActive(true);
+        }
+    }
+    /// <summary>
+    /// 结束资源收集回到存储点并放下资源
+    /// </summary>
+    /// <param name="storePosition"></param>
+    private void ExcuteGatherBack(Vector3 storePosition)
+    {
+        worker.moveTo(storePosition, (() =>
+        {
+            GameResource.AddAmount(GameResource.ResourceType.Gold, worker.GetCarryAmount());
+            worker.Drop(ResourceGameObject, (() =>
+            {
+                inventoryTextMesh.text = "";
+                worker.Idle();
+                state = State.WaitingForNextTask;
+            }));
+        }));
+    }
 }

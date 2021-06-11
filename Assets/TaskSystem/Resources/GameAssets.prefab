@@ -47,7 +47,6 @@ MonoBehaviour:
   player: {fileID: 1200976536868524450, guid: b569a14cab7e1ea47b39a8548e68f402, type: 3}
   rifle: {fileID: 8333481726314500824, guid: 23d536d6083344698e17aa8fc049b99f, type: 3}
   WeaponSlot: {fileID: 4436693064181886209, guid: 9f30f35184729d64e9778f3a861945dc, type: 3}
-  gold: {fileID: 21300000, guid: 8042daf4c7190bf49ba25891ddabb962, type: 3}
   GoldPoint: {fileID: 21300000, guid: b5069404e18b35a479f15710158f92e4, type: 3}
   MiningShovel: {fileID: -8149644795044491681, guid: 859caa1337f1497c857b71771e7c5295, type: 3}
   AnimationObjects:
@@ -101,4 +100,16 @@ MonoBehaviour:
       animatiGameObject: {fileID: 5521700249502523949, guid: c36d4ab99a509b94faa5935436eff0a3, type: 3}
   ItemTypeObjects:
   - itemType: 0
-    itemGameObject: {fileID: 7869986127268172203, guid: c2818acc4c3f2fc4abac34e13792dc46, type: 3}
+    itemGameObject: {fileID: 7585514309718846840, guid: c2c8872e42fadf841b550616047fc2ba, type: 3}
+  - itemType: 0
+    itemGameObject: {fileID: 6827343201569544143, guid: 2f8378e1668f8c6469ded12aa6425348, type: 3}
+  ItemTypeSpries:
+  - itemType: 0
+    itemSprite: {fileID: 21300000, guid: 8042daf4c7190bf49ba25891ddabb962, type: 3}
+  - itemType: 1
+    itemSprite: {fileID: 21300000, guid: ef9b144f4b7d611489541bd5174e37ce, type: 3}
+  ResourceTypeObjects:
+  - ResourceType: 0
+    ResourceGameObject: {fileID: 7869986127268172203, guid: c2818acc4c3f2fc4abac34e13792dc46, type: 3}
+  - ResourceType: 1
+    ResourceGameObject: {fileID: 4015211326300082478, guid: 467977938b322894a93aca6912220552, type: 3}
