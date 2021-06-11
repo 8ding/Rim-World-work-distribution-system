@@ -14,7 +14,7 @@ public class CharacterAnimation : MonoBehaviour
     //加event就只能在这个类内被调用被赋值,封闭安全
     public Action OnAnimationEnd;
     public Action OneTimeAction;
-    public int LoopTimes;
+    
     private Dictionary<FaceDirectionType, GameObject> faceDirectionGameObjectDictionary;
 
     private Dictionary<ObjectAnimationType, Dictionary<FaceDirectionType, GameObject>>
@@ -25,10 +25,11 @@ public class CharacterAnimation : MonoBehaviour
             new Dictionary<ObjectAnimationType, Dictionary<FaceDirectionType, GameObject>>();
         faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>();
         faceDirectionType = FaceDirectionType.Side;
-        LoopTimes = 0;
+    
     }
-    private void CreateobjectAnimaiton(ObjectAnimationType objectAnimationType)
+    public void PlayobjectAnimaiton(int loopTimes,ObjectAnimationType objectAnimationType)
     {
+       
         if(animationobject != null && animationobject.activeSelf)
             animationobject.SetActive(false);
         if (!animationTypDirectionDictionaryDictionary.TryGetValue(objectAnimationType,out faceDirectionGameObjectDictionary))
@@ -53,7 +54,7 @@ public class CharacterAnimation : MonoBehaviour
         {
             animationObjectController = animationobject.GetComponent<AnimationObjectController>();
         }
-        animationObjectController.LoopTimes = LoopTimes;
+        animationObjectController.LoopTimes = loopTimes;
         animationObjectController.OnLoopOneTime = OneTimeAction;
         animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
     }
@@ -81,38 +82,38 @@ public class CharacterAnimation : MonoBehaviour
                 faceDirectionType = FaceDirectionType.Down;
             }
         }
-        CreateobjectAnimaiton(ObjectAnimationType.Walk);
+        PlayobjectAnimaiton(0,ObjectAnimationType.Walk);
      }
 
-    public void PlayIdleAnimation()
-    {
-        CreateobjectAnimaiton(ObjectAnimationType.Idle);
-    }
-
-    public void PlayVictoryAnimation()
-    {
-        CreateobjectAnimaiton(ObjectAnimationType.Throw);
-    }
-
-    public void PlayCleanAnimation(int looptimes)
-    {
-        this.LoopTimes = looptimes;
-        CreateobjectAnimaiton(ObjectAnimationType.Clean);
-    }
-
-
-    public void PlayMineAnimation(int looptimes,Action onetimeAction)
-    {
-        this.LoopTimes = looptimes;
-        this.OneTimeAction = onetimeAction;
-        CreateobjectAnimaiton(ObjectAnimationType.Mine);
-    }
-
-    public void PlayCutAnimation(int looptimes)
-    {
-        this.LoopTimes = looptimes;
-        CreateobjectAnimaiton(ObjectAnimationType.Cut);
-    }
+    // public void PlayIdleAnimation()
+    // {
+    //     PlayobjectAnimaiton(ObjectAnimationType.Idle);
+    // }
+    //
+    // public void PlayVictoryAnimation()
+    // {
+    //     PlayobjectAnimaiton(ObjectAnimationType.Throw);
+    // }
+    //
+    // public void PlayCleanAnimation(int looptimes)
+    // {
+    //     this.LoopTimes = looptimes;
+    //     PlayobjectAnimaiton(ObjectAnimationType.Clean);
+    // }
+    //
+    //
+    // public void PlayMineAnimation(int looptimes,Action onetimeAction)
+    // {
+    //     this.LoopTimes = looptimes;
+    //     this.OneTimeAction = onetimeAction;
+    //     PlayobjectAnimaiton(ObjectAnimationType.Mine);
+    // }
+    //
+    // public void PlayCutAnimation(int looptimes)
+    // {
+    //     this.LoopTimes = looptimes;
+    //     PlayobjectAnimaiton(ObjectAnimationType.Cut);
+    // }
     public void VictoryEnd()
     {
         OnAnimationEnd?.Invoke();

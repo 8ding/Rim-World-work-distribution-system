@@ -1,8 +1,7 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using TaskSystem;
 using TaskSystem.GatherResource;
-using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
 public enum JobType
@@ -29,8 +28,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     private State state;
     private float waitingTimer;
     private GameObject ResourceGameObject;
-    private TextMesh inventoryTextMesh;
-    
+
     private List<JobOrder> jobOrderList;
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
     
@@ -54,12 +52,11 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         }
     }
 
-    public void setUp(IWorker worker)
+    public void setUp(Woker worker)
     {
         this.worker = worker as Woker;
         state = State.WaitingForNextTask;
         worker.Idle();
-        inventoryTextMesh = transform.Find("CarryAmount").GetComponent<TextMesh>();
         jobOrderList = new List<JobOrder>
         {
             new JobOrder(JobType.GatherGold, 4),
@@ -68,12 +65,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         resourceTypeIconDictionary = new Dictionary<ResourceType, GameObject>();
     }
 
-    private void updateInventory()
-    {
-        inventoryTextMesh.text = worker.GetCarryAmount().ToString();
-    }
 
-    
     public void RequestNextTask()
     {
         TaskBase task = null;
@@ -103,6 +95,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         else
         {
             state = State.ExecutingTask;
+            
             if(task is TaskSystem.GatherResourceTask)
             {
                 ExecuteTask_Gather(task as TaskSystem.GatherResourceTask);
@@ -112,6 +105,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
+        Debug.Log("资源类型： " + task.resourceManager.ResourceType);
         GameHandler.ResourceManager resourceManager = task.resourceManager;
         Vector3 storePosition = task.StorePosition;
         int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
@@ -120,50 +114,52 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         {
             int mineTimes = resourceManager.GetResourceAmount() < canCarryAmount ? resourceManager.GetResourceAmount() : canCarryAmount;
             //工人采集资源
-            worker.Mine(mineTimes, (() =>
-            {
-                worker.Grab(null);
-            }), () =>
+            worker.Gather(mineTimes, resourceManager.ResourceType, () =>
             {
                 //资源被工人捡起
                 task.ResourceGrabed(mineTimes,resourceManager);
-                //工人背满了
-                if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1)
+                //工人捡起资源
+                worker.Grab(mineTimes, () =>
                 {
-                    //如果资源点仍有剩余资源则回收资源点
-                    if (resourceManager.IsHasResource())
+                    //工人背满了
+                    if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1)
                     {
-                        restoreResource(resourceManager);
-                    }
-                    //生成资源物品，工人回储存点
-                    CreateResourceIcon(resourceManager.ResourceType);
-                    ExcuteGatherBack(storePosition);
-                }
-                //工人没背满,继续请求当前收集资源的相关任务
-                else
-                {
-                    switch (resourceManager.ResourceType)
-                    {
-                        case ResourceType.Gold:
-                            task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold]
-                                .RequestTask() as GatherResourceTask;
-                            break;
-                        case ResourceType.Wood:
-                            task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
-                                .RequestTask() as  GatherResourceTask;
-                            break;
-                    }
-                    //仍有相关任务则执行，无任务返回存储点
-                    if (task != null)
-                    {
-                        ExecuteTask_Gather(task);
-                    }
-                    else
-                    {
+                        //如果资源点仍有剩余资源则回收资源点
+                        if (resourceManager.IsHasResource())
+                        {
+                            restoreResource(resourceManager);
+                        }
+                        //生成资源物品，工人回储存点
                         CreateResourceIcon(resourceManager.ResourceType);
                         ExcuteGatherBack(storePosition);
                     }
-                }
+                    //工人没背满,继续请求当前收集资源的相关任务
+                    else
+                    {
+                        switch (resourceManager.ResourceType)
+                        {
+                            case ResourceType.Gold:
+                                task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold]
+                                    .RequestTask() as GatherResourceTask;
+                                break;
+                            case ResourceType.Wood:
+                                task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
+                                    .RequestTask() as  GatherResourceTask;
+                                break;
+                        }
+                        //仍有相关任务则执行，无任务返回存储点
+                        if (task != null)
+                        {
+                            ExecuteTask_Gather(task);
+                        }
+                        else
+                        {
+                            CreateResourceIcon(resourceManager.ResourceType);
+                            ExcuteGatherBack(storePosition);
+                        }
+                    }
+                });
+             
             });
         });
     }
@@ -180,7 +176,15 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
             StorePosition = GameObject.Find("Crate").transform.position,
             ResourceGrabed = (amount, minemanager) => { minemanager.GiveResource(amount); }
         };
-        GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold].InsertTask(0, task);
+        switch (resourceManager.ResourceType)
+        {
+            case ResourceType.Gold:
+                GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold].InsertTask(0, task);
+                break;
+            case ResourceType.Wood:
+                GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood].InsertTask(0, task);
+                break;
+        }
         
     }
     /// <summary>
@@ -221,7 +225,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
             GameResource.AddAmount(GameResource.ResourceType.Gold, worker.GetCarryAmount());
             worker.Drop(ResourceGameObject, (() =>
             {
-                inventoryTextMesh.text = "";
                 worker.Idle();
                 state = State.WaitingForNextTask;
             }));

@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 5071991863321411765}
   - component: {fileID: 5071991863321411763}
   - component: {fileID: 5071991863321411764}
+  - component: {fileID: 1052315667145875658}
   m_Layer: 0
   m_Name: sword_up
   m_TagString: Untagged
@@ -237,6 +238,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1052315667145875658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5071991863321411766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c226f3e0114ee58ca8ec3062627549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoopTimes: 0
 --- !u!1 &5071991864664061167
 GameObject:
   m_ObjectHideFlags: 0

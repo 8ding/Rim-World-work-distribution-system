@@ -9,7 +9,7 @@ namespace TaskSystem
     }
     public interface ITaskAI
     {
-        void setUp(IWorker worker); 
+        void setUp(Woker worker); 
         void RequestNextTask();
     }
 }

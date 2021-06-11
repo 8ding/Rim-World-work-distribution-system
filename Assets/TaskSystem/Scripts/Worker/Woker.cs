@@ -5,7 +5,7 @@ using CodeMonkey;
 using CodeMonkey.Utils;
 using UnityEngine;
 
-public class Woker:IWorker
+public class Woker
 {
     public const int MaxCarryAmount = 3;
     public GameObject gameObject;
@@ -41,55 +41,53 @@ public class Woker:IWorker
     //worker的闲置行为
     public void Idle()
     {
-        characterAnimation.PlayIdleAnimation();
+        characterAnimation.PlayobjectAnimaiton(0,ObjectAnimationType.Idle);
     }
     //worker的胜利行为
-    public void Victory(Action onVictoryEnd)
+    public void Victory(int loopTimes,Action onVictoryEnd)
     {
         characterAnimation.OnAnimationEnd = onVictoryEnd;
-        characterAnimation.PlayVictoryAnimation();
+        characterAnimation.PlayobjectAnimaiton(0,ObjectAnimationType.Throw);
     }
     //worker的清扫行为
-    public void CleanUp(Action onCleanEnd)
+    public void CleanUp(int loopTimes,Action onCleanEnd)
     {
         characterAnimation.OnAnimationEnd = onCleanEnd;
-        characterAnimation.PlayCleanAnimation(2);
+        characterAnimation.PlayobjectAnimaiton(loopTimes, ObjectAnimationType.Clean);
+    }
+    /// <summary>
+    /// 工人的采集行为,根据资源类型不同,采集动画也不一样
+    /// </summary>
+    /// <param name="resourceType"></param>
+    /// <param name="OnGatherEnd"></param>
+    public void Gather(int actTimes,ResourceType resourceType, Action OnGatherEnd = null)
+    {
+        characterAnimation.OnAnimationEnd = OnGatherEnd;
+        switch (resourceType)
+        {
+            case ResourceType.Gold:
+                characterAnimation.PlayobjectAnimaiton(actTimes,ObjectAnimationType.Mine);
+                break;
+            case ResourceType.Wood:
+                characterAnimation.PlayobjectAnimaiton(actTimes,ObjectAnimationType.Cut);
+                break;
+        }
     }
 
-    public void Grab(int Grabtimes, Action OnGrabEnd = null)
+    public void Grab(int amount, Action OnGrabEnd = null)
     {
-        throw new NotImplementedException();
-    }
-
-    public void Grab(Action OnGrabEnd = null)
-    {
-        carryAmount++;
+        carryAmount += amount;
         OnGrabEnd?.Invoke();
     }
     
-
-    /// <summary>
-    /// Woker的挖矿行为，mineTImes为挖矿的动作次数
-    /// </summary>
-    /// <param name="mineTimes"></param>
-    /// <param name="OnMineEnd"></param>
-    public void Mine(int mineTimes,Action OnMineOnce,Action OnMineEnd = null)
-    {
-        characterAnimation.OnAnimationEnd = OnMineEnd;
-        characterAnimation.PlayMineAnimation(mineTimes,OnMineOnce);
-    }
+    
 
     public void Drop(Action OnDropEnd = null)
     {
         carryAmount = 0;
         OnDropEnd?.Invoke();
     }
-
-    public void Cut(int cutTimes,Action OnCutEnd = null)
-    {
-        characterAnimation.OnAnimationEnd = OnCutEnd;
-        characterAnimation.PlayCutAnimation(cutTimes);
-    }
+    
 
     public void Drop(GameObject gameObject,Action OnDropEnd = null)
     {
