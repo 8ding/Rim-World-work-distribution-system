@@ -6,7 +6,7 @@ namespace TaskSystem
 {
     public abstract class TaskBase
     {
-    
+        public JobType jobType;
     }
     
     public class GatherResourceTask : TaskBase
@@ -15,10 +15,6 @@ namespace TaskSystem
         public Action<int,GameHandler.ResourceManager> ResourceGrabed;
         public GameHandler.ResourceManager resourceManager;
     }
-
-    public class GatherWoodTask : TaskBase
-    {
-        
-    }
+    
     
 }

@@ -34,7 +34,7 @@ namespace TaskSystem
 
         private List<ResourceManager> mineManagerList;
         private List<ResourceManager> woodManagerList;
-        private int idleMinerAmount;
+
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
         
         private Transform MineButton;
@@ -84,6 +84,7 @@ namespace TaskSystem
                     {
                         GatherResourceTask task = new GatherResourceTask
                         {
+                            jobType = JobType.GatherGold,
                             resourceManager =  resourceManager,
                             StorePosition = GameObject.Find("Crate").transform.position,
                             ResourceGrabed = (amount,minemanager) =>
@@ -100,6 +101,7 @@ namespace TaskSystem
                     {
                         GatherResourceTask task = new GatherResourceTask
                         {
+                            jobType = JobType.GatherWood,
                             resourceManager = resourceManager,
                             StorePosition = GameObject.Find("Crate").transform.position,
                             ResourceGrabed = ((amount, woodManager) =>
@@ -145,7 +147,6 @@ namespace TaskSystem
                 case WokerType.Miner:
                     taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
                     taskAI.setUp(woker);
-                    idleMinerAmount++;
                     break;
             }
         }

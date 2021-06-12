@@ -2,10 +2,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using CodeMonkey;
 using TaskSystem;
 using TaskSystem.GatherResource;
 using UnityEngine;
 
+public class Test
+{
+    public void SayHello()
+    {
+        Debug.Log("SayHello");
+    }
+}
 public class compare : IComparer<JobType>
 {
     public Dictionary<JobType, int> jobTypeOrderDictionary;
@@ -42,14 +51,22 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     private State state;
     private float waitingTimer;
     private GameObject ResourceGameObject;
-    public SettingOfJobType settingOfJobType;
-    private List<JobType> jobTypeList;
-    private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
-    public  Dictionary<JobType, int> jobtypeOrderDictionary;
 
+
+    private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
+    
+    //工作类型的配置
+    public SettingOfJobType settingOfJobType;
+    //工作类型与优先级对应的字典
+    public  Dictionary<JobType, int> jobtypeOrderDictionary;
+    //按照工作优先级排列的工作列表
+    private List<JobType> jobTypeList;
+    
     private IComparer<JobType> compareType;
 
     public Action OnJobOrderChanged;
+
+    public Type t;
     // Update is called once per frame
     void Update()
     {
@@ -79,7 +96,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         
         jobTypeList = new List<JobType>();
         jobtypeOrderDictionary = new Dictionary<JobType, int>();
-        //依照scripableObject的数据对JobTypeList与jobtypeOrderDictionary进行初始化
+        //依照scripableObject的数据对工作类型顺序列表 与 工作类型与优先级对应表 以及 工作类型与执行方法对应表进行初始化
         for (int i = 0; i < settingOfJobType.JobTypeList.Count; i++)
         {
             jobTypeList.Add(settingOfJobType.JobTypeList[i].jobType);
@@ -92,6 +109,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         jobTypeList.Sort(compareType);
         
         worker.Idle();
+        t = typeof(Test);
         // for (int i = 0; i < jobTypeList.Count; i++)
         // {
         //     Debug.Log(jobTypeList[i]);
@@ -112,6 +130,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         jobTypeList.Sort(compareType);
         OnJobOrderChanged?.Invoke();
     }
+    
     public void RequestNextTask()
     {
         TaskBase task = null;
@@ -124,7 +143,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                 break;
             } 
         }
-
         if (task == null)
         {
             state = State.WaitingForNextTask;
@@ -132,14 +150,20 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         else
         {
             state = State.ExecutingTask;
-            
-            if(task is TaskSystem.GatherResourceTask)
+            switch (task.jobType)
             {
-                ExecuteTask_Gather(task as TaskSystem.GatherResourceTask);
+                case JobType.GatherGold:
+                case JobType.GatherWood:
+                    ExecuteTask_Gather(task as GatherResourceTask);
+                    break;
             }
+
         }
     }
 
+
+    
+    #region GatherResourceTask
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
         GameHandler.ResourceManager resourceManager = task.resourceManager;
@@ -148,23 +172,26 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         //工人前往资源点
         worker.moveTo(resourceManager.GetResourcePointTransform().position, () =>
         {
-            int mineTimes = resourceManager.GetResourceAmount() < canCarryAmount ? resourceManager.GetResourceAmount() : canCarryAmount;
+            int mineTimes = resourceManager.GetResourceAmount() < canCarryAmount
+                ? resourceManager.GetResourceAmount()
+                : canCarryAmount;
             //工人采集资源
             worker.Gather(mineTimes, resourceManager.ResourceType, () =>
             {
                 //资源被工人捡起
-                task.ResourceGrabed(mineTimes,resourceManager);
+                task.ResourceGrabed(mineTimes, resourceManager);
                 //工人捡起资源
                 worker.Grab(mineTimes, () =>
                 {
                     //工人背满了
-                    if (worker.GetMaxCarryAmount()  - worker.GetCarryAmount() < 1)
+                    if (worker.GetMaxCarryAmount() - worker.GetCarryAmount() < 1)
                     {
                         //如果资源点仍有剩余资源则回收资源点
                         if (resourceManager.IsHasResource())
                         {
                             restoreResource(resourceManager);
                         }
+
                         //生成资源物品，工人回储存点
                         CreateResourceIcon(resourceManager.ResourceType);
                         ExcuteGatherBack(storePosition);
@@ -180,9 +207,10 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                                 break;
                             case ResourceType.Wood:
                                 task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
-                                    .RequestTask() as  GatherResourceTask;
+                                    .RequestTask() as GatherResourceTask;
                                 break;
                         }
+
                         //仍有相关任务则执行，无任务返回存储点
                         if (task != null)
                         {
@@ -195,15 +223,16 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                         }
                     }
                 });
-             
+
             });
         });
     }
+
     /// <summary>
     /// 回收资源点生成新任务,并插入任务队列头部
     /// </summary>
     /// <param name="resourceManager"></param>
-    private  void restoreResource(GameHandler.ResourceManager resourceManager)
+    private void restoreResource(GameHandler.ResourceManager resourceManager)
     {
         //资源点仍剩余资源,生成新任务,插入任务系统头部
         GatherResourceTask task = new GatherResourceTask
@@ -221,8 +250,9 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                 GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood].InsertTask(0, task);
                 break;
         }
-        
+
     }
+
     /// <summary>
     /// 生成与资源对应的物品图标
     /// </summary>
@@ -243,6 +273,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                         new Vector3(0, 0.5f, 0), ItemType.Wood);
                     break;
             }
+
             resourceTypeIconDictionary[resourceType] = ResourceGameObject;
         }
         else
@@ -250,6 +281,7 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
             ResourceGameObject.SetActive(true);
         }
     }
+
     /// <summary>
     /// 结束资源收集回到存储点并放下资源
     /// </summary>
@@ -266,4 +298,11 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
             }));
         }));
     }
+    #endregion
+
+    
+
+    
+
+    
 }
