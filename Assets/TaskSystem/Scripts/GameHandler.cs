@@ -165,10 +165,9 @@ namespace TaskSystem
                 }
             }
 
-            //采矿图标跟随鼠标
+            //采集资源图标跟随鼠标
             if(attachMouseSprite != null)
                 attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
-            
             
             //生成矿点的操作
             if (Input.GetKeyDown(KeyCode.Space))
@@ -184,6 +183,13 @@ namespace TaskSystem
             if (Input.GetKeyDown(KeyCode.Backspace))
             {
                 createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Wood);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                WorkGatherTaskAI workGatherTaskAI = woker.gameObject.GetComponent<WorkGatherTaskAI>();
+                workGatherTaskAI.ModifyOrder(JobType.GatherWood);
+                CMDebug.TextPopupMouse("采木头顺序" + workGatherTaskAI.jobtypeOrderDictionary[JobType.GatherWood]);
             }
         }
 

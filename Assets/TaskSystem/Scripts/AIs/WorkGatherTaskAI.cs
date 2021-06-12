@@ -1,37 +1,55 @@
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TaskSystem;
 using TaskSystem.GatherResource;
 using UnityEngine;
 
-public enum JobType
+public class compare : IComparer<JobType>
 {
-    GatherGold,
-    GatherWood,
-}
-
-public struct JobOrder
-{
-    public JobType type;
-    private int order;
-
-    public JobOrder(JobType jobType, int order)
+    public Dictionary<JobType, int> jobTypeOrderDictionary;
+    public int Compare(JobType x, JobType y)
     {
-        this.type = jobType;
-        this.order = order;
+        if (jobTypeOrderDictionary[x] < jobTypeOrderDictionary[y])
+        {
+            return -1;
+        }
+        else if(jobTypeOrderDictionary[x] > jobTypeOrderDictionary[y])
+        {
+            return 1;
+        }
+        else if(x < y)
+        {
+            return -1;
+        }
+        else if(y < x)
+        {
+            return 1;
+        }
+        return 0;
+    }
+    public compare(Dictionary<JobType, int> dictionary)
+    {
+        this.jobTypeOrderDictionary = dictionary;
     }
 }
+
+
 public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 {
     private Woker worker;
-    private PL_TaskSystem<TaskBase> taskSystem;
     private State state;
     private float waitingTimer;
     private GameObject ResourceGameObject;
-
-    private List<JobOrder> jobOrderList;
+    public SettingOfJobType settingOfJobType;
+    private List<JobType> jobTypeList;
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
-    
+    public  Dictionary<JobType, int> jobtypeOrderDictionary;
+
+    private IComparer<JobType> compareType;
+
+    public Action OnJobOrderChanged;
     // Update is called once per frame
     void Update()
     {
@@ -55,39 +73,58 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     public void setUp(Woker worker)
     {
         this.worker = worker as Woker;
+        settingOfJobType = Resources.Load("SettingOfJobTypeOrder") as SettingOfJobType;
         state = State.WaitingForNextTask;
-        worker.Idle();
-        jobOrderList = new List<JobOrder>
+        
+        
+        jobTypeList = new List<JobType>();
+        jobtypeOrderDictionary = new Dictionary<JobType, int>();
+        //依照scripableObject的数据对JobTypeList与jobtypeOrderDictionary进行初始化
+        for (int i = 0; i < settingOfJobType.JobTypeList.Count; i++)
         {
-            new JobOrder(JobType.GatherGold, 4),
-            new JobOrder(JobType.GatherWood, 4)
-        };
+            jobTypeList.Add(settingOfJobType.JobTypeList[i].jobType);
+            jobtypeOrderDictionary.Add(settingOfJobType.JobTypeList[i].jobType,4);
+        }
+        //实例一个比较方法
+        compareType = new compare(jobtypeOrderDictionary);
         resourceTypeIconDictionary = new Dictionary<ResourceType, GameObject>();
+        //依照比较方法对工人的工作类型进行排序,工人按照该顺序去领取工作
+        jobTypeList.Sort(compareType);
+        
+        worker.Idle();
+        // for (int i = 0; i < jobTypeList.Count; i++)
+        // {
+        //     Debug.Log(jobTypeList[i]);
+        // }
     }
 
-
+    public void ModifyOrder(JobType jobType)
+    {
+        int order;
+        if (jobtypeOrderDictionary.TryGetValue(jobType, out order))
+        {
+            jobtypeOrderDictionary[jobType] = (jobtypeOrderDictionary[jobType] ) % 4 + 1;
+        }
+        else
+        {
+            jobtypeOrderDictionary[jobType] = 1;
+        }
+        jobTypeList.Sort(compareType);
+        OnJobOrderChanged?.Invoke();
+    }
     public void RequestNextTask()
     {
         TaskBase task = null;
-        for (int i = 0; i < jobOrderList.Count; i++)
+        for (int i = 0; i < jobTypeList.Count; i++)
         {
-            switch (jobOrderList[i].type)
-            {
-                case JobType.GatherGold:
-                    task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold]
+            task = GameHandler.JobTypeTaskSystemDictionary[jobTypeList[i]]
                         .RequestTask();
-                    break;
-                case JobType.GatherWood:
-                    task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
-                        .RequestTask();
-                    break;
-            }
             if (task != null)
             {
                 break;
             } 
         }
-            
+
         if (task == null)
         {
             state = State.WaitingForNextTask;
@@ -105,7 +142,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
-        Debug.Log("资源类型： " + task.resourceManager.ResourceType);
         GameHandler.ResourceManager resourceManager = task.resourceManager;
         Vector3 storePosition = task.StorePosition;
         int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
