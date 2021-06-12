@@ -156,12 +156,15 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
                 case JobType.GatherWood:
                     ExecuteTask_Gather(task as GatherResourceTask);
                     break;
+                default:
+                    Debug.Log(task.jobType + "尚未编写执行方法");
+                    state = State.WaitingForNextTask;
+                    break;
             }
 
         }
     }
-
-
+    
     
     #region GatherResourceTask
     private void ExecuteTask_Gather(GatherResourceTask task)
@@ -299,10 +302,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         }));
     }
     #endregion
-
-    
-
-    
 
     
 }

@@ -23,7 +23,8 @@ namespace TaskSystem
     }
     public class GameHandler : MonoBehaviour
     {
-     
+
+        [SerializeField] private JobOrderPanel orderPanel;
         private GameObject weaponSlotGameObject;
         private GameObject resourcePointGameObject;
 
@@ -62,10 +63,16 @@ namespace TaskSystem
             MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
             cutButton = GameObject.Find("CutButton").transform;
             cutButton.GetComponent<Button_UI>().ClickFunc += handleCutButtonClick;
+            orderPanel = GameObject.Find("OrderPanel").GetComponent<JobOrderPanel>();
+            
 
-            createWorker(new Vector3(0,0,0),WokerType.Miner);
-
+            
             mouseType = MouseType.None;
+        }
+
+        private void Start()
+        {
+            createWorker(new Vector3(0,0,0),WokerType.Miner);
         }
 
         //取消点击采矿按钮的状态
@@ -147,6 +154,7 @@ namespace TaskSystem
                 case WokerType.Miner:
                     taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
                     taskAI.setUp(woker);
+                    orderPanel.AddWorkerOnPanel(taskAI as WorkGatherTaskAI);
                     break;
             }
         }
