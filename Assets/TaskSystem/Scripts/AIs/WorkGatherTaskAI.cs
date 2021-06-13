@@ -7,6 +7,13 @@ using CodeMonkey;
 using TaskSystem;
 using TaskSystem.GatherResource;
 using UnityEngine;
+public enum JobType
+{
+    GatherGold,
+    GatherWood,
+    MakeThing,
+    enumcount,
+}
 
 public class Test
 {
@@ -55,8 +62,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
 
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
     
-    //工作类型的配置
-    public SettingOfJobType settingOfJobType;
     //工作类型与优先级对应的字典
     public  Dictionary<JobType, int> jobtypeOrderDictionary;
     //按照工作优先级排列的工作列表
@@ -90,17 +95,16 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     public void setUp(Woker worker)
     {
         this.worker = worker as Woker;
-        settingOfJobType = Resources.Load("SettingOfJobTypeOrder") as SettingOfJobType;
         state = State.WaitingForNextTask;
         
         
         jobTypeList = new List<JobType>();
         jobtypeOrderDictionary = new Dictionary<JobType, int>();
         //依照scripableObject的数据对工作类型顺序列表 与 工作类型与优先级对应表 以及 工作类型与执行方法对应表进行初始化
-        for (int i = 0; i < settingOfJobType.JobTypeList.Count; i++)
+        for (int i = 0; i < (int)JobType.enumcount; i++)
         {
-            jobTypeList.Add(settingOfJobType.JobTypeList[i].jobType);
-            jobtypeOrderDictionary.Add(settingOfJobType.JobTypeList[i].jobType,4);
+            jobTypeList.Add((JobType)i);
+            jobtypeOrderDictionary.Add((JobType)i,4);
         }
         //实例一个比较方法
         compareType = new compare(jobtypeOrderDictionary);
@@ -109,7 +113,6 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         jobTypeList.Sort(compareType);
         
         worker.Idle();
-        t = typeof(Test);
         // for (int i = 0; i < jobTypeList.Count; i++)
         // {
         //     Debug.Log(jobTypeList[i]);
@@ -303,5 +306,5 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
     }
     #endregion
 
-    
+
 }

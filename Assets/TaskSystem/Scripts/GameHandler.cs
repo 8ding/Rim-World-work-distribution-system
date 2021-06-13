@@ -23,18 +23,15 @@ namespace TaskSystem
     }
     public class GameHandler : MonoBehaviour
     {
-
+        public Camera camera1;
+        public Camera camera2;
+        private Camera currentCamera;
         private JobOrderPanel orderPanel;
         private GameObject weaponSlotGameObject;
         private GameObject resourcePointGameObject;
-
-        private static PL_TaskSystem<TaskBase> gatherWoodTaskSystem;
-        private PL_TaskSystem<TaskBase> gatherGoldTaskSystem;
         private Woker woker;
         private ITaskAI taskAI;
-
-        private List<ResourceManager> mineManagerList;
-        private List<ResourceManager> woodManagerList;
+        
 
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
 
@@ -46,17 +43,13 @@ namespace TaskSystem
         private void Awake()
         {
             GameResource.Init();
-            gatherWoodTaskSystem = new PL_TaskSystem<TaskBase>();
-            gatherGoldTaskSystem = new PL_TaskSystem<TaskBase>();
-            JobTypeTaskSystemDictionary = new Dictionary<JobType, PL_TaskSystem<TaskBase>>
-            {
-                {JobType.GatherGold, gatherGoldTaskSystem},
-                {JobType.GatherWood, gatherWoodTaskSystem}
-            };
-                         
-            mineManagerList = new List<ResourceManager>();
-            woodManagerList = new List<ResourceManager>();
+            JobTypeTaskSystemDictionary = new Dictionary<JobType, PL_TaskSystem<TaskBase>>();
 
+            for (int i = 0; i < (int) JobType.enumcount; i++)
+            {
+                JobTypeTaskSystemDictionary.Add((JobType)i,new PL_TaskSystem<TaskBase>());
+            }
+            
             ResourceManager.OnResourceClicked += handleMinePointClicked;
              
             MineButton = GameObject.Find("MineButton").transform;
@@ -64,9 +57,9 @@ namespace TaskSystem
             cutButton = GameObject.Find("CutButton").transform;
             cutButton.GetComponent<Button_UI>().ClickFunc += handleCutButtonClick;
             orderPanel = GameObject.Find("OrderPanel").GetComponent<JobOrderPanel>();
-            
 
-            
+            camera1.enabled = true;
+            camera2.enabled = false;
             mouseState = MouseState.None;
         }
 
@@ -99,7 +92,7 @@ namespace TaskSystem
                                 minemanager.GiveResource(amount);
                             }
                         };
-                        gatherGoldTaskSystem.AddTask(task);
+                        JobTypeTaskSystemDictionary[JobType.GatherGold].AddTask(task);
                         Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                     }
                     break;
@@ -116,7 +109,7 @@ namespace TaskSystem
                                 woodManager.GiveResource(amount);
                             })
                         };
-                        gatherWoodTaskSystem.AddTask(task);
+                        JobTypeTaskSystemDictionary[JobType.GatherWood].AddTask(task);;
                         Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                     }
                     break;
@@ -193,12 +186,20 @@ namespace TaskSystem
             {
                 createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Wood);
             }
+            
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                WorkGatherTaskAI workGatherTaskAI = woker.gameObject.GetComponent<WorkGatherTaskAI>();
-                workGatherTaskAI.ModifyOrder(JobType.GatherWood);
-                CMDebug.TextPopupMouse("采木头顺序" + workGatherTaskAI.jobtypeOrderDictionary[JobType.GatherWood]);
+                if (camera1.isActiveAndEnabled)
+                {
+                    camera1.enabled = false;
+                    camera2.enabled = true;
+                }
+                else
+                {
+                    camera1.enabled = true;
+                    camera2.enabled = false;
+                }
             }
         }
 

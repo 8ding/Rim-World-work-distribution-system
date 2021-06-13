@@ -19,6 +19,15 @@ namespace TaskSystem.Character
                 OnObjectAnimationEnd?.Invoke();
             }
         }
+        
+        private void OnBecameInvisible()
+        {
+            Debug.Log("看不见了");
+        }
 
+        private void OnBecameVisible()
+        {
+            Debug.Log("又看见了");
+        }
     }
 }

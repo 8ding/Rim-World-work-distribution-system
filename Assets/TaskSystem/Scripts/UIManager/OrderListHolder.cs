@@ -8,34 +8,32 @@ using UnityEngine.UI;
 public class OrderListHolder : MonoBehaviour
 {
     private WorkGatherTaskAI boundWorkerAI;
-    private SettingOfJobType settingOfJobType;
+    
     private  Dictionary<JobType, ButtonManager> joTypeButtonDictionary;
     [SerializeField] private ButtonManager buttonTemplate;
     [SerializeField] private Transform buttonRoot;
 
     private void Awake()
     {
-        Debug.Log(gameObject.name);
-        settingOfJobType = Resources.Load("SettingOfJobTypeOrder") as SettingOfJobType;
         joTypeButtonDictionary = new Dictionary<JobType, ButtonManager>();
         buttonTemplate.gameObject.SetActive(false);
     }
 
     public void Bind(WorkGatherTaskAI workGatherTaskAI)
     {
-        Debug.Log(gameObject.name);
+
         boundWorkerAI = workGatherTaskAI;
         boundWorkerAI.OnJobOrderChanged += handleOrderChanged;
         ButtonManager temp;
-        for (int i = 0; i < settingOfJobType.JobTypeList.Count; i++)
+        for (int i = 0; i < (int)JobType.enumcount; i++)
         {
-            if (joTypeButtonDictionary.TryGetValue(settingOfJobType.JobTypeList[i].jobType, out temp))
+            if (joTypeButtonDictionary.TryGetValue((JobType)i, out temp))
             {
                 break;
             }
             else
             {
-                createButton(settingOfJobType.JobTypeList[i].jobType,workGatherTaskAI);
+                createButton((JobType)i,workGatherTaskAI);
             }
         }
         handleOrderChanged();
