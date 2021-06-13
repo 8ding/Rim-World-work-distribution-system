@@ -15092,7 +15092,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a97a1b9a1f04bdaab55e37e8f1c0f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orderPanel: {fileID: 0}
 --- !u!4 &1252825553
 Transform:
   m_ObjectHideFlags: 0
@@ -15236,7 +15235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

@@ -15,7 +15,7 @@ namespace TaskSystem
         Miner
     }
 
-    public enum MouseType
+    public enum MouseState
     {
         None,
         HitMine,
@@ -24,7 +24,7 @@ namespace TaskSystem
     public class GameHandler : MonoBehaviour
     {
 
-        [SerializeField] private JobOrderPanel orderPanel;
+        private JobOrderPanel orderPanel;
         private GameObject weaponSlotGameObject;
         private GameObject resourcePointGameObject;
 
@@ -37,10 +37,10 @@ namespace TaskSystem
         private List<ResourceManager> woodManagerList;
 
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
-        
+
         private Transform MineButton;
         private Transform cutButton;
-        private MouseType mouseType;
+        private MouseState mouseState;
         private GameObject attachMouseSprite;
 
         private void Awake()
@@ -67,7 +67,7 @@ namespace TaskSystem
             
 
             
-            mouseType = MouseType.None;
+            mouseState = MouseState.None;
         }
 
         private void Start()
@@ -78,7 +78,7 @@ namespace TaskSystem
         //取消点击采矿按钮的状态
         private void cancleHitMine()
         {
-            mouseType = MouseType.None;
+            mouseState = MouseState.None;
             Destroy(attachMouseSprite);
         }
         //处理点击资源点事件
@@ -87,7 +87,7 @@ namespace TaskSystem
             switch (resourceManager.ResourceType)
             {
                 case ResourceType.Gold:
-                    if(mouseType == MouseType.HitMine)
+                    if(mouseState == MouseState.HitMine)
                     {
                         GatherResourceTask task = new GatherResourceTask
                         {
@@ -104,7 +104,7 @@ namespace TaskSystem
                     }
                     break;
                 case ResourceType.Wood:
-                    if (mouseType == MouseType.HitWood)
+                    if (mouseState == MouseState.HitWood)
                     {
                         GatherResourceTask task = new GatherResourceTask
                         {
@@ -126,13 +126,13 @@ namespace TaskSystem
         //处理点击采矿按钮事件
         private void handleMineButtonClick()
         {
-            mouseType = MouseType.HitMine;
+            mouseState = MouseState.HitMine;
             attachMouseSprite = MyClass.CreateWorldSprite(null, "mineAttachMouse", "AttachIcon", GameAssets.Instance.MiningShovel,
                     MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
         }
         private void handleCutButtonClick()
         {
-            mouseType = MouseType.HitWood;
+            mouseState = MouseState.HitWood;
             attachMouseSprite = MyClass.CreateWorldSprite(null, "cutAttachMouse", "AttachIcon", GameAssets.Instance.CutKnife,
                     MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
         }
@@ -164,11 +164,11 @@ namespace TaskSystem
             if (Input.GetMouseButtonDown(1))
             {
                 //根据鼠标状态确定左键点击的效果
-                switch (mouseType)
+                switch (mouseState)
                 {
-                    case MouseType.None:
+                    case MouseState.None:
                         break;
-                    case MouseType.HitMine:
+                    case MouseState.HitMine:
                         cancleHitMine();
                         break;
                 }
