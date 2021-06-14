@@ -30,11 +30,11 @@ public class MyGrid<TgridObect>
     private TgridObect[,] gridArray;
     private Vector3 originPosition;
     
-    public MyGrid(int width,int height,Func<Vector3,int,int,TgridObect> createGridContent)
+    public MyGrid(Transform LefDown,Transform RightUp,Func<Vector3,int,int,TgridObect> createGridContent)
     {
-        originPosition = new Vector3(0, 0, 0);
-        this.width = width;
-        this.height = height;
+        originPosition = LefDown.position;
+        this.width = Mathf.FloorToInt((RightUp.position.x - LefDown.position.x)/CellSize);
+        this.height = Mathf.FloorToInt((RightUp.position.y - LefDown.position.y)/CellSize);
         Vector3 startPosition;
         Vector3 upPosition;
         Vector3 rightPosition;
@@ -48,9 +48,10 @@ public class MyGrid<TgridObect>
                 rightPosition = startPosition + Vector3.right * CellSize;
                 Debug.DrawLine(startPosition, upPosition, Color.red, 100f);
                 Debug.DrawLine(startPosition, rightPosition, Color.red, 100f);
-                gridArray[i, j] = createGridContent(startPosition + (Vector3.right) * 0.5f * CellSize,i,j);
-                // MyClass.CreateWorldText(null, "1", startPosition + (Vector3.right) * 0.5f * CellSize, 10, Color.red,
-                    // TextAnchor.MiddleCenter, TextAlignment.Center, 1);
+                Vector3 contentPosition = startPosition + (Vector3.right) * 0.5f * CellSize;
+                gridArray[i, j] = createGridContent(contentPosition, i, j);
+                // MyClass.CreateWorldText(null, contentPosition.x.ToString() +" " +contentPosition.y.ToString(), startPosition + (Vector3.right) * 0.5f * CellSize, 5, Color.red,
+                //     TextAnchor.MiddleCenter, TextAlignment.Center, 1);
             }
         }
     }
@@ -76,7 +77,7 @@ public class MyGrid<TgridObect>
     public XY GetXY(Vector3 pos)
     {
         int x = Mathf.FloorToInt((pos - originPosition).x / CellSize);
-        int y = Mathf.FloorToInt(pos.y / CellSize);
+        int y = Mathf.FloorToInt((pos + Vector3.up * 0.1f - originPosition).y / CellSize);
         if (x >= 0 && x < width && y >= 0 && y < height)
         {
             return new XY(x, y);

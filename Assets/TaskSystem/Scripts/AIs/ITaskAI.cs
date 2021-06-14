@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace TaskSystem
@@ -7,9 +8,5 @@ namespace TaskSystem
         WaitingForNextTask,
         ExecutingTask,
     }
-    public interface ITaskAI
-    {
-        void setUp(Woker worker); 
-        void RequestNextTask();
-    }
+
 }

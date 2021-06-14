@@ -52,12 +52,13 @@ public class compare : IComparer<JobType>
 }
 
 
-public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
+public class WorkGatherTaskAI : MonoBehaviour
 {
     private Woker worker;
     private State state;
     private float waitingTimer;
     private GameObject ResourceGameObject;
+    public PathFinding pathFinding;
 
 
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
@@ -92,9 +93,10 @@ public class WorkGatherTaskAI : MonoBehaviour,ITaskAI
         }
     }
 
-    public void setUp(Woker worker)
+    public void setUp(Woker worker,PathFinding findPath)
     {
         this.worker = worker as Woker;
+        this.pathFinding = findPath;
         state = State.WaitingForNextTask;
         
         

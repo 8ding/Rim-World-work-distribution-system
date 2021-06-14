@@ -25,7 +25,7 @@ public class Woker
     {
        GameObject unit =  GameAssets.Instance.createUnit(null, position);
        gameObject = unit;
-       moveWay = gameObject.GetComponent<MovePositionDirect>();
+       moveWay = gameObject.GetComponent<IMovePosition>();
        characterAnimation = gameObject.GetComponent<CharacterAnimation>();
        carryAmount = 0;
     }

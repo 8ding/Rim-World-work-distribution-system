@@ -25,11 +25,12 @@ namespace TaskSystem
     {
         public Camera camera1;
         public Camera camera2;
+        public Transform LeftDown, RightUp;
         private Camera currentCamera;
         private JobOrderPanel orderPanel;
         private GameObject resourcePointGameObject;
         private Woker woker;
-        private ITaskAI taskAI;
+        private WorkGatherTaskAI taskAI;
         private MyGrid<PathNode> grid;
         private PathFinding pathFInding;
 
@@ -62,7 +63,7 @@ namespace TaskSystem
             camera1.enabled = true;
             camera2.enabled = false;
             mouseState = MouseState.None;
-            grid = new MyGrid<PathNode>(10, 10, (position,x,y) => { return new PathNode(position, x,y,true); });
+            grid = new MyGrid<PathNode>(LeftDown, RightUp, (position,x,y) => { return new PathNode(position, x,y,true); });
             pathFInding = new PathFinding(grid);
         }
 
@@ -149,7 +150,7 @@ namespace TaskSystem
             {
                 case WokerType.Miner:
                     taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
-                    taskAI.setUp(woker);
+                    taskAI.setUp(woker,pathFInding);
                     orderPanel.AddWorkerOnPanel(taskAI as WorkGatherTaskAI);
                     break;
             }
@@ -163,7 +164,6 @@ namespace TaskSystem
                 switch (mouseState)
                 {
                     case MouseState.None:
-                        pathFInding.DrawPath(pathFInding.FindPath(new Vector3(0,0,0),MyClass.GetMouseWorldPosition(0,camera1)));
                         break;
                     case MouseState.HitMine:
                         cancleHitMine();
