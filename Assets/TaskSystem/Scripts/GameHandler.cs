@@ -5,6 +5,7 @@ using CodeMonkey;
 using CodeMonkey.Utils;
 using StateMachine;
 using TaskSystem.GatherResource;
+using TaskSystem.PathFInding;
 using UnityEngine;
 
 
@@ -40,6 +41,7 @@ namespace TaskSystem
         private MouseState mouseState;
         private GameObject attachMouseSprite;
 
+        private MyGrid myGrid;
         private void Awake()
         {
             GameResource.Init();
@@ -61,6 +63,7 @@ namespace TaskSystem
             camera1.enabled = true;
             camera2.enabled = false;
             mouseState = MouseState.None;
+            myGrid = new MyGrid(10, 10);
         }
 
         private void Start()
