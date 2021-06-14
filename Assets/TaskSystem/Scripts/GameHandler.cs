@@ -162,6 +162,12 @@ namespace TaskSystem
                 switch (mouseState)
                 {
                     case MouseState.None:
+                        MoveTask task = new MoveTask
+                        {
+                            jobType = JobType.GoToPlace,
+                            Destination = MyClass.GetMouseWorldPosition(0, camera1)
+                        };
+                        JobTypeTaskSystemDictionary[JobType.GoToPlace].AddTask(task);
                         break;
                     case MouseState.HitMine:
                         cancleHitMine();

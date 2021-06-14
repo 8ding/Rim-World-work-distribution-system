@@ -12,6 +12,7 @@ public enum JobType
     GatherGold,
     GatherWood,
     MakeThing,
+    GoToPlace,
     enumcount,
 }
 
@@ -161,6 +162,9 @@ public class WorkGatherTaskAI : MonoBehaviour
                 case JobType.GatherWood:
                     ExecuteTask_Gather(task as GatherResourceTask);
                     break;
+                case JobType.GoToPlace:
+                    ExcuteTask_Move(task as MoveTask);
+                    break;
                 default:
                     Debug.Log(task.jobType + "尚未编写执行方法");
                     state = State.WaitingForNextTask;
@@ -308,5 +312,17 @@ public class WorkGatherTaskAI : MonoBehaviour
     }
     #endregion
 
+    #region MoveTask
 
+    private void ExcuteTask_Move(MoveTask task)
+    {
+        worker.moveTo(task.Destination,(() =>
+        {
+            worker.Idle();
+            state = State.WaitingForNextTask;
+        }));
+    }
+    
+
+    #endregion
 }

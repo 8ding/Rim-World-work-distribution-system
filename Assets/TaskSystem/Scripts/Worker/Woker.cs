@@ -35,8 +35,8 @@ public class Woker
         //启动移动方式,到达目标 事件赋值给移动方式的移动结束后处理,赋值而不是加,避免上次移动结束的事件仍会被触发
         moveWay.Enable();
         moveWay.BindOnPostMoveEnd(onArriveAtPosition);
-        moveWay.SetMovePosition(position);
         characterAnimation.PlayDirectMoveAnimation(position);
+        moveWay.SetMovePosition(position);
     }
     //worker的闲置行为
     public void Idle()

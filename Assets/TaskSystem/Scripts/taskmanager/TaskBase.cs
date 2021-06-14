@@ -15,6 +15,10 @@ namespace TaskSystem
         public Action<int,GameHandler.ResourceManager> ResourceGrabed;
         public GameHandler.ResourceManager resourceManager;
     }
-    
+
+    public class MoveTask : TaskBase
+    {
+        public Vector3 Destination;
+    }
     
 }

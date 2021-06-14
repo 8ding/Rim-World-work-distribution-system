@@ -16,8 +16,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
-
-    private Vector3 movePosition;
+    
     public Vector3 moveDir;
     private IMoveVelocity moveVelocity;
     public event Action OnMovEnd;//当移动停止,移动方式需要做的事情
@@ -29,7 +28,6 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
 
     private void Awake()
     {
-        movePosition = gameObject.transform.position;
         moveVelocity = GetComponent<IMoveVelocity>();
         myGrid = (Resources.Load("New Grid Setting") as GridSetting).grid;
     }
@@ -41,15 +39,18 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     }
 
     public void SetMovePosition(Vector3 movePosition) {
-        
-        this.movePosition = movePosition;
         pathNodes = pathFinding.FindPath(transform.position, movePosition);
-        pathFinding.DrawPath(pathNodes);
+        OnMovEnd += Disable;
         if (pathNodes != null)
         {
+            pathFinding.DrawPath(pathNodes);
             currentNodeIndex = 0;
         }
-        OnMovEnd += Disable;
+        else
+        {
+            OnMovEnd?.Invoke();
+            OnPostMoveEnd?.Invoke();
+        }
     }
 
     public void BindOnPostMoveEnd(Action postMoveEnd)

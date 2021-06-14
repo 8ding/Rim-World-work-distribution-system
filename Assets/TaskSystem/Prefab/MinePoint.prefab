@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7869986127268172206}
   - component: {fileID: 7869986127268172201}
   - component: {fileID: 7869986127268172200}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MinePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
