@@ -35,6 +35,16 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
         OnMovEnd += Disable;
     }
 
+    public void BindOnPostMoveEnd(Action postMoveEnd)
+    {
+        OnPostMoveEnd = postMoveEnd;
+    }
+
+    public void Enable()
+    {
+        this.enabled = true;
+    }
+
     private void Update() {
         moveDir = (movePosition - transform.position).normalized;
         if (Vector3.Distance(movePosition, transform.position) < .1f)
@@ -51,11 +61,7 @@ public class MovePositionDirect : MonoBehaviour, IMovePosition {
     {
         this.enabled = false;
     }
-
-    public void Enalbe()
-    {
-        this.enabled = true;
-    }
+    
 
     public void OnDestroy()
     {

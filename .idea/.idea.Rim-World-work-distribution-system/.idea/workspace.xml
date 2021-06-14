@@ -97,9 +97,7 @@
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/PL_TaskSystem.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/IWorker.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/TaskManager/TaskBase.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/OrderHolder.cs" />
@@ -115,6 +113,10 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -296,7 +298,7 @@
       <workItem from="1623333278483" duration="7801000" />
       <workItem from="1623378653717" duration="22797000" />
       <workItem from="1623411314885" duration="4644000" />
-      <workItem from="1623553475540" duration="18037000" />
+      <workItem from="1623553475540" duration="18991000" />
     </task>
     <servers />
   </component>

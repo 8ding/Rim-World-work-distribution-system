@@ -59,6 +59,10 @@ public class CharacterAnimation : MonoBehaviour
         animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
     }
 
+    public void PlayMoveAnimation(Vector3 position)
+    {
+        
+    }
     public void PlayDirectMoveAnimation(Vector3 Position)
     {
         if (Position.x - transform.position.x > 0.1f)
