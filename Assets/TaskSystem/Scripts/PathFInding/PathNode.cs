@@ -12,10 +12,12 @@ public class PathNode
     public PathNode CamePathNode;
     public int x;
     public int y;
-    public PathNode(Vector3 worldPosition,bool isWalkable)
+    public PathNode(Vector3 worldPosition,int x, int y,bool isWalkable)
     {
         this.worldPosition = worldPosition;
         this.isWalkable = isWalkable;
+        this.x = x;
+        this.y = y;
     }
     public void CalculateFCost()
     {

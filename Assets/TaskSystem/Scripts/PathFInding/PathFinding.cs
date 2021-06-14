@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TaskSystem.PathFInding;
 using UnityEngine;
 
 
@@ -16,11 +15,19 @@ public class PathFinding
     {
         this.grid = grid;
     }
+
+    public List<PathNode> FindPath(Vector3 startPosition, Vector3 endPosition)
+    {
+        XY startXY = grid.GetXY(startPosition);
+        XY endXY = grid.GetXY(endPosition);
+        return FindPath(startXY.GetX(), startXY.GetY(), endXY.GetX(), endXY.GetY());
+    }
     public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
     {
         PathNode startNode = grid.GetGridObject(startX, startY);
         PathNode endNode = grid.GetGridObject(endX, endY);
-        
+        // MyClass.CreateWorldText(null, "2", endNode.worldPosition, 10, Color.yellow, TextAnchor.MiddleCenter,
+        //     TextAlignment.Center, 1);
         opentList = new List<PathNode> {startNode};
         closeList = new List<PathNode> {};
         for (int x = 0; x < grid.GetWidth(); x++)
@@ -41,6 +48,8 @@ public class PathFinding
         while (opentList.Count > 0)
         {
             PathNode currentNode = GetLowestFCostNode(opentList);
+            // MyClass.CreateWorldText(null, "1", currentNode.worldPosition, 10, Color.blue, TextAnchor.MiddleCenter,
+            //     TextAlignment.Center, 1);
             if (currentNode == endNode)
             {
                 return CalculatePath(endNode);
@@ -48,7 +57,8 @@ public class PathFinding
 
             opentList.Remove(currentNode);
             closeList.Add(currentNode);
-            foreach (var neighbourNode in GetNeighbourList(currentNode))
+            List<PathNode> neigbourList = GetNeighbourList(currentNode);
+            foreach (var neighbourNode in neigbourList)
             {
                 if(closeList.Contains(neighbourNode)) continue;
                 if (!neighbourNode.isWalkable)
@@ -164,9 +174,9 @@ public class PathFinding
 
     public void DrawPath(List<PathNode> pathNodes)
     {
-        for (int i = 0; i < pathNodes.Count; i++)
+        for (int i = 1; i < pathNodes.Count; i++)
         {
-            
+            Debug.DrawLine(pathNodes[i-1].worldPosition, pathNodes[i].worldPosition,Color.black,2f);
         }
     }
 }

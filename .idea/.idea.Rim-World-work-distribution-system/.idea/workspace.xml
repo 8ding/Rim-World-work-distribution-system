@@ -109,12 +109,12 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/TitleList.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/OrderListHolder.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/MyClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/MyClass.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -252,10 +252,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="17512">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="1528">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="17512" />
+      <option name="pid" value="1528" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -296,7 +296,7 @@
       <workItem from="1623333278483" duration="7801000" />
       <workItem from="1623378653717" duration="22797000" />
       <workItem from="1623411314885" duration="4644000" />
-      <workItem from="1623553475540" duration="14720000" />
+      <workItem from="1623553475540" duration="18037000" />
     </task>
     <servers />
   </component>
@@ -393,26 +393,13 @@
           <line>130</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="127" containingFunctionPresentation="method 'handleCutButtonClick'">
             <startOffsets>
-              <option value="4754" />
+              <option value="4845" />
             </startOffsets>
             <endOffsets>
-              <option value="4786" />
+              <option value="4877" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
-          <line>179</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="183" containingFunctionPresentation="method 'Update'">
-            <startOffsets>
-              <option value="6596" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6681" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/ButtonManager.cs</url>
@@ -432,13 +419,39 @@
           <line>138</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="142" containingFunctionPresentation="method 'createResourcePoint'">
             <startOffsets>
-              <option value="5149" />
+              <option value="5240" />
             </startOffsets>
             <endOffsets>
-              <option value="5293" />
+              <option value="5384" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
+          <line>165</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="165" containingFunctionPresentation="method 'Update'">
+            <startOffsets>
+              <option value="6234" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6338" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs</url>
+          <line>59</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\PathFinding.cs" initialLine="59" containingFunctionPresentation="method 'FindPath'">
+            <startOffsets>
+              <option value="2101" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2161" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="72" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

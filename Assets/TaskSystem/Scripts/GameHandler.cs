@@ -5,7 +5,6 @@ using CodeMonkey;
 using CodeMonkey.Utils;
 using StateMachine;
 using TaskSystem.GatherResource;
-using TaskSystem.PathFInding;
 using UnityEngine;
 
 
@@ -28,11 +27,11 @@ namespace TaskSystem
         public Camera camera2;
         private Camera currentCamera;
         private JobOrderPanel orderPanel;
-        private GameObject weaponSlotGameObject;
         private GameObject resourcePointGameObject;
         private Woker woker;
         private ITaskAI taskAI;
-        MyGrid<PathNode> grid;
+        private MyGrid<PathNode> grid;
+        private PathFinding pathFInding;
 
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
 
@@ -63,7 +62,8 @@ namespace TaskSystem
             camera1.enabled = true;
             camera2.enabled = false;
             mouseState = MouseState.None;
-            grid = new MyGrid<PathNode>(10, 10, (position) => { return new PathNode(position, true); });
+            grid = new MyGrid<PathNode>(10, 10, (position,x,y) => { return new PathNode(position, x,y,true); });
+            pathFInding = new PathFinding(grid);
         }
 
         private void Start()
@@ -163,13 +163,14 @@ namespace TaskSystem
                 switch (mouseState)
                 {
                     case MouseState.None:
+                        pathFInding.DrawPath(pathFInding.FindPath(new Vector3(0,0,0),MyClass.GetMouseWorldPosition(0,camera1)));
                         break;
                     case MouseState.HitMine:
                         cancleHitMine();
                         break;
                 }
             }
-
+            
             //采集资源图标跟随鼠标
             if(attachMouseSprite != null)
                 attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
