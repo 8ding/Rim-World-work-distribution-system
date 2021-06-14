@@ -118,7 +118,6 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/MyClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" />
@@ -130,6 +129,7 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -416,45 +416,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="62" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs</url>
-          <line>68</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Move\MovePositionPathFinding.cs" initialLine="67" containingFunctionPresentation="method 'Update'">
-            <startOffsets>
-              <option value="1748" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1834" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="86" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs</url>
-          <line>320</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\WorkGatherTaskAI.cs" initialLine="320" containingFunctionPresentation="lambda expression inside method 'ExcuteTask_Move'">
-            <startOffsets>
-              <option value="9680" />
-            </startOffsets>
-            <endOffsets>
-              <option value="9694" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="87" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs</url>
-          <line>41</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Move\MovePositionPathFinding.cs" initialLine="41" containingFunctionPresentation="method 'SetMovePosition'">
-            <startOffsets>
-              <option value="1137" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1204" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="88" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

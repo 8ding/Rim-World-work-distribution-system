@@ -29,25 +29,30 @@ public class CharacterAnimation : MonoBehaviour
     }
     public void PlayobjectAnimaiton(int loopTimes,ObjectAnimationType objectAnimationType)
     {
-       
-        if(animationobject != null && animationobject.activeSelf)
-            animationobject.SetActive(false);
+
+        GameObject temp;
         if (!animationTypDirectionDictionaryDictionary.TryGetValue(objectAnimationType,out faceDirectionGameObjectDictionary))
         {
-            animationobject =
+            temp =
                 GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
             faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>
-                {{faceDirectionType, animationobject}};
+                {{faceDirectionType, temp}};
             animationTypDirectionDictionaryDictionary[objectAnimationType] = faceDirectionGameObjectDictionary;
         }
-        else if(!faceDirectionGameObjectDictionary.TryGetValue(faceDirectionType, out animationobject))
+        else if(!faceDirectionGameObjectDictionary.TryGetValue(faceDirectionType, out temp))
         {
-            animationobject =
+            temp =
                 GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
-            animationTypDirectionDictionaryDictionary[objectAnimationType][faceDirectionType] = animationobject;
+            animationTypDirectionDictionaryDictionary[objectAnimationType][faceDirectionType] = temp;
         }
 
-        animationobject.SetActive(true);
+        if (animationobject != temp)
+        {
+            if(animationobject != null) 
+                animationobject.SetActive(false);
+            animationobject = temp;
+            animationobject.SetActive(true);
+        }
         AnimationObjectController animationObjectController =
             animationobject.GetComponentInChildren<AnimationObjectController>();
         if (animationObjectController == null)
