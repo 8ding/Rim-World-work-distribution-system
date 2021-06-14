@@ -54,6 +54,7 @@
     <setting file="file://C:/Program Files/Unity/Hub/Editor/2020.3.8f1c1/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.ugui/Runtime/UI/Core/Layout/LayoutGroup.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/Downloads/UI-Binding-Scripts/Scripts/StatsList.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0CADAF24-E9D3-412C-A2C2-0CC519CF853A/8f/5c156dfb/Physics2D.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../school/UnityRenderStreaming/com.unity.template.renderstreaming-rtx/Library/PackageCache/com.unity.render-pipelines.high-definition@10.5.0/Runtime/Material/AxF/AxF.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameResource.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/695D1CC9-3CCA-4506-9C52-8C15C9FDD749/06/d3c1a2a9/02000227.il" root0="SKIP_HIGHLIGHTING" />
@@ -69,11 +70,13 @@
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveTransformVelocity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/695D1CC9-3CCA-4506-9C52-8C15C9FDD749/e7/e70f57ff/Comparison`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/TitleList.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/c2/02d0a284/LayerMask.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionDirect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/IMovePosition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/63/479219b7/UnitySynchronizationContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/695D1CC9-3CCA-4506-9C52-8C15C9FDD749/67/158f0bb7/ArraySortHelper`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/d3/c9c334aa/02000241.il" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/99/8662ddd5/02000226.il" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MoveVelocity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/ITaskAI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/695D1CC9-3CCA-4506-9C52-8C15C9FDD749/78/a67b6c68/020001DD.il" root0="SKIP_HIGHLIGHTING" />
@@ -94,6 +97,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/695D1CC9-3CCA-4506-9C52-8C15C9FDD749/3d/c4dc4205/02000A2C.il" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/UIManager/JobOrderPanel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/IL/0CADAF24-E9D3-412C-A2C2-0CC519CF853A/bd/e267cd20/02000004.il" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -117,10 +121,10 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Worker/Woker.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Setting/GridSetting.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Setting/GridSetting.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -220,7 +224,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34991798" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34994584" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="Discover.Launch.Via.Unity" value="true" />
     <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
@@ -258,10 +262,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="8976">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="8976" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -303,7 +307,7 @@
       <workItem from="1623378653717" duration="22797000" />
       <workItem from="1623411314885" duration="4644000" />
       <workItem from="1623553475540" duration="23428000" />
-      <workItem from="1623658064227" duration="5836000" />
+      <workItem from="1623658064227" duration="7681000" />
     </task>
     <servers />
   </component>
@@ -446,6 +450,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="80" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs</url>
+          <line>63</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\MyGrid.cs" initialLine="62" containingFunctionPresentation="method 'checkWalkable'">
+            <startOffsets>
+              <option value="2110" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2123" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="84" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -29,9 +29,10 @@ public class MyGrid<TgridObect>
     private int height;
     public TgridObect[,] gridArray;
     private Vector3 originPosition;
-    
-    public MyGrid(Vector3 LefDown,Vector3 RightUp,Func<Vector3,int,int,TgridObect> createGridContent)
+    private LayerMask layerMask;
+    public MyGrid(Vector3 LefDown,Vector3 RightUp,Func<Vector3,int,int,bool,TgridObect> createGridContent,LayerMask layerMask)
     {
+        this.layerMask = layerMask;
         originPosition = LefDown;
         this.width = 200;
         this.height = 200;
@@ -49,11 +50,20 @@ public class MyGrid<TgridObect>
                 // Debug.DrawLine(startPosition, upPosition, Color.red, 100f);
                 // Debug.DrawLine(startPosition, rightPosition, Color.red, 100f);
                 Vector3 contentPosition = startPosition + (Vector3.right) * 0.5f * CellSize;
-                gridArray[i, j] = createGridContent(contentPosition, i, j);
+                gridArray[i, j] = createGridContent(contentPosition, i, j,checkWalkable(contentPosition));
                 // MyClass.CreateWorldText(null, contentPosition.x.ToString() +" " +contentPosition.y.ToString(), startPosition + (Vector3.right) * 0.5f * CellSize, 5, Color.red,
                 //     TextAnchor.MiddleCenter, TextAlignment.Center, 1);
             }
         }
+    }
+    private bool checkWalkable(Vector3 position)
+    {
+        var ray = Physics2D.Raycast(position, Vector2.up, 0.5f * CellSize,layerMask);
+        if (ray.collider != null)
+        {
+            return false;
+        }
+        return true;
     }
     public TgridObect GetGridObject(int x, int z)
     {
