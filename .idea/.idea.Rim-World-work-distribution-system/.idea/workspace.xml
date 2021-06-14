@@ -111,6 +111,9 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkGatherTaskAI.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/AnimationObjectController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathFinding.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/MyClass.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs" />
     </changedPaths>
   </component>
@@ -293,7 +296,7 @@
       <workItem from="1623333278483" duration="7801000" />
       <workItem from="1623378653717" duration="22797000" />
       <workItem from="1623411314885" duration="4644000" />
-      <workItem from="1623553475540" duration="10327000" />
+      <workItem from="1623553475540" duration="14720000" />
     </task>
     <servers />
   </component>

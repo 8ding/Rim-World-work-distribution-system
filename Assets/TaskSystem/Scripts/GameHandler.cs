@@ -32,7 +32,7 @@ namespace TaskSystem
         private GameObject resourcePointGameObject;
         private Woker woker;
         private ITaskAI taskAI;
-        
+        MyGrid<PathNode> grid;
 
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
 
@@ -41,7 +41,7 @@ namespace TaskSystem
         private MouseState mouseState;
         private GameObject attachMouseSprite;
 
-        private MyGrid myGrid;
+        
         private void Awake()
         {
             GameResource.Init();
@@ -63,7 +63,7 @@ namespace TaskSystem
             camera1.enabled = true;
             camera2.enabled = false;
             mouseState = MouseState.None;
-            myGrid = new MyGrid(10, 10);
+            grid = new MyGrid<PathNode>(10, 10, (position) => { return new PathNode(position, true); });
         }
 
         private void Start()
