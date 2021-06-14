@@ -31,7 +31,7 @@ namespace TaskSystem
         private GameObject resourcePointGameObject;
         private Woker woker;
         private WorkGatherTaskAI taskAI;
-        private MyGrid<PathNode> grid;
+ 
         private PathFinding pathFInding;
 
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
@@ -63,8 +63,6 @@ namespace TaskSystem
             camera1.enabled = true;
             camera2.enabled = false;
             mouseState = MouseState.None;
-            grid = new MyGrid<PathNode>(LeftDown, RightUp, (position,x,y) => { return new PathNode(position, x,y,true); });
-            pathFInding = new PathFinding(grid);
         }
 
         private void Start()
@@ -150,7 +148,7 @@ namespace TaskSystem
             {
                 case WokerType.Miner:
                     taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
-                    taskAI.setUp(woker,pathFInding);
+                    taskAI.setUp(woker);
                     orderPanel.AddWorkerOnPanel(taskAI as WorkGatherTaskAI);
                     break;
             }

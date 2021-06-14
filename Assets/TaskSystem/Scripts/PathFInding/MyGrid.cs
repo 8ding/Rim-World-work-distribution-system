@@ -27,14 +27,14 @@ public class MyGrid<TgridObect>
     private const float CellSize = 1f;
     private int width;
     private int height;
-    private TgridObect[,] gridArray;
+    public TgridObect[,] gridArray;
     private Vector3 originPosition;
     
-    public MyGrid(Transform LefDown,Transform RightUp,Func<Vector3,int,int,TgridObect> createGridContent)
+    public MyGrid(Vector3 LefDown,Vector3 RightUp,Func<Vector3,int,int,TgridObect> createGridContent)
     {
-        originPosition = LefDown.position;
-        this.width = Mathf.FloorToInt((RightUp.position.x - LefDown.position.x)/CellSize);
-        this.height = Mathf.FloorToInt((RightUp.position.y - LefDown.position.y)/CellSize);
+        originPosition = LefDown;
+        this.width = 200;
+        this.height = 200;
         Vector3 startPosition;
         Vector3 upPosition;
         Vector3 rightPosition;
@@ -46,8 +46,8 @@ public class MyGrid<TgridObect>
                 startPosition = originPosition + (Vector3.right) * i * CellSize + Vector3.up * j * CellSize;
                 upPosition = startPosition + Vector3.up * CellSize;
                 rightPosition = startPosition + Vector3.right * CellSize;
-                Debug.DrawLine(startPosition, upPosition, Color.red, 100f);
-                Debug.DrawLine(startPosition, rightPosition, Color.red, 100f);
+                // Debug.DrawLine(startPosition, upPosition, Color.red, 100f);
+                // Debug.DrawLine(startPosition, rightPosition, Color.red, 100f);
                 Vector3 contentPosition = startPosition + (Vector3.right) * 0.5f * CellSize;
                 gridArray[i, j] = createGridContent(contentPosition, i, j);
                 // MyClass.CreateWorldText(null, contentPosition.x.ToString() +" " +contentPosition.y.ToString(), startPosition + (Vector3.right) * 0.5f * CellSize, 5, Color.red,

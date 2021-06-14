@@ -93,10 +93,10 @@ public class WorkGatherTaskAI : MonoBehaviour
         }
     }
 
-    public void setUp(Woker worker,PathFinding findPath)
+    public void setUp(Woker worker)
     {
         this.worker = worker as Woker;
-        this.pathFinding = findPath;
+
         state = State.WaitingForNextTask;
         
         

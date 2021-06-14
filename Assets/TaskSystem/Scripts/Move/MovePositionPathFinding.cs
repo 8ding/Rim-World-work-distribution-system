@@ -23,6 +23,7 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     public event Action OnMovEnd;//当移动停止,移动方式需要做的事情
     public Action OnPostMoveEnd;//移动停止的后处理
     public PathFinding pathFinding;
+    private MyGrid<PathNode> myGrid;
     private List<PathNode> pathNodes;
     private int currentNodeIndex;
 
@@ -30,11 +31,12 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     {
         movePosition = gameObject.transform.position;
         moveVelocity = GetComponent<IMoveVelocity>();
+        myGrid = (Resources.Load("New Grid Setting") as GridSetting).grid;
     }
 
     private void Start()
     {
-        pathFinding = GetComponent<WorkGatherTaskAI>().pathFinding;
+        pathFinding = new PathFinding(myGrid);
         pathNodes = new List<PathNode>();
     }
 
