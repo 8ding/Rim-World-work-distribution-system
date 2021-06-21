@@ -7,14 +7,6 @@ using CodeMonkey;
 using TaskSystem;
 using TaskSystem.GatherResource;
 using UnityEngine;
-public enum JobType
-{
-    GatherGold,
-    GatherWood,
-    MakeThing,
-    GoToPlace,
-    enumcount,
-}
 
 
 public class compare : IComparer<JobType>
@@ -47,13 +39,12 @@ public class compare : IComparer<JobType>
 }
 
 
-public class WorkerAI : MonoBehaviour
+public class WorkerAI : AIBase
 {
-    private Body worker;
+ 
     private State state;
     private float waitingTimer;
     private GameObject ResourceGameObject;
-    public int characterId;
 
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
     
@@ -68,6 +59,28 @@ public class WorkerAI : MonoBehaviour
 
     public Action OnNotWorker;
     // Update is called once per frame
+    private void Awake()
+    {
+        jobTypeList = new List<JobType>();
+        jobtypeOrderDictionary = new Dictionary<JobType, int>();
+    }
+
+    private void Start()
+    {
+        //依照scripableObject的数据对工作类型顺序列表 与 工作类型与优先级对应表 以及 工作类型与执行方法对应表进行初始化
+        for (int i = 0; i < (int)JobType.enumcount; i++)
+        {
+            jobTypeList.Add((JobType)i);
+            jobtypeOrderDictionary.Add((JobType)i,4);
+        }
+        //实例一个比较方法
+        compareType = new compare(jobtypeOrderDictionary);
+        resourceTypeIconDictionary = new Dictionary<ResourceType, GameObject>();
+        //依照比较方法对工人的工作类型进行排序,工人按照该顺序去领取工作
+        jobTypeList.Sort(compareType);
+        state = State.WaitingForNextTask;
+    }
+
     void Update()
     {
         switch (state)
@@ -87,33 +100,7 @@ public class WorkerAI : MonoBehaviour
         }
     }
 
-    public void setUp(Body worker)
-    {
-        this.worker = worker;
-        characterId = worker.GetId();
-        state = State.WaitingForNextTask;
-        
-        
-        jobTypeList = new List<JobType>();
-        jobtypeOrderDictionary = new Dictionary<JobType, int>();
-        //依照scripableObject的数据对工作类型顺序列表 与 工作类型与优先级对应表 以及 工作类型与执行方法对应表进行初始化
-        for (int i = 0; i < (int)JobType.enumcount; i++)
-        {
-            jobTypeList.Add((JobType)i);
-            jobtypeOrderDictionary.Add((JobType)i,4);
-        }
-        //实例一个比较方法
-        compareType = new compare(jobtypeOrderDictionary);
-        resourceTypeIconDictionary = new Dictionary<ResourceType, GameObject>();
-        //依照比较方法对工人的工作类型进行排序,工人按照该顺序去领取工作
-        jobTypeList.Sort(compareType);
-        
-        worker.Idle();
-        // for (int i = 0; i < jobTypeList.Count; i++)
-        // {
-        //     Debug.Log(jobTypeList[i]);
-        // }
-    }
+
 
     public void ModifyOrder(JobType jobType)
     {

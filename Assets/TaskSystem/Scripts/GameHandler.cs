@@ -25,7 +25,6 @@ namespace TaskSystem
     {
         public Camera camera1;
         public Camera camera2;
-        public Transform LeftDown, RightUp;
         private Camera currentCamera;
         private JobOrderPanel orderPanel;
         private GameObject resourcePointGameObject;
@@ -67,7 +66,7 @@ namespace TaskSystem
 
         private void Start()
         {
-            createPlayer(new Vector3(0,0,0));
+            createUnit(new Vector3(0,0,0));
         }
 
         //取消点击采矿按钮的状态
@@ -141,15 +140,15 @@ namespace TaskSystem
             return resourcePointGameObject;
         }
 
-        private void createPlayer(Vector3 position)
+        private void createUnit(Vector3 position)
         {
             _m_body = Body.Create(0,position);
-            playerAI = _m_body.gameObject.AddComponent<PlayerControlAI>();
+//            playerAI = _m_body.gameObject.AddComponent<PlayerControlAI>();
             taskAI = _m_body.gameObject.AddComponent<WorkerAI>();
             taskAI.setUp(_m_body);
             orderPanel.AddWorkerOnPanel(taskAI);
-            taskAI.Disable();
-            playerAI.setUp(_m_body);
+//            taskAI.Disable();
+//            playerAI.setUp(_m_body);
         }
 
         private void createNpc(Vector3 position)

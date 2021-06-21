@@ -40,7 +40,7 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     {
         pathFinding = new PathFinding(myGrid);
         pathNodes = new List<PathNode>();
-        characterId = GetComponent<WorkerAI>().characterId;
+        characterId = GetComponent<WorkerAI>().GetId();
     }
 
     public void SetMovePosition(Vector3 movePosition) {

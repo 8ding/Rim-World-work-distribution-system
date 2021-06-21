@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using TaskSystem;
 using UnityEngine;
 
-public class NPCAI : MonoBehaviour
+public class NPCAI : AIBase
 {
-    private Body worker;
+
     private State state;
     private float waitingTimer;
 
@@ -39,7 +39,6 @@ public class NPCAI : MonoBehaviour
         else
         {
             state = State.ExecutingTask;
-            
         }
     }
 

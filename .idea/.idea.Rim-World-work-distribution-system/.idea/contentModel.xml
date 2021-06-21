@@ -20,9 +20,10 @@
         <e p="TaskSystem" t="Include">
           <e p="Scripts" t="Include">
             <e p="AIs" t="Include">
-              <e p="ITaskAI.cs" t="Include" />
+              <e p="AIBase.cs" t="Include" />
               <e p="NPCAI.cs" t="Include" />
               <e p="PlayerControlAI.cs" t="Include" />
+              <e p="SomeEnum.cs" t="Include" />
               <e p="WorkerAI.cs" t="Include" />
             </e>
             <e p="Character" t="Include">
@@ -36,10 +37,6 @@
               <e p="ObjectPool.cs" t="Include" />
             </e>
             <e p="GameHandler.cs" t="Include" />
-            <e p="Grid" t="Include">
-              <e p="Grid.cs" t="Include" />
-              <e p="Testing.cs" t="Include" />
-            </e>
             <e p="Move" t="Include">
               <e p="IMovePosition.cs" t="Include" />
               <e p="IMoveVelocity.cs" t="Include" />

@@ -2,19 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControlAI : MonoBehaviour
+public class PlayerControlAI : AIBase
 {
-    private Body worker;
-    public int characterId;
+
     private Vector3 direction = Vector3.zero;
     private Vector3 moveH = Vector3.zero;
     private Vector3 moveV = Vector3.zero;
 
-    public void setUp(Body worker)
-    {
-        this.worker = worker;
-        characterId = worker.GetId();
-    }
+
     
     
     // Update is called once per frame
