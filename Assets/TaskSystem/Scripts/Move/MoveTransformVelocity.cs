@@ -18,6 +18,7 @@ public class MoveTransformVelocity : MonoBehaviour,IMoveVelocity
 
     public void Disable()
     {
+        this.vectorVelocity = Vector3.zero;
         this.enabled = false;
     }
 

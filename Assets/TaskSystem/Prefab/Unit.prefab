@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6390544557167805191}
   - component: {fileID: 4649522182736686882}
   - component: {fileID: 3074566371491650917}
-  - component: {fileID: 9163893640616587857}
+  - component: {fileID: -2254866464484393777}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -150,7 +150,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &9163893640616587857
+--- !u!114 &-2254866464484393777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1200976536868524450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fdb4ce95564c05b28898ede5505f76, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dc59f5095cb41ed8d6d43874ee45eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6

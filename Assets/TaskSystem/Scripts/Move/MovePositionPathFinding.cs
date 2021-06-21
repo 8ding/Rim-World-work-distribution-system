@@ -26,18 +26,21 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     private List<PathNode> pathNodes;
     private int currentNodeIndex;
     private CharacterAnimation characterAnimation;
+    private int characterId;
 
     private void Awake()
     {
         moveVelocity = GetComponent<IMoveVelocity>();
         characterAnimation = GetComponent<CharacterAnimation>();
         myGrid = (Resources.Load("New Grid Setting") as GridSetting).grid;
+
     }
 
     private void Start()
     {
         pathFinding = new PathFinding(myGrid);
         pathNodes = new List<PathNode>();
+        characterId = GetComponent<WorkerAI>().characterId;
     }
 
     public void SetMovePosition(Vector3 movePosition) {
@@ -47,7 +50,7 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
         {
             pathFinding.DrawPath(pathNodes);
             currentNodeIndex = 0;
-            characterAnimation.PlayDirectMoveAnimation(pathNodes[currentNodeIndex].worldPosition);
+            characterAnimation.PlayDirectMoveAnimation(characterId,pathNodes[currentNodeIndex].worldPosition);
         }
         else
         {
@@ -77,7 +80,7 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
                 if (currentNodeIndex < pathNodes.Count - 1)
                 {
                     currentNodeIndex++;
-                    characterAnimation.PlayDirectMoveAnimation(pathNodes[currentNodeIndex].worldPosition);
+                    characterAnimation.PlayDirectMoveAnimation(characterId,pathNodes[currentNodeIndex].worldPosition);
                 }
                 else
                 {

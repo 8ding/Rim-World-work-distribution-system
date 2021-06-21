@@ -10,11 +10,11 @@ using UnityEngine;
 
 namespace TaskSystem
 {
-    public enum WokerType
+    public enum PlayerControlWay
     {
-        Miner
+        WorkerWay,
+        PlayerWay,
     }
-
     public enum MouseState
     {
         None,
@@ -29,13 +29,13 @@ namespace TaskSystem
         private Camera currentCamera;
         private JobOrderPanel orderPanel;
         private GameObject resourcePointGameObject;
-        private Woker woker;
-        private WorkGatherTaskAI taskAI;
- 
+        private Body _m_body;
+        private WorkerAI taskAI;
+        private PlayerControlAI playerAI;
         private PathFinding pathFInding;
 
         public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
-
+        public static Dictionary<int, PL_TaskSystem<TaskBase>> IdTaskSystemDictionary;
         private Transform MineButton;
         private Transform cutButton;
         private MouseState mouseState;
@@ -67,7 +67,7 @@ namespace TaskSystem
 
         private void Start()
         {
-            createWorker(new Vector3(0,0,0),WokerType.Miner);
+            createPlayer(new Vector3(0,0,0));
         }
 
         //取消点击采矿按钮的状态
@@ -141,19 +141,26 @@ namespace TaskSystem
             return resourcePointGameObject;
         }
 
-        private void createWorker(Vector3 position,WokerType wokerType)
+        private void createPlayer(Vector3 position)
         {
-            woker = Woker.Create(position);
-            switch (wokerType)
-            {
-                case WokerType.Miner:
-                    taskAI = woker.gameObject.AddComponent<WorkGatherTaskAI>();
-                    taskAI.setUp(woker);
-                    orderPanel.AddWorkerOnPanel(taskAI as WorkGatherTaskAI);
-                    break;
-            }
+            _m_body = Body.Create(0,position);
+            playerAI = _m_body.gameObject.AddComponent<PlayerControlAI>();
+            taskAI = _m_body.gameObject.AddComponent<WorkerAI>();
+            taskAI.setUp(_m_body);
+            orderPanel.AddWorkerOnPanel(taskAI);
+            taskAI.Disable();
+            playerAI.setUp(_m_body);
         }
 
+        private void createNpc(Vector3 position)
+        {
+            
+        }
+
+        public void changePlayerControlMode()
+        {
+            
+        }
         private void Update()
         {
             if (Input.GetMouseButtonDown(1))
@@ -162,7 +169,7 @@ namespace TaskSystem
                 switch (mouseState)
                 {
                     case MouseState.None:
-                        MoveTask task = new MoveTask
+                        WorkerMoveTask task = new WorkerMoveTask
                         {
                             jobType = JobType.GoToPlace,
                             Destination = MyClass.GetMouseWorldPosition(0, camera1)
@@ -184,11 +191,7 @@ namespace TaskSystem
             {
                 createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Gold);
             }
-            //生成工人操作
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                createWorker(MyClass.GetMouseWorldPosition(0,Camera.main),WokerType.Miner);
-            }
+
             //生成树木操作
             if (Input.GetKeyDown(KeyCode.Backspace))
             {

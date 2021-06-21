@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 public class JobOrderPanel : MonoBehaviour
 {
-    public Dictionary<WorkGatherTaskAI, OrderListHolder> holders = new Dictionary<WorkGatherTaskAI, OrderListHolder>();
+    public Dictionary<WorkerAI, OrderListHolder> holders = new Dictionary<WorkerAI, OrderListHolder>();
     [FormerlySerializedAs("orderHolderTemplate")] [SerializeField]private OrderListHolder orderListHolderTemplate;
     [SerializeField] private Transform orderHolderRoot;
 
@@ -15,7 +15,7 @@ public class JobOrderPanel : MonoBehaviour
         orderListHolderTemplate.gameObject.SetActive(false);
     }
 
-    public void CreateHolder(WorkGatherTaskAI workerAI)
+    public void CreateHolder(WorkerAI workerAI)
     {
         var orderHolder = Instantiate(orderListHolderTemplate, orderHolderRoot);
         orderHolder.gameObject.SetActive(true);
@@ -23,16 +23,18 @@ public class JobOrderPanel : MonoBehaviour
         holders.Add(workerAI,orderHolder);
     }
 
-    public void AddWorkerOnPanel(WorkGatherTaskAI workGatherTaskAI)
+    public void AddWorkerOnPanel(WorkerAI _workerAi)
     {
         OrderListHolder temp;
-        if (holders.TryGetValue(workGatherTaskAI, out temp))
+        if (holders.TryGetValue(_workerAi, out temp))
         {
+            temp.gameObject.SetActive(true);
             return;
         }
         else
         {
-            CreateHolder(workGatherTaskAI);
+            CreateHolder(_workerAi);
         }
     }
+    
 }

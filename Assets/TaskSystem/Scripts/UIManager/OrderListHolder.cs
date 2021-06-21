@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class OrderListHolder : MonoBehaviour
 {
-    private WorkGatherTaskAI boundWorkerAI;
+    private WorkerAI boundWorkerAI;
     
     private  Dictionary<JobType, ButtonManager> joTypeButtonDictionary;
     [SerializeField] private ButtonManager buttonTemplate;
@@ -19,11 +19,12 @@ public class OrderListHolder : MonoBehaviour
         buttonTemplate.gameObject.SetActive(false);
     }
 
-    public void Bind(WorkGatherTaskAI workGatherTaskAI)
+    public void Bind(WorkerAI _workerAi)
     {
 
-        boundWorkerAI = workGatherTaskAI;
+        boundWorkerAI = _workerAi;
         boundWorkerAI.OnJobOrderChanged += handleOrderChanged;
+        boundWorkerAI.OnNotWorker += cancelOnPanel;
         ButtonManager temp;
         for (int i = 0; i < (int)JobType.enumcount; i++)
         {
@@ -33,17 +34,17 @@ public class OrderListHolder : MonoBehaviour
             }
             else
             {
-                createButton((JobType)i,workGatherTaskAI);
+                createButton((JobType)i,_workerAi);
             }
         }
         handleOrderChanged();
     }
 
-    private void createButton(JobType jobType,WorkGatherTaskAI workGatherTaskAI)
+    private void createButton(JobType jobType,WorkerAI _workerAi)
     {
         var newbutton = Instantiate(buttonTemplate, buttonRoot);
         newbutton.gameObject.SetActive(true);
-        newbutton.SetData(workGatherTaskAI, jobType);
+        newbutton.SetData(_workerAi, jobType);
         joTypeButtonDictionary.Add(jobType, newbutton);
     }
     private void handleOrderChanged()
@@ -61,6 +62,11 @@ public class OrderListHolder : MonoBehaviour
             }
         }
         
+    }
+
+    private void cancelOnPanel()
+    {
+        gameObject.SetActive(false);
     }
 
 }

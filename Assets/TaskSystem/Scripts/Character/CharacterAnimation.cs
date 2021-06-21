@@ -27,14 +27,14 @@ public class CharacterAnimation : MonoBehaviour
         faceDirectionType = FaceDirectionType.Side;
     
     }
-    public void PlayobjectAnimaiton(int loopTimes,ObjectAnimationType objectAnimationType)
+    public void PlayobjectAnimaiton(int id,int loopTimes,ObjectAnimationType objectAnimationType)
     {
-
+        
         GameObject temp;
         if (!animationTypDirectionDictionaryDictionary.TryGetValue(objectAnimationType,out faceDirectionGameObjectDictionary))
         {
             temp =
-                GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
+                GameAssets.Instance.createAnimationGameObject(id,objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
             faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>
                 {{faceDirectionType, temp}};
             animationTypDirectionDictionaryDictionary[objectAnimationType] = faceDirectionGameObjectDictionary;
@@ -42,7 +42,7 @@ public class CharacterAnimation : MonoBehaviour
         else if(!faceDirectionGameObjectDictionary.TryGetValue(faceDirectionType, out temp))
         {
             temp =
-                GameAssets.Instance.createAnimationGameObject(objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
+                GameAssets.Instance.createAnimationGameObject(id,objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
             animationTypDirectionDictionaryDictionary[objectAnimationType][faceDirectionType] = temp;
         }
 
@@ -52,48 +52,71 @@ public class CharacterAnimation : MonoBehaviour
                 animationobject.SetActive(false);
             animationobject = temp;
             animationobject.SetActive(true);
+            AnimationObjectController animationObjectController =
+                animationobject.GetComponentInChildren<AnimationObjectController>();
+            if (animationObjectController == null)
+            {
+                animationObjectController = animationobject.GetComponent<AnimationObjectController>();
+            }
+            animationObjectController.LoopTimes = loopTimes;
+            animationObjectController.OnLoopOneTime = OneTimeAction;
+            animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
         }
-        AnimationObjectController animationObjectController =
-            animationobject.GetComponentInChildren<AnimationObjectController>();
-        if (animationObjectController == null)
-        {
-            animationObjectController = animationobject.GetComponent<AnimationObjectController>();
-        }
-        animationObjectController.LoopTimes = loopTimes;
-        animationObjectController.OnLoopOneTime = OneTimeAction;
-        animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
+
     }
 
-    public void PlayMoveAnimation(Vector3 position)
+
+    public void PlayDirectMoveAnimation(int id,Vector3 vector3,bool isPosition = true)
     {
-        
-    }
-    public void PlayDirectMoveAnimation(Vector3 Position)
-    {
-        if (Position.x - transform.position.x > 0.1f)
+        if(isPosition)
         {
-            faceDirectionType = FaceDirectionType.Side;
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else if (Position.x - transform.position.x  < -0.1f)
-        {
-            faceDirectionType = FaceDirectionType.Side;
-            transform.localScale = new Vector3(1, 1, 1);
+            if (vector3.x - transform.position.x > 0.1f)
+            {
+                faceDirectionType = FaceDirectionType.Side;
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else if (vector3.x - transform.position.x  < -0.1f)
+            {
+                faceDirectionType = FaceDirectionType.Side;
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else
+            {
+                if (vector3.y - transform.position.y > 0f)
+                {
+                    faceDirectionType= FaceDirectionType.Up;
+                }
+                else if(vector3.y - transform.position.y< 0f)
+                {
+                    faceDirectionType = FaceDirectionType.Down;
+                }
+            }
         }
         else
         {
-            if (Position.y - transform.position.y > 0f)
+            if(vector3.x > 0)
             {
-                faceDirectionType= FaceDirectionType.Up;
+                faceDirectionType = FaceDirectionType.Side;
+                transform.localScale = new Vector3(-1, 1, 1);
+
             }
-            else if(Position.y - transform.position.y< 0f)
+            else if(vector3.x < 0)
             {
-                faceDirectionType = FaceDirectionType.Down;
+                faceDirectionType = FaceDirectionType.Side;
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else 
+            {
+                if(vector3.y > 0.1f)
+                    faceDirectionType = FaceDirectionType.Up;
+                else
+                {
+                    faceDirectionType = FaceDirectionType.Down;
+                }
             }
         }
-        PlayobjectAnimaiton(0,ObjectAnimationType.Walk);
-     }
-
+        PlayobjectAnimaiton(id,0,ObjectAnimationType.Walk);
+    }
     // public void PlayIdleAnimation()
     // {
     //     PlayobjectAnimaiton(ObjectAnimationType.Idle);

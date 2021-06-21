@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using StateMachine;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Networking.PlayerConnection;
 
@@ -13,22 +14,10 @@ public enum ObjectAnimationType
     Cut,
     Walk,
     Idle,
-    Throw
+    Throw,
+    enumcount
 }
 
-[Serializable]
-public struct FaceType_Object
-{
-    public FaceDirectionType faceDirectionType;
-    public GameObject animatiGameObject;
-}
-
-[Serializable]
-public struct AnimationType_Struct
-{
-    public ObjectAnimationType objectAnimationType;
-    public List<FaceType_Object> faceTypeObjects;
-}
 [Serializable]
 public enum ResourceType
 {
@@ -68,16 +57,16 @@ public class GameAssets : MonoBehaviour
     public GameObject player;
     public Sprite rifle;
     public Sprite WeaponSlot;
-    
+    public const int CharecterNumber = 1;
     
     public Sprite GoldPoint;
     public Sprite MiningShovel;
     public Sprite CutKnife;
     
-    [SerializeField]
-    public List<AnimationType_Struct> AnimationObjects;
+
     [SerializeField]
     public List<ItemType_Object> ItemTypeObjects;
+
 
     [SerializeField] 
     public List<ItemType_Sprite> ItemTypeSpries;
@@ -109,6 +98,7 @@ public class GameAssets : MonoBehaviour
                 }
             }
         }
+
     }
 
     public GameObject createUnit(Transform  parent,Vector3 position)
@@ -136,27 +126,13 @@ public class GameAssets : MonoBehaviour
         return result;
     }
 
-    public GameObject createAnimationGameObject(ObjectAnimationType _objectAnimationType,
+    public GameObject createAnimationGameObject(int id,ObjectAnimationType _objectAnimationType,
         FaceDirectionType faceDirectionType, Transform parent, Vector3 position)
     {
-
-        if (AnimationObjects != null)
-        {
-            for (int i = 0; i < AnimationObjects.Count; i++)
-            {
-                if (AnimationObjects[i].objectAnimationType == _objectAnimationType)
-                {
-                    for (int j = 0; j < AnimationObjects[i].faceTypeObjects.Count; j++)
-                    {
-                        if (faceDirectionType == AnimationObjects[i].faceTypeObjects[j].faceDirectionType)
-                        {
-                            return Instantiate(AnimationObjects[i].faceTypeObjects[j].animatiGameObject, position,
-                                Quaternion.identity, parent);
-                        }
-                    }
-                }
-            }
-        }
+        string path = "animation/" + id + "_" + _objectAnimationType + "_" + faceDirectionType;
+        GameObject animationObject = Resources.Load<GameObject>(path) as GameObject;
+        if(animationObject != null)
+            return Instantiate(animationObject, position, quaternion.identity,parent);
         return null; 
     }
 }

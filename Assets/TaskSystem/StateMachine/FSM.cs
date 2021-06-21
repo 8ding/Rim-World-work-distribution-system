@@ -19,7 +19,7 @@ namespace StateMachine
         Side,
         Up,
         Down,
-
+        enumcount
     }
     [Serializable]
     public class Parameter

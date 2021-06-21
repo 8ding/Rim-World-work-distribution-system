@@ -25,8 +25,8 @@ public class MoveVelocity : MonoBehaviour,IMoveVelocity
 
     public void Disable()
     {
-        this.enabled = false;
         rb.velocity = Vector2.zero;
+        this.enabled = false;
     }
 
     public void Enable()
