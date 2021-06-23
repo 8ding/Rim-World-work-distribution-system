@@ -33,8 +33,8 @@ namespace TaskSystem
         private PlayerControlAI playerAI;
         private PathFinding pathFInding;
 
-        public static Dictionary<JobType, PL_TaskSystem<TaskBase>> JobTypeTaskSystemDictionary;
-        public static Dictionary<int, PL_TaskSystem<TaskBase>> IdTaskSystemDictionary;
+        public static Dictionary<JobType, PL_TaskSystem> JobTypeTaskSystemDictionary;
+        public static Dictionary<int, PL_TaskSystem> IdTaskSystemDictionary;
         private Transform MineButton;
         private Transform cutButton;
         private MouseState mouseState;
@@ -44,11 +44,11 @@ namespace TaskSystem
         private void Awake()
         {
             GameResource.Init();
-            JobTypeTaskSystemDictionary = new Dictionary<JobType, PL_TaskSystem<TaskBase>>();
+            JobTypeTaskSystemDictionary = new Dictionary<JobType, PL_TaskSystem>();
 
             for (int i = 0; i < (int) JobType.enumcount; i++)
             {
-                JobTypeTaskSystemDictionary.Add((JobType)i,new PL_TaskSystem<TaskBase>());
+                JobTypeTaskSystemDictionary.Add((JobType)i,new PL_TaskSystem());
             }
             
             ResourceManager.OnResourceClicked += handleMinePointClicked;
@@ -151,15 +151,7 @@ namespace TaskSystem
 //            playerAI.setUp(_m_body);
         }
 
-        private void createNpc(Vector3 position)
-        {
-            
-        }
 
-        public void changePlayerControlMode()
-        {
-            
-        }
         private void Update()
         {
             if (Input.GetMouseButtonDown(1))

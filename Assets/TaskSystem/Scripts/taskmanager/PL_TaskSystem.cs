@@ -22,30 +22,30 @@ public class QueueTask<TTask> where TTask : TaskBase
         return this.tryGetTaskFunc();
     }
 }
-public class PL_TaskSystem<TTask> where TTask : TaskBase
+public class PL_TaskSystem
 {
     //队列任务，需要满足调节才能出队的任务
 
    
 
-    private List<TTask> taskList;
-    private List<QueueTask<TTask>> queueTaskList;
+    private List<TaskBase> taskList;
+    private List<QueueTask<TaskBase>> queueTaskList;
     public PL_TaskSystem()
     {
-        taskList = new List<TTask>();
-        queueTaskList = new List<QueueTask<TTask>>();
+        taskList = new List<TaskBase>();
+        queueTaskList = new List<QueueTask<TaskBase>>();
         //每0.2s执行一次任务出队
         FunctionPeriodic.Create(dequeueTasks, 0.2f);
     }
 
-    public void EnqueueTask(QueueTask<TTask> queueTask)
+    public void EnqueueTask(QueueTask<TaskBase> queueTask)
     {
         queueTaskList.Add(queueTask);
     }
 
-    public void EnqueueTask(Func<TTask> tryGetTaskFunc)
+    public void EnqueueTask(Func<TaskBase> tryGetTaskFunc)
     {
-        QueueTask<TTask> queueTask = new QueueTask<TTask>(tryGetTaskFunc);
+        QueueTask<TaskBase> queueTask = new QueueTask<TaskBase>(tryGetTaskFunc);
         queueTaskList.Add(queueTask);
     }
     
@@ -53,8 +53,8 @@ public class PL_TaskSystem<TTask> where TTask : TaskBase
     {
         for (int i = 0; i < queueTaskList.Count; i++)
         {
-            QueueTask<TTask> queueTask = queueTaskList[i];
-            TTask TTask = queueTask.TryDequeueTask();
+            QueueTask<TaskBase> queueTask = queueTaskList[i];
+            TaskBase TTask = queueTask.TryDequeueTask();
             if (TTask != null)
             {
                 AddTask(TTask);
@@ -69,12 +69,12 @@ public class PL_TaskSystem<TTask> where TTask : TaskBase
         }
     }
 
-    public TTask RequestTask()
+    public TaskBase RequestTask()
     {
         if (taskList != null && taskList.Count > 0)
         {
             //给予请求者第一个任务
-            TTask TTask = taskList[0];
+            TaskBase TTask = taskList[0];
             taskList.Remove(TTask);
             return TTask;
 
@@ -85,12 +85,12 @@ public class PL_TaskSystem<TTask> where TTask : TaskBase
         }
     }
 
-    public void AddTask(TTask TTask)
+    public void AddTask(TaskBase TTask)
     {
         taskList.Add(TTask);
     }
 
-    public void InsertTask(int index, TTask ttTask)
+    public void InsertTask(int index, TaskBase ttTask)
     {
         taskList.Insert(index,ttTask);
     }
