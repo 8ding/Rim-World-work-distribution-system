@@ -66,9 +66,10 @@
             <e p="Setting" t="Include">
               <e p="GridSetting.cs" t="Include" />
             </e>
-            <e p="taskmanager" t="Include">
-              <e p="PL_TaskSystem.cs" t="Include" />
+            <e p="Task" t="Include">
               <e p="TaskBase.cs" t="Include" />
+              <e p="TaskCenter.cs" t="Include" />
+              <e p="TaskSender.cs" t="Include" />
             </e>
             <e p="UIManager" t="Include">
               <e p="ButtonManager.cs" t="Include" />

@@ -9,10 +9,10 @@ using TaskSystem.GatherResource;
 using UnityEngine;
 
 
-public class compare : IComparer<JobType>
+public class compare : IComparer<TaskType>
 {
-    public Dictionary<JobType, int> jobTypeOrderDictionary;
-    public int Compare(JobType x, JobType y)
+    public Dictionary<TaskType, int> jobTypeOrderDictionary;
+    public int Compare(TaskType x, TaskType y)
     {
         if (jobTypeOrderDictionary[x] < jobTypeOrderDictionary[y])
         {
@@ -32,7 +32,7 @@ public class compare : IComparer<JobType>
         }
         return 0;
     }
-    public compare(Dictionary<JobType, int> dictionary)
+    public compare(Dictionary<TaskType, int> dictionary)
     {
         this.jobTypeOrderDictionary = dictionary;
     }
@@ -49,11 +49,11 @@ public class WorkerAI : AIBase
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
     
     //工作类型与优先级对应的字典
-    public  Dictionary<JobType, int> jobtypeOrderDictionary;
+    public  Dictionary<TaskType, int> jobtypeOrderDictionary;
     //按照工作优先级排列的工作列表
-    private List<JobType> jobTypeList;
+    private List<TaskType> jobTypeList;
     
-    private IComparer<JobType> compareType;
+    private IComparer<TaskType> compareType;
     
     public Action OnJobOrderChanged;
 
@@ -61,17 +61,17 @@ public class WorkerAI : AIBase
     // Update is called once per frame
     private void Awake()
     {
-        jobTypeList = new List<JobType>();
-        jobtypeOrderDictionary = new Dictionary<JobType, int>();
+        jobTypeList = new List<TaskType>();
+        jobtypeOrderDictionary = new Dictionary<TaskType, int>();
     }
 
     private void Start()
     {
         //依照scripableObject的数据对工作类型顺序列表 与 工作类型与优先级对应表 以及 工作类型与执行方法对应表进行初始化
-        for (int i = 0; i < (int)JobType.enumcount; i++)
+        for (int i = 0; i < (int)TaskType.enumcount; i++)
         {
-            jobTypeList.Add((JobType)i);
-            jobtypeOrderDictionary.Add((JobType)i,4);
+            jobTypeList.Add((TaskType)i);
+            jobtypeOrderDictionary.Add((TaskType)i,4);
         }
         //实例一个比较方法
         compareType = new compare(jobtypeOrderDictionary);
@@ -102,16 +102,16 @@ public class WorkerAI : AIBase
 
 
 
-    public void ModifyOrder(JobType jobType)
+    public void ModifyOrder(TaskType _taskType)
     {
         int order;
-        if (jobtypeOrderDictionary.TryGetValue(jobType, out order))
+        if (jobtypeOrderDictionary.TryGetValue(_taskType, out order))
         {
-            jobtypeOrderDictionary[jobType] = (jobtypeOrderDictionary[jobType] ) % 4 + 1;
+            jobtypeOrderDictionary[_taskType] = (jobtypeOrderDictionary[_taskType] ) % 4 + 1;
         }
         else
         {
-            jobtypeOrderDictionary[jobType] = 1;
+            jobtypeOrderDictionary[_taskType] = 1;
         }
         jobTypeList.Sort(compareType);
         OnJobOrderChanged?.Invoke();
@@ -122,8 +122,8 @@ public class WorkerAI : AIBase
         TaskBase task = null;
         for (int i = 0; i < jobTypeList.Count; i++)
         {
-            task = GameHandler.JobTypeTaskSystemDictionary[jobTypeList[i]]
-                        .RequestTask();
+            //任务中心处理工人的任务请求
+            task = TaskCenter.Instance.handleTaskRequest(jobTypeList[i]);
             if (task != null)
             {
                 break;
@@ -136,17 +136,17 @@ public class WorkerAI : AIBase
         else
         {
             state = State.ExecutingTask;
-            switch (task.jobType)
+            switch (task.taskType)
             {
-                case JobType.GatherGold:
-                case JobType.GatherWood:
+                case TaskType.GatherGold:
+                case TaskType.GatherWood:
                     ExecuteTask_Gather(task as GatherResourceTask);
                     break;
-                case JobType.GoToPlace:
+                case TaskType.GoToPlace:
                     ExcuteTask_Move(task as WorkerMoveTask);
                     break;
                 default:
-                    Debug.Log(task.jobType + "尚未编写执行方法");
+                    Debug.Log(task.taskType + "尚未编写执行方法");
                     state = State.WaitingForNextTask;
                     break;
             }
@@ -194,12 +194,10 @@ public class WorkerAI : AIBase
                         switch (resourceManager.ResourceType)
                         {
                             case ResourceType.Gold:
-                                task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold]
-                                    .RequestTask() as GatherResourceTask;
+                                task = TaskCenter.Instance.handleTaskRequest(TaskType.GatherGold) as GatherResourceTask;
                                 break;
                             case ResourceType.Wood:
-                                task = GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood]
-                                    .RequestTask() as GatherResourceTask;
+                                task = TaskCenter.Instance.handleTaskRequest(TaskType.GatherWood) as GatherResourceTask;
                                 break;
                         }
 
@@ -221,7 +219,7 @@ public class WorkerAI : AIBase
     }
 
     /// <summary>
-    /// 回收资源点生成新任务,并插入任务队列头部
+    /// 回收资源点生成新任务,并由事件中心发布
     /// </summary>
     /// <param name="resourceManager"></param>
     private void restoreResource(GameHandler.ResourceManager resourceManager)
@@ -236,10 +234,10 @@ public class WorkerAI : AIBase
         switch (resourceManager.ResourceType)
         {
             case ResourceType.Gold:
-                GameHandler.JobTypeTaskSystemDictionary[JobType.GatherGold].InsertTask(0, task);
+                EventCenter.Instance.EventTrigger(TaskType.GatherGold.ToString(),task);
                 break;
             case ResourceType.Wood:
-                GameHandler.JobTypeTaskSystemDictionary[JobType.GatherWood].InsertTask(0, task);
+                EventCenter.Instance.EventTrigger(TaskType.GatherWood.ToString(),task);
                 break;
         }
 

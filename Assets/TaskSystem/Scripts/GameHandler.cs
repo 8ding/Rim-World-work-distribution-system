@@ -1,266 +1,259 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CodeMonkey;
 using CodeMonkey.Utils;
-using StateMachine;
+
 using TaskSystem.GatherResource;
 using UnityEngine;
 
 
-namespace TaskSystem
+
+public enum PlayerControlWay
 {
-    public enum PlayerControlWay
+    WorkerWay,
+    PlayerWay,
+}
+public enum MouseState
+{
+    None,
+    HitMine,
+    HitWood,
+}
+public class GameHandler : MonoBehaviour
+{
+    public Camera camera1;
+    public Camera camera2;
+    private Camera currentCamera;
+    private JobOrderPanel orderPanel;
+    private GameObject resourcePointGameObject;
+    private Body _m_body;
+    private WorkerAI taskAI;
+    private PlayerControlAI playerAI;
+    private PathFinding pathFInding;
+
+   
+    
+    private Transform MineButton;
+    private Transform cutButton;
+    private MouseState mouseState;
+    private GameObject attachMouseSprite;
+
+    
+    private void Awake()
     {
-        WorkerWay,
-        PlayerWay,
+        GameResource.Init();
+        //任务中心监听任务事件
+        TaskCenter.Instance.ListenTaskEvent();
+        ResourceManager.OnResourceClicked += handleMinePointClicked;
+         
+        MineButton = GameObject.Find("MineButton").transform;
+        MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
+        cutButton = GameObject.Find("CutButton").transform;
+        cutButton.GetComponent<Button_UI>().ClickFunc += handleCutButtonClick;
+        orderPanel = GameObject.Find("OrderPanel").GetComponent<JobOrderPanel>();
+
+        camera1.enabled = true;
+        camera2.enabled = false;
+        mouseState = MouseState.None;
     }
-    public enum MouseState
+
+    private void Start()
     {
-        None,
-        HitMine,
-        HitWood,
+        createUnit(new Vector3(0,0,0));
     }
-    public class GameHandler : MonoBehaviour
+
+    //取消点击采矿按钮的状态
+    private void cancleHitMine()
     {
-        public Camera camera1;
-        public Camera camera2;
-        private Camera currentCamera;
-        private JobOrderPanel orderPanel;
-        private GameObject resourcePointGameObject;
-        private Body _m_body;
-        private WorkerAI taskAI;
-        private PlayerControlAI playerAI;
-        private PathFinding pathFInding;
-
-        public static Dictionary<JobType, PL_TaskSystem> JobTypeTaskSystemDictionary;
-        public static Dictionary<int, PL_TaskSystem> IdTaskSystemDictionary;
-        private Transform MineButton;
-        private Transform cutButton;
-        private MouseState mouseState;
-        private GameObject attachMouseSprite;
-
-        
-        private void Awake()
+        mouseState = MouseState.None;
+        Destroy(attachMouseSprite);
+    }
+    //处理点击资源点事件
+    private void handleMinePointClicked(ResourceManager resourceManager)
+    {
+        switch (resourceManager.ResourceType)
         {
-            GameResource.Init();
-            JobTypeTaskSystemDictionary = new Dictionary<JobType, PL_TaskSystem>();
-
-            for (int i = 0; i < (int) JobType.enumcount; i++)
-            {
-                JobTypeTaskSystemDictionary.Add((JobType)i,new PL_TaskSystem());
-            }
-            
-            ResourceManager.OnResourceClicked += handleMinePointClicked;
-             
-            MineButton = GameObject.Find("MineButton").transform;
-            MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
-            cutButton = GameObject.Find("CutButton").transform;
-            cutButton.GetComponent<Button_UI>().ClickFunc += handleCutButtonClick;
-            orderPanel = GameObject.Find("OrderPanel").GetComponent<JobOrderPanel>();
-
-            camera1.enabled = true;
-            camera2.enabled = false;
-            mouseState = MouseState.None;
-        }
-
-        private void Start()
-        {
-            createUnit(new Vector3(0,0,0));
-        }
-
-        //取消点击采矿按钮的状态
-        private void cancleHitMine()
-        {
-            mouseState = MouseState.None;
-            Destroy(attachMouseSprite);
-        }
-        //处理点击资源点事件
-        private void handleMinePointClicked(ResourceManager resourceManager)
-        {
-            switch (resourceManager.ResourceType)
-            {
-                case ResourceType.Gold:
-                    if(mouseState == MouseState.HitMine)
+            case ResourceType.Gold:
+                if(mouseState == MouseState.HitMine)
+                {
+                    GatherResourceTask task = new GatherResourceTask
                     {
-                        GatherResourceTask task = new GatherResourceTask
+                        taskType = TaskType.GatherGold,
+                        resourceManager =  resourceManager,
+                        StorePosition = GameObject.Find("Crate").transform.position,
+                        ResourceGrabed = (amount,minemanager) =>
                         {
-                            jobType = JobType.GatherGold,
-                            resourceManager =  resourceManager,
-                            StorePosition = GameObject.Find("Crate").transform.position,
-                            ResourceGrabed = (amount,minemanager) =>
-                            {
-                                minemanager.GiveResource(amount);
-                            }
-                        };
-                        JobTypeTaskSystemDictionary[JobType.GatherGold].AddTask(task);
-                        Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
-                    }
-                    break;
-                case ResourceType.Wood:
-                    if (mouseState == MouseState.HitWood)
+                            minemanager.GiveResource(amount);
+                        }
+                    };
+                    EventCenter.Instance.EventTrigger(TaskType.GatherGold.ToString(),task);
+                    Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
+                }
+                break;
+            case ResourceType.Wood:
+                if (mouseState == MouseState.HitWood)
+                {
+                    GatherResourceTask task = new GatherResourceTask
                     {
-                        GatherResourceTask task = new GatherResourceTask
+                        taskType = TaskType.GatherGold,
+                        resourceManager = resourceManager,
+                        StorePosition = GameObject.Find("Crate").transform.position,
+                        ResourceGrabed = ((amount, woodManager) =>
                         {
-                            jobType = JobType.GatherWood,
-                            resourceManager = resourceManager,
-                            StorePosition = GameObject.Find("Crate").transform.position,
-                            ResourceGrabed = ((amount, woodManager) =>
-                            {
-                                woodManager.GiveResource(amount);
-                            })
-                        };
-                        JobTypeTaskSystemDictionary[JobType.GatherWood].AddTask(task);;
-                        Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
-                    }
-                    break;
-            }
-
-        }
-        //处理点击采矿按钮事件
-        private void handleMineButtonClick()
-        {
-            mouseState = MouseState.HitMine;
-            attachMouseSprite = MyClass.CreateWorldSprite(null, "mineAttachMouse", "AttachIcon", GameAssets.Instance.MiningShovel,
-                    MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
-        }
-        private void handleCutButtonClick()
-        {
-            mouseState = MouseState.HitWood;
-            attachMouseSprite = MyClass.CreateWorldSprite(null, "cutAttachMouse", "AttachIcon", GameAssets.Instance.CutKnife,
-                    MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
+                            woodManager.GiveResource(amount);
+                        })
+                    };
+                    EventCenter.Instance.EventTrigger(TaskType.GatherGold.ToString(),task);
+                    Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
+                }
+                break;
         }
 
+    }
+    //处理点击采矿按钮事件
+    private void handleMineButtonClick()
+    {
+        mouseState = MouseState.HitMine;
+        attachMouseSprite = MyClass.CreateWorldSprite(null, "mineAttachMouse", "AttachIcon", GameAssets.Instance.MiningShovel,
+                MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
+    }
+    private void handleCutButtonClick()
+    {
+        mouseState = MouseState.HitWood;
+        attachMouseSprite = MyClass.CreateWorldSprite(null, "cutAttachMouse", "AttachIcon", GameAssets.Instance.CutKnife,
+                MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
+    }
 
-        private GameObject createResourcePoint(Vector3 position,ResourceType resourceType)
-        {
-            resourcePointGameObject = GameAssets.Instance.createResource(null, MyClass.GetMouseWorldPosition(0, Camera.main),
-                resourceType);
-            new ResourceManager(resourcePointGameObject.transform, resourceType);
-            return resourcePointGameObject;
-        }
 
-        private void createUnit(Vector3 position)
-        {
-            _m_body = Body.Create(0,position);
+    private GameObject createResourcePoint(Vector3 position,ResourceType resourceType)
+    {
+        resourcePointGameObject = GameAssets.Instance.createResource(null, MyClass.GetMouseWorldPosition(0, Camera.main),
+            resourceType);
+        new ResourceManager(resourcePointGameObject.transform, resourceType);
+        return resourcePointGameObject;
+    }
+
+    private void createUnit(Vector3 position)
+    {
+        _m_body = Body.Create(0,position);
 //            playerAI = _m_body.gameObject.AddComponent<PlayerControlAI>();
-            taskAI = _m_body.gameObject.AddComponent<WorkerAI>();
-            taskAI.setUp(_m_body);
-            orderPanel.AddWorkerOnPanel(taskAI);
+        taskAI = _m_body.gameObject.AddComponent<WorkerAI>();
+        taskAI.setUp(_m_body);
+        orderPanel.AddWorkerOnPanel(taskAI);
 //            taskAI.Disable();
 //            playerAI.setUp(_m_body);
-        }
+    }
 
 
-        private void Update()
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
         {
-            if (Input.GetMouseButtonDown(1))
+            //根据鼠标状态确定左键点击的效果
+            switch (mouseState)
             {
-                //根据鼠标状态确定左键点击的效果
-                switch (mouseState)
-                {
-                    case MouseState.None:
-                        WorkerMoveTask task = new WorkerMoveTask
-                        {
-                            jobType = JobType.GoToPlace,
-                            Destination = MyClass.GetMouseWorldPosition(0, camera1)
-                        };
-                        JobTypeTaskSystemDictionary[JobType.GoToPlace].AddTask(task);
-                        break;
-                    case MouseState.HitMine:
-                        cancleHitMine();
-                        break;
-                }
-            }
-            
-            //采集资源图标跟随鼠标
-            if(attachMouseSprite != null)
-                attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
-            
-            //生成矿点的操作
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Gold);
-            }
-
-            //生成树木操作
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Wood);
-            }
-            
-
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                if (camera1.isActiveAndEnabled)
-                {
-                    camera1.enabled = false;
-                    camera2.enabled = true;
-                }
-                else
-                {
-                    camera1.enabled = true;
-                    camera2.enabled = false;
-                }
+                case MouseState.None:
+                    WorkerMoveTask task = new WorkerMoveTask
+                    {
+                        taskType = TaskType.GoToPlace,
+                        Destination = MyClass.GetMouseWorldPosition(0, camera1)
+                    };
+                    //任务事件触发
+                    EventCenter.Instance.EventTrigger(TaskType.GoToPlace.ToString(),task);
+                    break;
+                case MouseState.HitMine:
+                    cancleHitMine();
+                    break;
             }
         }
-
-        //资源点管理类对象
-        public class ResourceManager
+        
+        //采集资源图标跟随鼠标
+        if(attachMouseSprite != null)
+            attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
+        
+        //生成矿点的操作
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            private ResourceType resourceType;
-            private Transform ResourcePointTransform;
-            private int resourceAmount;
-            public static int MaxAmount = 4;
-            public static Action<ResourceManager> OnResourceClicked;
-            public ResourceManager(Transform resourcePointTransform, ResourceType resourceType)
-            {
-                this.ResourceType = resourceType;
-                this.ResourcePointTransform = resourcePointTransform;
-                resourceAmount = MaxAmount;
-                resourcePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
-                {
-                    OnResourceClicked?.Invoke(this);
-                };
-            }
+            createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Gold);
+        }
 
-            public ResourceType ResourceType
-            {
-                set
-                {
-                    resourceType = value;
-                }
-                get
-                {
-                    return resourceType;
-                }
-            }
-            public bool IsHasResource()
-            {
-                return resourceAmount > 0;
-            }
+        //生成树木操作
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Wood);
+        }
+        
 
-            public Transform GetResourcePointTransform()
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (camera1.isActiveAndEnabled)
             {
-                return ResourcePointTransform;
+                camera1.enabled = false;
+                camera2.enabled = true;
             }
-
-            public void GiveResource(int amount)
+            else
             {
-                resourceAmount -= amount;
-                if (resourceAmount < 1)
-                {
-                    GameObject.Destroy(GetResourcePointTransform().gameObject);
-                }
-            }
-
-            public int GetResourceAmount()
-            {
-                return resourceAmount;
+                camera1.enabled = true;
+                camera2.enabled = false;
             }
         }
     }
-    
+
+    //资源点管理类对象
+    public class ResourceManager
+    {
+        private ResourceType resourceType;
+        private Transform ResourcePointTransform;
+        private int resourceAmount;
+        public static int MaxAmount = 4;
+        public static Action<ResourceManager> OnResourceClicked;
+        public ResourceManager(Transform resourcePointTransform, ResourceType resourceType)
+        {
+            this.ResourceType = resourceType;
+            this.ResourcePointTransform = resourcePointTransform;
+            resourceAmount = MaxAmount;
+            resourcePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
+            {
+                OnResourceClicked?.Invoke(this);
+            };
+        }
+
+        public ResourceType ResourceType
+        {
+            set
+            {
+                resourceType = value;
+            }
+            get
+            {
+                return resourceType;
+            }
+        }
+        public bool IsHasResource()
+        {
+            return resourceAmount > 0;
+        }
+
+        public Transform GetResourcePointTransform()
+        {
+            return ResourcePointTransform;
+        }
+
+        public void GiveResource(int amount)
+        {
+            resourceAmount -= amount;
+            if (resourceAmount < 1)
+            {
+                GameObject.Destroy(GetResourcePointTransform().gameObject);
+            }
+        }
+
+        public int GetResourceAmount()
+        {
+            return resourceAmount;
+        }
+    }
 }
+    
+
 
 

@@ -5,7 +5,8 @@ public enum State
     TaskInterupt
 }
 
-public enum JobType
+//工人任务类型
+public enum TaskType
 {
     GatherGold,
     GatherWood,

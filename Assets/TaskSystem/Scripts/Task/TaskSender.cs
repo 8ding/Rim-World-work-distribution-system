@@ -1,36 +1,35 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using CodeMonkey;
 using CodeMonkey.Utils;
-using TaskSystem;
-using UnityEngine;
 
 
 
-public class QueueTask<TTask> where TTask : TaskBase
+
+public class QueueTask<TaskBase>
 {
-    private Func<TTask> tryGetTaskFunc;
+    private Func<TaskBase> tryGetTaskFunc;
 
-    public QueueTask(Func<TTask> tryGetTaskFunc)
+    public QueueTask(Func<TaskBase> tryGetTaskFunc)
     {
         this.tryGetTaskFunc = tryGetTaskFunc;
     }
 
-    public TTask TryDequeueTask()
+    public TaskBase TryDequeueTask()
     {
         return this.tryGetTaskFunc();
     }
 }
-public class PL_TaskSystem
+/// <summary>
+/// 任务发布者,存储各类型的任务并发派给对应的工人
+/// </summary>
+public class TaskSender
 {
     //队列任务，需要满足调节才能出队的任务
 
-   
-
     private List<TaskBase> taskList;
     private List<QueueTask<TaskBase>> queueTaskList;
-    public PL_TaskSystem()
+    public TaskSender()
     {
         taskList = new List<TaskBase>();
         queueTaskList = new List<QueueTask<TaskBase>>();

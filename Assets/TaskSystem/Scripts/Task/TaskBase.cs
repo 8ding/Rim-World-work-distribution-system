@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
+using TaskSystem;
 using UnityEngine;
 
-namespace TaskSystem
-{
     public abstract class TaskBase
     {
-        public JobType jobType;
+        public TaskType taskType;
     }
     
     public class GatherResourceTask : TaskBase
@@ -27,4 +26,3 @@ namespace TaskSystem
         public Vector3 Destination;
 
     }
-}

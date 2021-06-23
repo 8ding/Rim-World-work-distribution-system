@@ -6,20 +6,20 @@ using UnityEngine.UI;
 public class ButtonManager : MonoBehaviour
 {
     private WorkerAI boundAI;
-    private JobType boundJobType;
+    private TaskType _m_boundTaskType;
     [SerializeField] public Text orderText;
 
-    public void SetData(WorkerAI _workerAi, JobType jobType)
+    public void SetData(WorkerAI _workerAi, TaskType _taskType)
     {
         boundAI = _workerAi;
-        boundJobType = jobType;
+        _m_boundTaskType = _taskType;
     }
 
     public void AddOrder()
     {
         if (boundAI != null)
         {
-            boundAI.ModifyOrder(boundJobType);
+            boundAI.ModifyOrder(_m_boundTaskType);
         }
     }
 }

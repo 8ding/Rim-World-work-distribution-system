@@ -9,13 +9,13 @@ public class OrderListHolder : MonoBehaviour
 {
     private WorkerAI boundWorkerAI;
     
-    private  Dictionary<JobType, ButtonManager> joTypeButtonDictionary;
+    private  Dictionary<TaskType, ButtonManager> joTypeButtonDictionary;
     [SerializeField] private ButtonManager buttonTemplate;
     [SerializeField] private Transform buttonRoot;
 
     private void Awake()
     {
-        joTypeButtonDictionary = new Dictionary<JobType, ButtonManager>();
+        joTypeButtonDictionary = new Dictionary<TaskType, ButtonManager>();
         buttonTemplate.gameObject.SetActive(false);
     }
 
@@ -26,26 +26,26 @@ public class OrderListHolder : MonoBehaviour
         boundWorkerAI.OnJobOrderChanged += handleOrderChanged;
         boundWorkerAI.OnNotWorker += cancelOnPanel;
         ButtonManager temp;
-        for (int i = 0; i < (int)JobType.enumcount; i++)
+        for (int i = 0; i < (int)TaskType.enumcount; i++)
         {
-            if (joTypeButtonDictionary.TryGetValue((JobType)i, out temp))
+            if (joTypeButtonDictionary.TryGetValue((TaskType)i, out temp))
             {
                 break;
             }
             else
             {
-                createButton((JobType)i,_workerAi);
+                createButton((TaskType)i,_workerAi);
             }
         }
         handleOrderChanged();
     }
 
-    private void createButton(JobType jobType,WorkerAI _workerAi)
+    private void createButton(TaskType _taskType,WorkerAI _workerAi)
     {
         var newbutton = Instantiate(buttonTemplate, buttonRoot);
         newbutton.gameObject.SetActive(true);
-        newbutton.SetData(_workerAi, jobType);
-        joTypeButtonDictionary.Add(jobType, newbutton);
+        newbutton.SetData(_workerAi, _taskType);
+        joTypeButtonDictionary.Add(_taskType, newbutton);
     }
     private void handleOrderChanged()
     {

@@ -16,16 +16,16 @@ public class TitleList : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < (int) JobType.enumcount; i++)
+        for (int i = 0; i < (int) TaskType.enumcount; i++)
         {
-            CreateTitleText((JobType)i);
+            CreateTitleText((TaskType)i);
         }
     }
 
-    private void CreateTitleText(JobType jobType)
+    private void CreateTitleText(TaskType _taskType)
     {
         var title = Instantiate(textTemplate, TitleRoot);
         title.gameObject.SetActive(true);
-        title.text = jobType.ToString();
+        title.text = _taskType.ToString();
     }
 }
