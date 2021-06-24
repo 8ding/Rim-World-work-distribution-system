@@ -20,14 +20,5 @@ namespace TaskSystem.Character
             }
         }
         
-        // private void OnBecameInvisible()
-        // {
-        //     Debug.Log("看不见了");
-        // }
-        //
-        // private void OnBecameVisible()
-        // {
-        //     Debug.Log("又看见了");
-        // }
     }
 }

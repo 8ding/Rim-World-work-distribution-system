@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class PoolData
         obj.transform.SetParent(fatherObj.transform);
     }
 
-    public GameObject GetObj()
+    public void GetObj(Action<GameObject> callback)
     {
         
         GameObject obj = null;
@@ -35,15 +36,17 @@ public class PoolData
             obj = poolList[0];
             obj.transform.SetParent(null);
             poolList.RemoveAt(0);
+            callback?.Invoke(obj);
         }
         //抽屉里没衣服直接按照抽屉的衣架标签上的商场地址去买一套
         else
         {
-            obj = GameObject.Instantiate(Resources.Load<GameObject>(fatherObj.name));
-            //也给衣服贴上商场标签和衣服名字
-            obj.name = fatherObj.name;
+            ResMgr.Instance.LoadAsync<GameObject>(fatherObj.name,(o =>
+            {
+                o.name = fatherObj.name;
+                callback?.Invoke(o);
+            }));;
         }
-        return obj;
     }
 }
 /// <summary>
@@ -56,25 +59,28 @@ public class PoolMgr:BaseManager<PoolMgr>
     public Dictionary<string,PoolData> poolDic = new Dictionary<string, PoolData>();
     
     //取对象
-    public GameObject GetObj(string name)
+    public void GetObj(string name,Action<GameObject> callback)
     {
-        GameObject obj = null;
         //没有抽屉
         if(!poolDic.ContainsKey(name))
         {
             //根据地址和名字去商场买一件衣服，等放的时候再造抽屉
-            obj = GameObject.Instantiate(Resources.Load<GameObject>(name));
-            //在衣服上贴上商场、名字的标签
-            obj.name = name;
+            ResMgr.Instance.LoadAsync<GameObject>(name,(o => {  
+               o.name = name;
+               callback?.Invoke(o);
+           }));
+           
         }
         //已经有抽屉了，从抽屉里拿出衣服
         else
         {
-            obj = poolDic[name].GetObj();
+             poolDic[name].GetObj((o =>
+             {
+                 o.SetActive(true);
+                 callback?.Invoke(o);
+             }));
+
         }
-        //穿上衣服
-        obj.SetActive(true);
-        return obj;
     }
     //还对象
     public void PushObj(GameObject obj)

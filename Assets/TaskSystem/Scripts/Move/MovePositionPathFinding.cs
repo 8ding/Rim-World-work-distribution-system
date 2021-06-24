@@ -46,7 +46,7 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     public void SetMovePosition(Vector3 movePosition) {
         pathNodes = pathFinding.FindPath(transform.position, movePosition);
         OnMovEnd += Disable;
-        if (pathNodes != null)
+        if (pathNodes != null && pathNodes.Count > 0)
         {
             pathFinding.DrawPath(pathNodes);
             currentNodeIndex = 0;

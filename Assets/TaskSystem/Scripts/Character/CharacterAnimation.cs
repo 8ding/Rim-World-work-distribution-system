@@ -29,40 +29,31 @@ public class CharacterAnimation : MonoBehaviour
     }
     public void PlayobjectAnimaiton(int id,int loopTimes,ObjectAnimationType objectAnimationType)
     {
-        
-        GameObject temp;
-        if (!animationTypDirectionDictionaryDictionary.TryGetValue(objectAnimationType,out faceDirectionGameObjectDictionary))
+        string path = "animation/" + id + "_" + objectAnimationType + "_" + faceDirectionType;
+        if(animationobject == null || animationobject.name != path)
         {
-            temp =
-                GameAssets.Instance.createAnimationGameObject(id,objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
-            faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>
-                {{faceDirectionType, temp}};
-            animationTypDirectionDictionaryDictionary[objectAnimationType] = faceDirectionGameObjectDictionary;
-        }
-        else if(!faceDirectionGameObjectDictionary.TryGetValue(faceDirectionType, out temp))
-        {
-            temp =
-                GameAssets.Instance.createAnimationGameObject(id,objectAnimationType,faceDirectionType, gameObject.transform, transform.position);
-            animationTypDirectionDictionaryDictionary[objectAnimationType][faceDirectionType] = temp;
-        }
-
-        if (animationobject != temp)
-        {
-            if(animationobject != null) 
-                animationobject.SetActive(false);
-            animationobject = temp;
-            animationobject.SetActive(true);
-            AnimationObjectController animationObjectController =
-                animationobject.GetComponentInChildren<AnimationObjectController>();
-            if (animationObjectController == null)
+            if(animationobject != null)
             {
-                animationObjectController = animationobject.GetComponent<AnimationObjectController>();
+                PoolMgr.Instance.PushObj(animationobject);
+                animationobject.transform.localScale = Vector3.one;
             }
-            animationObjectController.LoopTimes = loopTimes;
-            animationObjectController.OnLoopOneTime = OneTimeAction;
-            animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
+            PoolMgr.Instance.GetObj(path,(_o =>
+            {
+                animationobject = _o;
+                animationobject.transform.SetParent(gameObject.transform);
+                animationobject.transform.localPosition = Vector3.zero;
+                animationobject.transform.localScale = Vector3.one;
+                AnimationObjectController animationObjectController =
+                    animationobject.GetComponentInChildren<AnimationObjectController>();
+                if (animationObjectController == null)
+                {
+                    animationObjectController = animationobject.GetComponent<AnimationObjectController>();
+                }
+                animationObjectController.LoopTimes = loopTimes;
+                animationObjectController.OnLoopOneTime = OneTimeAction;
+                animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
+            }));
         }
-
     }
 
 

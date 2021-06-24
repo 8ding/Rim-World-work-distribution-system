@@ -26,9 +26,21 @@
             <e p="EventCenter" t="Include">
               <e p="EventCenter.cs" t="Include" />
             </e>
+            <e p="Input" t="Include">
+              <e p="InputManager.cs" t="Include" />
+            </e>
+            <e p="Mono" t="Include">
+              <e p="MonoControler.cs" t="Include" />
+              <e p="MonoMgr.cs" t="Include" />
+            </e>
             <e p="Pool" t="Include">
-              <e p="DelayPush.cs" t="Include" />
               <e p="PoolMgr.cs" t="Include" />
+            </e>
+            <e p="Res" t="Include">
+              <e p="ResMgr.cs" t="Include" />
+            </e>
+            <e p="Scenes" t="Include">
+              <e p="ScenesMgr.cs" t="Include" />
             </e>
           </e>
           <e p="Scripts" t="Include">

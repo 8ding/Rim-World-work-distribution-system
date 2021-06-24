@@ -190,6 +190,7 @@ public class PathFinding
             currentNode = currentNode.CamePathNode;
         }
         path.Reverse();
+        path.RemoveAt(0);
         return path;
     }
 
