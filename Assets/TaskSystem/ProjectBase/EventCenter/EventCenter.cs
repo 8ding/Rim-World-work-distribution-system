@@ -2,39 +2,73 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+public interface IArgs
+{
+    
+}
+
+public class EventParameter<T> : IArgs
+{
+    public T t;
+    public EventParameter(T t)
+    {
+        this.t = t;
+    }
+}
+
+public class EventParameter<T1, T2> : IArgs
+{
+    public T1 t1;
+    public T2 t2;
+    public EventParameter(T1 t1,T2 t2)
+    {
+        this.t1 = t1;
+        this.t2 = t2;
+    }
+}
+public interface IevnetInfo
+{
+    
+}
+public class EventInfo<T> : IevnetInfo
+{
+    public Action<T> action;
+}
 public class EventCenter : BaseManager<EventCenter>
 {
     //key-事件的名字（比如怪物死亡)
     //value - 对应的是监听这个事件对应的委托函数
-    private Dictionary<string, Action<object>>eventDic  = new Dictionary<string, Action<object>>();
+    private Dictionary<string, IevnetInfo>eventDic  = new Dictionary<string, IevnetInfo>();
     
     /// <summary>
     /// 添加事件监听
     /// </summary>
     /// <param name="name">事件的名字</param>
     /// <param name="action">准备用来处理事件的委托函数</param>
-    public void AddEventListener(string name, Action<object> action)
+    public void AddEventListener<T>(string name, Action<T> action)
     {
         if(eventDic.ContainsKey(name))
         {
-            eventDic[name] += action;
+            (eventDic[name] as EventInfo<T>).action += action;
         }
         else
         {
-            eventDic.Add(name,action);
+            eventDic.Add(name,new EventInfo<T>{action = action});;
         }
     }
 
     /// <summary>
-    /// 事件触发
+    /// 事件的触发
     /// </summary>
-    /// <param name="name">触发事件的名字</param>
-    public void EventTrigger(string name, object objectInfo)
+    /// <param name="name">事件名字</param>
+    /// <param name="args">事件传递的参数 由泛型类EventParamter包裹</param>
+    public void EventTrigger<T>(string name,  T args)
     {
         if(eventDic.ContainsKey(name))
         {
-            eventDic[name]?.Invoke(objectInfo);
+            (eventDic[name]as EventInfo<T>).action?.Invoke(args);
         }
     }
     /// <summary>
@@ -42,11 +76,11 @@ public class EventCenter : BaseManager<EventCenter>
     /// </summary>
     /// <param name="name">事件的名字</param>
     /// <param name="action">准备用来处理事件的委托函数</param>
-    public void RemoveEventListener(string name, Action<object> action)
+    public void RemoveEventListener<T>(string name, Action<T> action)
     {
         if(eventDic.ContainsKey(name))
         {
-            eventDic[name] -= action;
+            (eventDic[name] as EventInfo<T>).action -= action;;
         }
     }
     /// <summary>
@@ -56,4 +90,7 @@ public class EventCenter : BaseManager<EventCenter>
     {
         eventDic.Clear();
     }
+    
 }
+
+

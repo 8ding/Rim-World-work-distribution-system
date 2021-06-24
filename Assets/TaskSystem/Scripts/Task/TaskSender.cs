@@ -4,8 +4,6 @@ using CodeMonkey;
 using CodeMonkey.Utils;
 
 
-
-
 public class QueueTask<TaskBase>
 {
     private Func<TaskBase> tryGetTaskFunc;
@@ -25,16 +23,17 @@ public class QueueTask<TaskBase>
 /// </summary>
 public class TaskSender
 {
-    //队列任务，需要满足调节才能出队的任务
+   
 
     private List<TaskBase> taskList;
+    //队列任务，需要满足调节才能出队的任务
     private List<QueueTask<TaskBase>> queueTaskList;
     public TaskSender()
     {
         taskList = new List<TaskBase>();
         queueTaskList = new List<QueueTask<TaskBase>>();
         //每0.2s执行一次任务出队
-        FunctionPeriodic.Create(dequeueTasks, 0.2f);
+//        FunctionPeriodic.Create(dequeueTasks, 0.2f);
     }
 
     public void EnqueueTask(QueueTask<TaskBase> queueTask)

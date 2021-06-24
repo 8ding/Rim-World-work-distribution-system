@@ -10,9 +10,8 @@ using UnityEngine;
     
     public class GatherResourceTask : TaskBase
     {
-        public Vector3 StorePosition;
-        public Action<int,GameHandler.ResourceManager> ResourceGrabed;
         public GameHandler.ResourceManager resourceManager;
+        public Vector3 storePosition = GameObject.Find("Crate").transform.position;
     }
 
     public class WorkerMoveTask : TaskBase

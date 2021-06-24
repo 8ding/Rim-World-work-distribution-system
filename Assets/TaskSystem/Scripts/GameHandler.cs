@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using CodeMonkey.Utils;
-
 using TaskSystem.GatherResource;
 using UnityEngine;
 
@@ -75,34 +74,15 @@ public class GameHandler : MonoBehaviour
             case ResourceType.Gold:
                 if(mouseState == MouseState.HitMine)
                 {
-                    GatherResourceTask task = new GatherResourceTask
-                    {
-                        taskType = TaskType.GatherGold,
-                        resourceManager =  resourceManager,
-                        StorePosition = GameObject.Find("Crate").transform.position,
-                        ResourceGrabed = (amount,minemanager) =>
-                        {
-                            minemanager.GiveResource(amount);
-                        }
-                    };
-                    EventCenter.Instance.EventTrigger(TaskType.GatherGold.ToString(),task);
+
+                    EventCenter.Instance.EventTrigger<IArgs>("ClickGoldResource",new EventParameter<ResourceManager>(resourceManager));
                     Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                 }
                 break;
             case ResourceType.Wood:
                 if (mouseState == MouseState.HitWood)
                 {
-                    GatherResourceTask task = new GatherResourceTask
-                    {
-                        taskType = TaskType.GatherGold,
-                        resourceManager = resourceManager,
-                        StorePosition = GameObject.Find("Crate").transform.position,
-                        ResourceGrabed = ((amount, woodManager) =>
-                        {
-                            woodManager.GiveResource(amount);
-                        })
-                    };
-                    EventCenter.Instance.EventTrigger(TaskType.GatherGold.ToString(),task);
+                    EventCenter.Instance.EventTrigger("ClickWoodResource",new EventParameter<ResourceManager>(resourceManager));
                     Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                 }
                 break;
@@ -152,13 +132,8 @@ public class GameHandler : MonoBehaviour
             switch (mouseState)
             {
                 case MouseState.None:
-                    WorkerMoveTask task = new WorkerMoveTask
-                    {
-                        taskType = TaskType.GoToPlace,
-                        Destination = MyClass.GetMouseWorldPosition(0, camera1)
-                    };
                     //任务事件触发
-                    EventCenter.Instance.EventTrigger(TaskType.GoToPlace.ToString(),task);
+                    EventCenter.Instance.EventTrigger<IArgs>("RightClick",new EventParameter<Vector3>(MyClass.GetMouseWorldPosition(0, camera1)));
                     break;
                 case MouseState.HitMine:
                     cancleHitMine();

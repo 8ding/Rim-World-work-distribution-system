@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Resources;
 using CodeMonkey;
 using TaskSystem;
 using TaskSystem.GatherResource;
@@ -159,7 +160,7 @@ public class WorkerAI : AIBase
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
         GameHandler.ResourceManager resourceManager = task.resourceManager;
-        Vector3 storePosition = task.StorePosition;
+        Vector3 storePosition = task.storePosition;
         int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
         //工人前往资源点
         worker.moveTo(resourceManager.GetResourcePointTransform().position, () =>
@@ -171,7 +172,7 @@ public class WorkerAI : AIBase
             worker.Gather(mineTimes, resourceManager.ResourceType, () =>
             {
                 //资源被工人捡起
-                task.ResourceGrabed(mineTimes, resourceManager);
+                resourceManager.GiveResource(mineTimes);
                 //工人捡起资源
                 worker.Grab(mineTimes, () =>
                 {
@@ -224,20 +225,15 @@ public class WorkerAI : AIBase
     /// <param name="resourceManager"></param>
     private void restoreResource(GameHandler.ResourceManager resourceManager)
     {
-        //资源点仍剩余资源,生成新任务,插入任务系统头部
-        GatherResourceTask task = new GatherResourceTask
-        {
-            resourceManager = resourceManager,
-            StorePosition = GameObject.Find("Crate").transform.position,
-            ResourceGrabed = (amount, minemanager) => { minemanager.GiveResource(amount); }
-        };
+        //资源点仍剩余资源,重新触发事件
+        
         switch (resourceManager.ResourceType)
         {
             case ResourceType.Gold:
-                EventCenter.Instance.EventTrigger(TaskType.GatherGold.ToString(),task);
+                EventCenter.Instance.EventTrigger<IArgs>("ClickGoldResource",new EventParameter<GameHandler.ResourceManager>(resourceManager));
                 break;
             case ResourceType.Wood:
-                EventCenter.Instance.EventTrigger(TaskType.GatherWood.ToString(),task);
+                EventCenter.Instance.EventTrigger<IArgs>("ClickWoodResource", new EventParameter<GameHandler.ResourceManager>(resourceManager));
                 break;
         }
 

@@ -1,5 +1,7 @@
 
 using System.Collections.Generic;
+
+
 //任务中心，从事件中心订阅事件，并在触发事件时，获得任务，并给予相应的任务发布者
 
 public class TaskCenter : BaseManager<TaskCenter>
@@ -8,19 +10,45 @@ public class TaskCenter : BaseManager<TaskCenter>
     //订阅任务相关事件的监听
     public void ListenTaskEvent()
     {
-        for (int i = 0; i < (int) TaskType.enumcount; i++)
+        EventCenter.Instance.AddEventListener<IArgs>("ClickGoldResource", (_o =>
         {
-            TaskType taskType = (TaskType) i;
-            //监听任务相关事件，事件触发后，获得任务，并分发给相应的的任务发布器
-            EventCenter.Instance.AddEventListener(((TaskType)i).ToString(), (_o =>
+            if(!taskDic.ContainsKey(TaskType.GatherGold))
             {
-                if(!taskDic.ContainsKey(taskType))
-                {
-                    taskDic[taskType] = new TaskSender();
-                }
-                taskDic[taskType].AddTask(_o as  TaskBase);
-            }));
-        }
+                taskDic[TaskType.GatherGold] = new TaskSender();
+            }
+            taskDic[TaskType.GatherGold].AddTask(new GatherResourceTask
+            {
+                taskType =  TaskType.GatherGold,
+                resourceManager = (_o as EventParameter<GameHandler.ResourceManager>).t
+            });
+        }));
+        
+        EventCenter.Instance.AddEventListener<IArgs>("ClickWoodResource", (_o =>
+        {
+            
+            if(!taskDic.ContainsKey(TaskType.GatherWood))
+            {
+                taskDic[TaskType.GatherWood] = new TaskSender();
+            }
+            taskDic[TaskType.GatherWood].AddTask(new GatherResourceTask
+            {
+                taskType = TaskType.GatherWood,
+                resourceManager = (_o as EventParameter<GameHandler.ResourceManager>).t,
+            });
+        }));
+        
+        EventCenter.Instance.AddEventListener<IArgs>("RightClick",(_o =>
+        {
+            if(!taskDic.ContainsKey(TaskType.GoToPlace))
+            {
+                taskDic[TaskType.GoToPlace] = new TaskSender();
+            }
+            taskDic[TaskType.GoToPlace].AddTask(new WorkerMoveTask
+            {
+                taskType = TaskType.GoToPlace,
+                Destination = (_o as EventParameter<UnityEngine.Vector3>).t
+            });
+        }));
     }
     
     /// <summary>
