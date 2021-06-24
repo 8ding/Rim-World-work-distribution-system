@@ -32,17 +32,19 @@ public class CharacterAnimation : MonoBehaviour
         string path = "animation/" + id + "_" + objectAnimationType + "_" + faceDirectionType;
         if(animationobject == null || animationobject.name != path)
         {
-            if(animationobject != null)
-            {
-                PoolMgr.Instance.PushObj(animationobject);
-                animationobject.transform.localScale = Vector3.one;
-            }
+
             PoolMgr.Instance.GetObj(path,(_o =>
             {
+
+                
+                _o.transform.SetParent(gameObject.transform);
+                _o.transform.localPosition = Vector3.zero;
+                _o.transform.localScale = Vector3.one;
+                if(animationobject != null)
+                {
+                    PoolMgr.Instance.PushObj(animationobject);
+                }
                 animationobject = _o;
-                animationobject.transform.SetParent(gameObject.transform);
-                animationobject.transform.localPosition = Vector3.zero;
-                animationobject.transform.localScale = Vector3.one;
                 AnimationObjectController animationObjectController =
                     animationobject.GetComponentInChildren<AnimationObjectController>();
                 if (animationObjectController == null)

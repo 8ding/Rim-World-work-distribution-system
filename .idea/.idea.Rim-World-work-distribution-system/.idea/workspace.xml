@@ -17,7 +17,7 @@
         <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkerAI.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="146" column="60" lean-forward="true" selection-start-line="146" selection-start-column="60" selection-end-line="146" selection-end-column="60" />
+              <caret line="146" column="60" selection-start-line="146" selection-start-column="60" selection-end-line="146" selection-end-column="60" />
               <folding>
                 <marker date="1624549626065" expanded="true" signature="7:211" ph="..." />
                 <marker date="1624549626065" expanded="true" signature="256:871" ph="{...}" />
@@ -114,34 +114,33 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="79" column="88" lean-forward="true" selection-start-line="79" selection-start-column="88" selection-end-line="79" selection-end-column="88" />
+            <state relative-caret-position="337">
+              <caret line="44" column="62" selection-start-line="44" selection-start-column="62" selection-end-line="44" selection-end-column="62" />
               <folding>
-                <marker date="1624554044453" expanded="true" signature="6:158" ph="..." />
-                <marker date="1624554044453" expanded="true" signature="207:6915" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="648:956" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="1054:4185" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="1070:2883" ph="/* GameObject temp; ... */" />
-                <marker date="1624554044453" expanded="true" signature="3046:4179" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="3096:3251" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="3312:4166" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="3780:3923" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4274:5836" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4303:5106" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4370:4520" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4584:4733" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4750:5096" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4823:4920" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="4982:5082" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="5119:5770" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="5159:5310" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="5345:5494" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="5512:5760" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="5646:5746" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="5841:6674" ph="/* public void PlayIdleAnimation() ... */" />
-                <marker date="1624554044453" expanded="true" signature="6703:6749" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="6794:6840" ph="{...}" />
-                <marker date="1624554044453" expanded="true" signature="6865:6913" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="6:158" ph="..." />
+                <marker date="1624555281629" expanded="true" signature="207:5020" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="648:956" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="1054:2290" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="1223:2284" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="1295:2271" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="1534:1633" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="1885:2028" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="2379:3941" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="2408:3211" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="2475:2625" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="2689:2838" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="2855:3201" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="2928:3025" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3087:3187" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3224:3875" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3264:3415" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3450:3599" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3617:3865" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3751:3851" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="3946:4779" ph="/* public void PlayIdleAnimation() ... */" />
+                <marker date="1624555281629" expanded="true" signature="4808:4854" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="4899:4945" ph="{...}" />
+                <marker date="1624555281629" expanded="true" signature="4970:5018" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -196,7 +195,7 @@
         <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="233">
-              <caret line="82" column="56" lean-forward="true" selection-start-line="82" selection-start-column="56" selection-end-line="82" selection-end-column="56" />
+              <caret line="82" column="56" selection-start-line="82" selection-start-column="56" selection-end-line="82" selection-end-column="56" />
               <folding>
                 <marker date="1624553340943" expanded="true" signature="0:299" ph="/* ------------------- Code Monkey ------------------- ... */" />
                 <marker date="1624553340943" expanded="false" signature="307:393" ph="..." />
@@ -280,7 +279,7 @@
         <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/83/89285c14/Vector3.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
-              <caret line="548" lean-forward="true" selection-start-line="548" selection-end-line="548" />
+              <caret line="548" selection-start-line="548" selection-end-line="548" />
             </state>
           </provider>
         </entry>
@@ -405,9 +404,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="436" />
-    <option name="y" value="172" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="108" />
+    <option name="y" value="155" />
     <option name="width" value="1490" />
     <option name="height" value="1059" />
   </component>
@@ -609,12 +608,12 @@
       <workItem from="1623658064227" duration="7681000" />
       <workItem from="1623986804732" duration="219000" />
       <workItem from="1624162008175" duration="38747000" />
-      <workItem from="1624463325620" duration="13367000" />
+      <workItem from="1624463325620" duration="14718000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="125064000" />
+    <option name="totallyTimeSpent" value="126415000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -626,8 +625,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="436" y="172" width="1490" height="1059" extended-state="0" />
-    <editor active="true" />
+    <frame x="108" y="155" width="1490" height="1059" extended-state="1" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49502134" visible="true" weight="0.3216783" />
       <window_info id="Structure" order="1" sideWeight="0.50497866" side_tool="true" visible="true" weight="0.3216783" />
@@ -740,19 +738,6 @@
           <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs</url>
-          <line>75</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" initialLine="75">
-            <startOffsets>
-              <option value="3368" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3426" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs</url>
           <line>50</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs" initialLine="50">
@@ -764,45 +749,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="75" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs</url>
-          <line>96</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" initialLine="96">
-            <startOffsets>
-              <option value="4326" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4370" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="76" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs</url>
-          <line>94</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" initialLine="94">
-            <startOffsets>
-              <option value="4289" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4303" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="77" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs</url>
-          <line>67</line>
-          <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs" initialLine="67">
-            <startOffsets>
-              <option value="3069" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3096" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="78" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1731,7 +1677,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/WorkerAI.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="146" column="60" lean-forward="true" selection-start-line="146" selection-start-column="60" selection-end-line="146" selection-end-column="60" />
+          <caret line="146" column="60" selection-start-line="146" selection-start-column="60" selection-end-line="146" selection-end-column="60" />
           <folding>
             <marker date="1624549626065" expanded="true" signature="7:211" ph="..." />
             <marker date="1624549626065" expanded="true" signature="256:871" ph="{...}" />
@@ -1791,7 +1737,7 @@
     <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/83/89285c14/Vector3.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="548" lean-forward="true" selection-start-line="548" selection-end-line="548" />
+          <caret line="548" selection-start-line="548" selection-end-line="548" />
         </state>
       </provider>
     </entry>
@@ -1923,7 +1869,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Move/MovePositionPathFinding.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
-          <caret line="82" column="56" lean-forward="true" selection-start-line="82" selection-start-column="56" selection-end-line="82" selection-end-column="56" />
+          <caret line="82" column="56" selection-start-line="82" selection-start-column="56" selection-end-line="82" selection-end-column="56" />
           <folding>
             <marker date="1624553340943" expanded="true" signature="0:299" ph="/* ------------------- Code Monkey ------------------- ... */" />
             <marker date="1624553340943" expanded="false" signature="307:393" ph="..." />
@@ -1948,34 +1894,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/CharacterAnimation.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="79" column="88" lean-forward="true" selection-start-line="79" selection-start-column="88" selection-end-line="79" selection-end-column="88" />
+        <state relative-caret-position="337">
+          <caret line="44" column="62" selection-start-line="44" selection-start-column="62" selection-end-line="44" selection-end-column="62" />
           <folding>
-            <marker date="1624554044453" expanded="true" signature="6:158" ph="..." />
-            <marker date="1624554044453" expanded="true" signature="207:6915" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="648:956" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="1054:4185" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="1070:2883" ph="/* GameObject temp; ... */" />
-            <marker date="1624554044453" expanded="true" signature="3046:4179" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="3096:3251" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="3312:4166" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="3780:3923" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4274:5836" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4303:5106" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4370:4520" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4584:4733" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4750:5096" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4823:4920" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="4982:5082" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="5119:5770" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="5159:5310" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="5345:5494" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="5512:5760" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="5646:5746" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="5841:6674" ph="/* public void PlayIdleAnimation() ... */" />
-            <marker date="1624554044453" expanded="true" signature="6703:6749" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="6794:6840" ph="{...}" />
-            <marker date="1624554044453" expanded="true" signature="6865:6913" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="6:158" ph="..." />
+            <marker date="1624555281629" expanded="true" signature="207:5020" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="648:956" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="1054:2290" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="1223:2284" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="1295:2271" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="1534:1633" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="1885:2028" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="2379:3941" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="2408:3211" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="2475:2625" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="2689:2838" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="2855:3201" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="2928:3025" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3087:3187" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3224:3875" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3264:3415" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3450:3599" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3617:3865" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3751:3851" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="3946:4779" ph="/* public void PlayIdleAnimation() ... */" />
+            <marker date="1624555281629" expanded="true" signature="4808:4854" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="4899:4945" ph="{...}" />
+            <marker date="1624555281629" expanded="true" signature="4970:5018" ph="{...}" />
           </folding>
         </state>
       </provider>
