@@ -21,8 +21,8 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     private IMoveVelocity moveVelocity;
     public event Action OnMovEnd;//当移动停止,移动方式需要做的事情
     public Action OnPostMoveEnd;//移动停止的后处理
-    public PathFinding pathFinding;
-    private MyGrid<PathNode> myGrid;
+    
+  
     private List<PathNode> pathNodes;
     private int currentNodeIndex;
     private CharacterAnimation characterAnimation;
@@ -32,23 +32,19 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     {
         moveVelocity = GetComponent<IMoveVelocity>();
         characterAnimation = GetComponent<CharacterAnimation>();
-        myGrid = (Resources.Load("New Grid Setting") as GridSetting).grid;
-
     }
 
     private void Start()
     {
-        pathFinding = new PathFinding(myGrid);
         pathNodes = new List<PathNode>();
         characterId = GetComponent<WorkerAI>().GetId();
     }
 
     public void SetMovePosition(Vector3 movePosition) {
-        pathNodes = pathFinding.FindPath(transform.position, movePosition);
+        pathNodes = PathManager.Instance.findPath(transform.position, movePosition);
         OnMovEnd += Disable;
         if (pathNodes != null && pathNodes.Count > 0)
         {
-            pathFinding.DrawPath(pathNodes);
             currentNodeIndex = 0;
             characterAnimation.PlayDirectMoveAnimation(characterId,pathNodes[currentNodeIndex].worldPosition);
         }

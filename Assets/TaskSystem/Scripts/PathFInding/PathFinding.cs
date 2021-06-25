@@ -11,7 +11,7 @@ public class PathFinding
     private MyGrid<PathNode> grid;
     private List<PathNode> opentList;
     private List<PathNode> closeList;
-    
+    private bool debug = true;
     public PathFinding(MyGrid<PathNode> grid)
     {
         this.grid = grid;
@@ -191,15 +191,15 @@ public class PathFinding
         }
         path.Reverse();
         path.RemoveAt(0);
+        if(debug)
+        {
+            for (int i = 1; i < path.Count; i++)
+            {
+                Debug.DrawLine(path[i-1].worldPosition, path[i].worldPosition,Color.black,2f);
+            }
+        }
         return path;
     }
 
-    public void DrawPath(List<PathNode> pathNodes)
-    {
-        for (int i = 1; i < pathNodes.Count; i++)
-        {
-            Debug.DrawLine(pathNodes[i-1].worldPosition, pathNodes[i].worldPosition,Color.black,2f);
-        }
-    }
 }
 

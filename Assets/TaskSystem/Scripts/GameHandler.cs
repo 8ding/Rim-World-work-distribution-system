@@ -41,7 +41,6 @@ public class GameHandler : MonoBehaviour
     {
         GameResource.Init();
         //任务中心监听任务事件
-        TaskCenter.Instance.ListenTaskEvent();
         ResourceManager.OnResourceClicked += handleMinePointClicked;
          
         MineButton = GameObject.Find("MineButton").transform;

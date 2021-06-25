@@ -95,4 +95,5 @@ public class MyGrid<TgridObect>
         Debug.Log("区域错误！");
         return default(XY);
     }
+    
 }

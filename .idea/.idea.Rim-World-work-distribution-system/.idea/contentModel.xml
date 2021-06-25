@@ -18,31 +18,6 @@
           <e p="README.txt" t="Include" />
         </e>
         <e p="TaskSystem" t="Include">
-          <e p="ProjectBase" t="Include">
-            <e p="Base" t="Include">
-              <e p="BaseManager.cs" t="Include" />
-              <e p="SingletonAutoMono.cs" t="Include" />
-            </e>
-            <e p="EventCenter" t="Include">
-              <e p="EventCenter.cs" t="Include" />
-            </e>
-            <e p="Input" t="Include">
-              <e p="InputManager.cs" t="Include" />
-            </e>
-            <e p="Mono" t="Include">
-              <e p="MonoControler.cs" t="Include" />
-              <e p="MonoMgr.cs" t="Include" />
-            </e>
-            <e p="Pool" t="Include">
-              <e p="PoolMgr.cs" t="Include" />
-            </e>
-            <e p="Res" t="Include">
-              <e p="ResMgr.cs" t="Include" />
-            </e>
-            <e p="Scenes" t="Include">
-              <e p="ScenesMgr.cs" t="Include" />
-            </e>
-          </e>
           <e p="Scripts" t="Include">
             <e p="AIs" t="Include">
               <e p="AIBase.cs" t="Include" />
@@ -59,7 +34,6 @@
               <e p="GameAssets.cs" t="Include" />
               <e p="GameResource.cs" t="Include" />
               <e p="MyClass.cs" t="Include" />
-              <e p="ObjectPool.cs" t="Include" />
             </e>
             <e p="GameHandler.cs" t="Include" />
             <e p="Move" t="Include">
@@ -73,7 +47,33 @@
             <e p="PathFInding" t="Include">
               <e p="MyGrid.cs" t="Include" />
               <e p="PathFinding.cs" t="Include" />
+              <e p="PathManager.cs" t="Include" />
               <e p="PathNode.cs" t="Include" />
+            </e>
+            <e p="ProjectBase" t="Include">
+              <e p="Base" t="Include">
+                <e p="BaseManager.cs" t="Include" />
+                <e p="SingletonAutoMono.cs" t="Include" />
+              </e>
+              <e p="EventCenter" t="Include">
+                <e p="EventCenter.cs" t="Include" />
+              </e>
+              <e p="Input" t="Include">
+                <e p="InputManager.cs" t="Include" />
+              </e>
+              <e p="Mono" t="Include">
+                <e p="MonoControler.cs" t="Include" />
+                <e p="MonoMgr.cs" t="Include" />
+              </e>
+              <e p="Pool" t="Include">
+                <e p="PoolMgr.cs" t="Include" />
+              </e>
+              <e p="Res" t="Include">
+                <e p="ResMgr.cs" t="Include" />
+              </e>
+              <e p="Scenes" t="Include">
+                <e p="ScenesMgr.cs" t="Include" />
+              </e>
             </e>
             <e p="Setting" t="Include">
               <e p="GridSetting.cs" t="Include" />
