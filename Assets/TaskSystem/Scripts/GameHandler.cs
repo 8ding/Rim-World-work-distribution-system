@@ -42,12 +42,18 @@ public class GameHandler : MonoBehaviour
         
         ResourceManager.OnResourceClicked += handleMinePointClicked;
         InputManager.Instance.StartOrEnd(true);
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.CreatMinePoit,createResourcePoint);
         EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, (_args =>
         {
             KeyCode keyCode = (_args as EventParameter<KeyCode>).t;
-            if(keyCode  == KeyCode.Tab)
+            switch (keyCode )
             {
-                EventCenter.Instance.EventTrigger<IArgs>(EventType.ChangeMode, null);
+                case KeyCode.Tab:
+                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ChangeMode, null);
+                    break;
+                case KeyCode.Space:
+                    EventCenter.Instance.EventTrigger<IArgs>(EventType.CreatMinePoit, new EventParameter<Vector3,ResourceType>(MyClass.GetMouseWorldPosition(0, camera1),ResourceType.Gold));
+                    break;
             }
         }));
         MineButton = GameObject.Find("MineButton").transform;
@@ -64,7 +70,6 @@ public class GameHandler : MonoBehaviour
     private void Start()
     {
         createUnit(new Vector3(0,0,0));
-        createUnit(new Vector3(-2, 0, 0));
     }
 
     //取消点击采矿按钮的状态
@@ -83,14 +88,14 @@ public class GameHandler : MonoBehaviour
                 {
 
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<ResourceManager>(resourceManager));
-                    Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
+                    resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
                 break;
             case ResourceType.Wood:
                 if (mouseState == MouseState.HitWood)
                 {
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource,new EventParameter<ResourceManager>(resourceManager));
-                    Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
+                    resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
                 break;
         }
@@ -111,12 +116,23 @@ public class GameHandler : MonoBehaviour
     }
 
 
-    private GameObject createResourcePoint(Vector3 position,ResourceType resourceType)
+    private void createResourcePoint(IArgs _iArgs)
     {
-        resourcePointGameObject = GameAssets.Instance.createResource(null, MyClass.GetMouseWorldPosition(0, Camera.main),
-            resourceType);
-        new ResourceManager(resourcePointGameObject.transform, resourceType);
-        return resourcePointGameObject;
+
+        switch ((_iArgs as EventParameter<Vector3,ResourceType>).t2)
+        {
+            case ResourceType.Gold:
+                PoolMgr.Instance.GetObj("MinePoint",(_o => { resourcePointGameObject = _o;
+                    resourcePointGameObject.transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
+                }));
+                break;
+            case ResourceType.Wood:
+                PoolMgr.Instance.GetObj("004_tree",(_o => { resourcePointGameObject = _o;
+                    resourcePointGameObject.transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
+                }));
+                break;
+        }
+        new ResourceManager(resourcePointGameObject.transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
     }
 
     private void createUnit(Vector3 position)
@@ -157,16 +173,10 @@ public class GameHandler : MonoBehaviour
             attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
         
         //生成矿点的操作
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Gold);
-        }
+
 
         //生成树木操作
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            createResourcePoint(MyClass.GetMouseWorldPosition(0, Camera.main),ResourceType.Wood);
-        }
+
         
 
 
@@ -182,9 +192,11 @@ public class GameHandler : MonoBehaviour
         public static Action<ResourceManager> OnResourceClicked;
         public ResourceManager(Transform resourcePointTransform, ResourceType resourceType)
         {
+            
             this.ResourceType = resourceType;
             this.ResourcePointTransform = resourcePointTransform;
             resourceAmount = MaxAmount;
+            resourcePointTransform.GetComponent<Button_Sprite>().enabled = true;
             resourcePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
             {
                 OnResourceClicked?.Invoke(this);
@@ -217,7 +229,7 @@ public class GameHandler : MonoBehaviour
             resourceAmount -= amount;
             if (resourceAmount < 1)
             {
-                GameObject.Destroy(GetResourcePointTransform().gameObject);
+               PoolMgr.Instance.PushObj(GetResourcePointTransform().gameObject);
             }
         }
 

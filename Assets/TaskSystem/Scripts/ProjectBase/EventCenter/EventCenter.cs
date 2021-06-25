@@ -15,6 +15,7 @@ public enum EventType
     ClickWoodResource,
     RightClick,//右击事件
     ChangeMode,//改变玩家控制模式事件
+    CreatMinePoit,
 }
 public interface IArgs
 {

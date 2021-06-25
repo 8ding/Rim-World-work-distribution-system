@@ -20,20 +20,20 @@ public class CharacterAnimation : MonoBehaviour
     public void PlayobjectAnimaiton(int id,ObjectAnimationType objectAnimationType,  Action OnPlayOneTime = null)
     {
         string path = "animation/" + id + "_" + objectAnimationType + "_" + faceDirectionType;
+
         if(animationobject == null || animationobject.name != path)
         {
 
             PoolMgr.Instance.GetObj(path,(_o =>
             {
-
-                
-                _o.transform.SetParent(gameObject.transform);
-                _o.transform.localPosition = Vector3.zero;
-                _o.transform.localScale = Vector3.one;
                 if(animationobject != null)
                 {
                     PoolMgr.Instance.PushObj(animationobject);
                 }
+                _o.transform.SetParent(gameObject.transform); 
+                _o.transform.localPosition = Vector3.zero;
+                _o.transform.localScale = Vector3.one;
+
                 animationobject = _o;
                 AnimationObjectController animationObjectController =
                     animationobject.GetComponentInChildren<AnimationObjectController>();
