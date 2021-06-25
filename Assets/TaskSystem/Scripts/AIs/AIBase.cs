@@ -6,6 +6,6 @@ using UnityEngine;
 public  class AIBase : MonoBehaviour
 {
 
-    protected int characterId;
+    
     
 }

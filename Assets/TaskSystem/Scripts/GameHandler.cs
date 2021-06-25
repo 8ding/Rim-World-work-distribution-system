@@ -64,6 +64,7 @@ public class GameHandler : MonoBehaviour
     private void Start()
     {
         createUnit(new Vector3(0,0,0));
+        createUnit(new Vector3(-2, 0, 0));
     }
 
     //取消点击采矿按钮的状态

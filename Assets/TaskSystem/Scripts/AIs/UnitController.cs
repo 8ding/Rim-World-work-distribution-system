@@ -63,6 +63,7 @@ public class UnitController : AIBase
 
     private UnitData unitData;
     public Action OnJobOrderChanged;
+    private TaskBase task = null; //单位正在执行的任务
     
     private void Awake()
     {
@@ -114,8 +115,6 @@ public class UnitController : AIBase
                 break;
             //离开工作模式，进入玩家控制模式
             case State.Wondering:
-                InputManager.Instance.StartOrEnd(true);
-                EventCenter.Instance.AddEventListener<IArgs>(EventType.GetAxis, handleAxis);
                 break;
         }
     }
@@ -150,7 +149,6 @@ public class UnitController : AIBase
     
     public void RequestNextTask()
     {
-        TaskBase task = null;
         for (int i = 0; i < jobTypeList.Count; i++)
         {
             //任务中心处理工人的任务请求
@@ -187,9 +185,25 @@ public class UnitController : AIBase
 
     private void interrupt()
     {
-        
+        if(task != null)
+        {
+//           switch (task.taskType)
+//               {
+//                   case TaskType.GatherGold:
+//                   case TaskType.GatherWood:
+//                       if((task as GatherResourceTask).resourceManager.IsHasResource())
+//                       {
+//                           restoreResource((task as GatherResourceTask).resourceManager);
+//                       }
+//                       if(unitData.GetCarryAmount() > 0)
+//                       {
+//                           
+//                       }
+//                   break;
+//               } 
+        }
     }
-
+    
     private void ChangeControlWay(IArgs _args)
     {
         if(state == State.WaitingForNextTask)
@@ -199,70 +213,25 @@ public class UnitController : AIBase
         if(state == State.Wondering)
         {
             state = State.WaitingForNextTask;
+            EventCenter.Instance.RemoveEventListener<IArgs>(EventType.GetAxis, handleAxis);
             return;
         }
         state = State.Wondering;
+        InputManager.Instance.StartOrEnd(true);
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.GetAxis, handleAxis);
     }
     #region GatherResourceTask
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
         GameHandler.ResourceManager resourceManager = task.resourceManager;
-        Vector3 storePosition = task.storePosition;
-        int canCarryAmount = unitData.GetMaxCarryAmount() - unitData.GetCarryAmount();
         //工人前往资源点
         moveTo(resourceManager.GetResourcePointTransform().position, () =>
         {
-            int mineTimes = resourceManager.GetResourceAmount() < canCarryAmount
-                ? resourceManager.GetResourceAmount()
-                : canCarryAmount;
-            //工人采集资源
-            Gather(mineTimes, resourceManager.ResourceType, () =>
+            StartCoroutine(Gather(resourceManager, (() =>
             {
-                //资源被工人捡起
-                resourceManager.GiveResource(mineTimes);
-                //工人捡起资源
-                Grab(mineTimes, () =>
-                {
-                    //工人背满了
-                    if (unitData.GetMaxCarryAmount() - unitData.GetCarryAmount() < 1)
-                    {
-                        //如果资源点仍有剩余资源则回收资源点
-                        if (resourceManager.IsHasResource())
-                        {
-                            restoreResource(resourceManager);
-                        }
-
-                        //生成资源物品，工人回储存点
-                        CreateResourceIcon(resourceManager.ResourceType);
-                        ExcuteGatherBack(storePosition);
-                    }
-                    //工人没背满,继续请求当前收集资源的相关任务
-                    else
-                    {
-                        switch (resourceManager.ResourceType)
-                        {
-                            case ResourceType.Gold:
-                                task = TaskCenter.Instance.handleTaskRequest(TaskType.GatherGold) as GatherResourceTask;
-                                break;
-                            case ResourceType.Wood:
-                                task = TaskCenter.Instance.handleTaskRequest(TaskType.GatherWood) as GatherResourceTask;
-                                break;
-                        }
-
-                        //仍有相关任务则执行，无任务返回存储点
-                        if (task != null)
-                        {
-                            ExecuteTask_Gather(task);
-                        }
-                        else
-                        {
-                            CreateResourceIcon(resourceManager.ResourceType);
-                            ExcuteGatherBack(storePosition);
-                        }
-                    }
-                });
-
-            });
+                Idle();
+                state = State.WaitingForNextTask;
+            })));
         });
     }
 
@@ -346,7 +315,9 @@ public class UnitController : AIBase
     
 
     #endregion
-        //worker的移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
+
+    #region BeHaviar
+     //移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
     {
         //启动移动方式,到达目标 事件赋值给移动方式的移动结束后处理,赋值而不是加,避免上次移动结束的事件仍会被触发
@@ -363,7 +334,7 @@ public class UnitController : AIBase
     {
         moveVelocity.Enable();
         moveVelocity.SetVelocity(direction);
-        characterAnimation.PlayDirectMoveAnimation(characterId,direction,false);
+        characterAnimation.PlayDirectMoveAnimation(unitData.CharacterId,direction,false);
         
     }
     //worker的闲置行为
@@ -371,37 +342,38 @@ public class UnitController : AIBase
     {
         moveWay.Disable();
         moveVelocity.Disable();
-        characterAnimation.PlayobjectAnimaiton(characterId,0,ObjectAnimationType.Idle);
+        characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Idle);
     }
     //worker的胜利行为
-    public void Victory(int loopTimes,Action onVictoryEnd)
+    public  void Victory(Action onVictoryEnd)
     {
-        characterAnimation.OnAnimationEnd = onVictoryEnd;
-        characterAnimation.PlayobjectAnimaiton(characterId,0,ObjectAnimationType.Throw);
+        characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Throw);
+        onVictoryEnd?.Invoke();
     }
     //worker的清扫行为
-    public void CleanUp(int loopTimes,Action onCleanEnd)
+    public void CleanUp(Action onCleanEnd)
     {
-        characterAnimation.OnAnimationEnd = onCleanEnd;
-        characterAnimation.PlayobjectAnimaiton(characterId,loopTimes, ObjectAnimationType.Clean);
+        characterAnimation.PlayobjectAnimaiton(unitData.CharacterId, ObjectAnimationType.Clean);
+        onCleanEnd?.Invoke();
     }
     /// <summary>
     /// 工人的采集行为,根据资源类型不同,采集动画也不一样
     /// </summary>
     /// <param name="resourceType"></param>
     /// <param name="OnGatherEnd"></param>
-    public void Gather(int actTimes,ResourceType resourceType, Action OnGatherEnd = null)
+    public IEnumerator Gather(GameHandler.ResourceManager _resourceManager, Action OnGatherEnd = null)
     {
-        characterAnimation.OnAnimationEnd = OnGatherEnd;
-        switch (resourceType)
+        switch (_resourceManager.ResourceType)
         {
             case ResourceType.Gold:
-                characterAnimation.PlayobjectAnimaiton(characterId,actTimes,ObjectAnimationType.Mine);
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{_resourceManager.GiveResource(1);});
                 break;
             case ResourceType.Wood:
-                characterAnimation.PlayobjectAnimaiton(characterId,actTimes,ObjectAnimationType.Cut);
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Cut,() =>{_resourceManager.GiveResource(1);});
                 break;
         }
+        yield return new WaitWhile((() => { return _resourceManager.IsHasResource();}));
+        OnGatherEnd?.Invoke();
     }
 
     public void Grab(int amount, Action OnGrabEnd = null)
@@ -425,4 +397,10 @@ public class UnitController : AIBase
         Drop(OnDropEnd);
     }
     
+    #endregion
+
+    private void OnDisable()
+    {
+        EventCenter.Instance.RemoveEventListener<IArgs>(EventType.ChangeMode,ChangeControlWay);
+    }
 }

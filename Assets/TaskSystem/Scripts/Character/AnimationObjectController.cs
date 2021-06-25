@@ -6,19 +6,11 @@ namespace TaskSystem.Character
 {
     public class AnimationObjectController : MonoBehaviour
     {
-        public int LoopTimes;
+    
         public Action OnObjectAnimationEnd;
-        public Action OnLoopOneTime;
-
         public void LoopOneTimeEnd()
         {
-            LoopTimes--;
-            OnLoopOneTime?.Invoke();
-            if (LoopTimes <= 0)
-            {
-                OnObjectAnimationEnd?.Invoke();
-            }
+            OnObjectAnimationEnd?.Invoke();
         }
-        
     }
 }

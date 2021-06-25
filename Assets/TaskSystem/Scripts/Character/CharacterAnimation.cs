@@ -11,23 +11,13 @@ public class CharacterAnimation : MonoBehaviour
     private FaceDirectionType faceDirectionType;
 
     private GameObject animationobject;
-    //加event就只能在这个类内被调用被赋值,封闭安全
-    public Action OnAnimationEnd;
-    public Action OneTimeAction;
-    
-    private Dictionary<FaceDirectionType, GameObject> faceDirectionGameObjectDictionary;
 
-    private Dictionary<ObjectAnimationType, Dictionary<FaceDirectionType, GameObject>>
-        animationTypDirectionDictionaryDictionary;
+    
     void Awake()
     {
-        animationTypDirectionDictionaryDictionary =
-            new Dictionary<ObjectAnimationType, Dictionary<FaceDirectionType, GameObject>>();
-        faceDirectionGameObjectDictionary = new Dictionary<FaceDirectionType, GameObject>();
         faceDirectionType = FaceDirectionType.Side;
-    
     }
-    public void PlayobjectAnimaiton(int id,int loopTimes,ObjectAnimationType objectAnimationType)
+    public void PlayobjectAnimaiton(int id,ObjectAnimationType objectAnimationType,  Action OnPlayOneTime = null)
     {
         string path = "animation/" + id + "_" + objectAnimationType + "_" + faceDirectionType;
         if(animationobject == null || animationobject.name != path)
@@ -51,9 +41,8 @@ public class CharacterAnimation : MonoBehaviour
                 {
                     animationObjectController = animationobject.GetComponent<AnimationObjectController>();
                 }
-                animationObjectController.LoopTimes = loopTimes;
-                animationObjectController.OnLoopOneTime = OneTimeAction;
-                animationObjectController.OnObjectAnimationEnd = handleObjectAnimationEnd;
+                
+                animationObjectController.OnObjectAnimationEnd = OnPlayOneTime;
             }));
         }
     }
@@ -108,7 +97,7 @@ public class CharacterAnimation : MonoBehaviour
                 }
             }
         }
-        PlayobjectAnimaiton(id,0,ObjectAnimationType.Walk);
+        PlayobjectAnimaiton(id,ObjectAnimationType.Walk);
     }
     // public void PlayIdleAnimation()
     // {
@@ -139,15 +128,8 @@ public class CharacterAnimation : MonoBehaviour
     //     this.LoopTimes = looptimes;
     //     PlayobjectAnimaiton(ObjectAnimationType.Cut);
     // }
-    public void VictoryEnd()
-    {
-        OnAnimationEnd?.Invoke();
-    }
 
-    private void handleObjectAnimationEnd()
-    {
-        OnAnimationEnd?.Invoke();
-    }
+    
     public void Enable()
     {
         gameObject.SetActive(true);
