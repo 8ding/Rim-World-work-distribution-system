@@ -11,7 +11,7 @@ public class TaskCenter : BaseManager<TaskCenter>
     public TaskCenter ()
     {
         taskDic = new Dictionary<TaskType, TaskSender>();
-        EventCenter.Instance.AddEventListener<IArgs>("ClickGoldResource", (_o =>
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.ClickGoldResource, (_o =>
         {
             if(!taskDic.ContainsKey(TaskType.GatherGold))
             {
@@ -24,7 +24,7 @@ public class TaskCenter : BaseManager<TaskCenter>
             });
         }));
         
-        EventCenter.Instance.AddEventListener<IArgs>("ClickWoodResource", (_o =>
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.ClickWoodResource, (_o =>
         {
             
             if(!taskDic.ContainsKey(TaskType.GatherWood))
@@ -38,7 +38,7 @@ public class TaskCenter : BaseManager<TaskCenter>
             });
         }));
         
-        EventCenter.Instance.AddEventListener<IArgs>("RightClick",(_o =>
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.RightClick,(_o =>
         {
             if(!taskDic.ContainsKey(TaskType.GoToPlace))
             {

@@ -19,38 +19,35 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
     
     public Vector3 moveDir;
     private IMoveVelocity moveVelocity;
-    public event Action OnMovEnd;//当移动停止,移动方式需要做的事情
     public Action OnPostMoveEnd;//移动停止的后处理
     
   
     private List<PathNode> pathNodes;
     private int currentNodeIndex;
     private CharacterAnimation characterAnimation;
-    private int characterId;
+    private UnitData unitData;
 
     private void Awake()
     {
         moveVelocity = GetComponent<IMoveVelocity>();
         characterAnimation = GetComponent<CharacterAnimation>();
+        unitData = GetComponent<UnitData>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        pathNodes = new List<PathNode>();
-        characterId = GetComponent<WorkerAI>().GetId();
+        pathNodes = new List<PathNode>(); 
     }
 
     public void SetMovePosition(Vector3 movePosition) {
         pathNodes = PathManager.Instance.findPath(transform.position, movePosition);
-        OnMovEnd += Disable;
         if (pathNodes != null && pathNodes.Count > 0)
         {
             currentNodeIndex = 0;
-            characterAnimation.PlayDirectMoveAnimation(characterId,pathNodes[currentNodeIndex].worldPosition);
+            characterAnimation.PlayDirectMoveAnimation(unitData.CharacterId,pathNodes[currentNodeIndex].worldPosition);
         }
         else
         {
-            OnMovEnd?.Invoke();
             OnPostMoveEnd?.Invoke();
         }
     }
@@ -65,6 +62,11 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
         this.enabled = true;
     }
 
+    public void Disable()
+    {
+        this.enabled = false;
+    }
+
     private void Update() {
         if (pathNodes != null && pathNodes.Count > 0)
         {
@@ -76,11 +78,10 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
                 if (currentNodeIndex < pathNodes.Count - 1)
                 {
                     currentNodeIndex++;
-                    characterAnimation.PlayDirectMoveAnimation(characterId,pathNodes[currentNodeIndex].worldPosition);
+                    characterAnimation.PlayDirectMoveAnimation(unitData.CharacterId,pathNodes[currentNodeIndex].worldPosition);
                 }
                 else
                 {
-                    OnMovEnd?.Invoke();
                     OnPostMoveEnd?.Invoke();
                 }
             }
@@ -88,16 +89,10 @@ public class MovePositionPathFinding : MonoBehaviour, IMovePosition {
         }
     }
     
-    public void Disable()
-    {
-        this.enabled = false;
-    }
-    
 
     public void OnDestroy()
     {
-        OnMovEnd -= Disable;
-        OnMovEnd -= moveVelocity.Disable;
+        OnPostMoveEnd = null;
     }
     
 }

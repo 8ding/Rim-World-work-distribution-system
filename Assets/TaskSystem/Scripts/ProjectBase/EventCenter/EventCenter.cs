@@ -4,6 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+public enum EventType
+{
+    GetSomeKeyDown,//键盘按下
+    GetSomeKeyUp, //键盘抬起
+    GetAxis,    //轴移动
+    SceneLoading, //场景加载中
+    ClickGoldResource,//点击金矿资源点
+    ClickWoodResource,
+    RightClick,//右击事件
+    ChangeMode,//改变玩家控制模式事件
+}
 public interface IArgs
 {
     
@@ -40,14 +52,14 @@ public class EventCenter : BaseManager<EventCenter>
 {
     //key-事件的名字（比如怪物死亡)
     //value - 对应的是监听这个事件对应的委托函数
-    private Dictionary<string, IevnetInfo>eventDic  = new Dictionary<string, IevnetInfo>();
+    private Dictionary<EventType, IevnetInfo>eventDic  = new Dictionary<EventType, IevnetInfo>();
     
     /// <summary>
     /// 添加事件监听
     /// </summary>
     /// <param name="name">事件的名字</param>
     /// <param name="action">准备用来处理事件的委托函数</param>
-    public void AddEventListener<T>(string name, Action<T> action)
+    public void AddEventListener<T>(EventType name, Action<T> action)
     {
         if(eventDic.ContainsKey(name))
         {
@@ -64,7 +76,7 @@ public class EventCenter : BaseManager<EventCenter>
     /// </summary>
     /// <param name="name">事件名字</param>
     /// <param name="args">事件传递的参数 由泛型类EventParamter包裹</param>
-    public void EventTrigger<T>(string name,  T args)
+    public void EventTrigger<T>(EventType name,  T args)
     {
         if(eventDic.ContainsKey(name))
         {
@@ -76,7 +88,7 @@ public class EventCenter : BaseManager<EventCenter>
     /// </summary>
     /// <param name="name">事件的名字</param>
     /// <param name="action">准备用来处理事件的委托函数</param>
-    public void RemoveEventListener<T>(string name, Action<T> action)
+    public void RemoveEventListener<T>(EventType name, Action<T> action)
     {
         if(eventDic.ContainsKey(name))
         {

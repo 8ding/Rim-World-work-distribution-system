@@ -34,7 +34,7 @@ public class ScenesMgr : BaseManager<ScenesMgr>
         while (!asyncOperation.isDone)
         {
             //事件中心分发进度情况
-            EventCenter.Instance.EventTrigger("SceneLoading",asyncOperation.progress);
+            EventCenter.Instance.EventTrigger(EventType.SceneLoading,asyncOperation.progress);
             yield return asyncOperation.progress;
         }
         //加载完成后执行

@@ -24,11 +24,12 @@
               <e p="NPCAI.cs" t="Include" />
               <e p="PlayerControlAI.cs" t="Include" />
               <e p="SomeEnum.cs" t="Include" />
-              <e p="WorkerAI.cs" t="Include" />
+              <e p="UnitController.cs" t="Include" />
             </e>
             <e p="Character" t="Include">
               <e p="AnimationObjectController.cs" t="Include" />
               <e p="CharacterAnimation.cs" t="Include" />
+              <e p="UnitData.cs" t="Include" />
             </e>
             <e p="Commons" t="Include">
               <e p="GameAssets.cs" t="Include" />
@@ -89,10 +90,6 @@
               <e p="OrderListHolder.cs" t="Include" />
               <e p="TitleList.cs" t="Include" />
               <e p="Window_GameResource.cs" t="Include" />
-            </e>
-            <e p="Worker" t="Include">
-              <e p="Body.cs" t="Include" />
-              <e p="IWorker.cs" t="Include" />
             </e>
           </e>
           <e p="Sprites" t="Include">

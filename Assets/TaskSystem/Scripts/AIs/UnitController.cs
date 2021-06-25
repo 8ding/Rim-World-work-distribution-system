@@ -40,13 +40,18 @@ public class compare : IComparer<TaskType>
 }
 
 
-public class WorkerAI : AIBase
+public class UnitController : AIBase
 {
  
     private State state;
     private float waitingTimer;
     private GameObject ResourceGameObject;
 
+
+    private IMovePosition moveWay;
+    private IMoveVelocity moveVelocity;
+    private CharacterAnimation characterAnimation;
+    
     private Dictionary<ResourceType, GameObject> resourceTypeIconDictionary;
     
     //工作类型与优先级对应的字典
@@ -55,15 +60,24 @@ public class WorkerAI : AIBase
     private List<TaskType> jobTypeList;
     
     private IComparer<TaskType> compareType;
-    
-    public Action OnJobOrderChanged;
 
-    public Action OnNotWorker;
-    // Update is called once per frame
+    private UnitData unitData;
+    public Action OnJobOrderChanged;
+    
     private void Awake()
     {
-        jobTypeList = new List<TaskType>();
+        jobTypeList = new List<TaskType>(); 
         jobtypeOrderDictionary = new Dictionary<TaskType, int>();
+        
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.ChangeMode, ChangeControlWay);
+        
+        //单位的相关组件与数据
+        unitData = GetComponent<UnitData>();
+        moveWay = gameObject.GetComponent<IMovePosition>();
+        characterAnimation = gameObject.GetComponent<CharacterAnimation>();
+        moveVelocity = gameObject.GetComponent<IMoveVelocity>();
+        
+        Idle();
     }
 
     private void Start()
@@ -98,10 +112,26 @@ public class WorkerAI : AIBase
                 break;
             case State.ExecutingTask:
                 break;
+            //离开工作模式，进入玩家控制模式
+            case State.Wondering:
+                InputManager.Instance.StartOrEnd(true);
+                EventCenter.Instance.AddEventListener<IArgs>(EventType.GetAxis, handleAxis);
+                break;
         }
     }
 
-
+    public void handleAxis(IArgs eventArgs)
+    {
+        EventParameter<Vector3> eventParameter = eventArgs as EventParameter<Vector3>;
+        if(!eventParameter.t.Equals(Vector3.zero))
+        {
+            moveTowards(eventParameter.t);
+        }
+        else
+        {
+            Idle();
+        }
+    }
 
     public void ModifyOrder(TaskType _taskType)
     {
@@ -154,30 +184,47 @@ public class WorkerAI : AIBase
 
         }
     }
-    
-    
+
+    private void interrupt()
+    {
+        
+    }
+
+    private void ChangeControlWay(IArgs _args)
+    {
+        if(state == State.WaitingForNextTask)
+        {
+            interrupt();
+        }
+        if(state == State.Wondering)
+        {
+            state = State.WaitingForNextTask;
+            return;
+        }
+        state = State.Wondering;
+    }
     #region GatherResourceTask
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
         GameHandler.ResourceManager resourceManager = task.resourceManager;
         Vector3 storePosition = task.storePosition;
-        int canCarryAmount = worker.GetMaxCarryAmount() - worker.GetCarryAmount();
+        int canCarryAmount = unitData.GetMaxCarryAmount() - unitData.GetCarryAmount();
         //工人前往资源点
-        worker.moveTo(resourceManager.GetResourcePointTransform().position, () =>
+        moveTo(resourceManager.GetResourcePointTransform().position, () =>
         {
             int mineTimes = resourceManager.GetResourceAmount() < canCarryAmount
                 ? resourceManager.GetResourceAmount()
                 : canCarryAmount;
             //工人采集资源
-            worker.Gather(mineTimes, resourceManager.ResourceType, () =>
+            Gather(mineTimes, resourceManager.ResourceType, () =>
             {
                 //资源被工人捡起
                 resourceManager.GiveResource(mineTimes);
                 //工人捡起资源
-                worker.Grab(mineTimes, () =>
+                Grab(mineTimes, () =>
                 {
                     //工人背满了
-                    if (worker.GetMaxCarryAmount() - worker.GetCarryAmount() < 1)
+                    if (unitData.GetMaxCarryAmount() - unitData.GetCarryAmount() < 1)
                     {
                         //如果资源点仍有剩余资源则回收资源点
                         if (resourceManager.IsHasResource())
@@ -230,10 +277,10 @@ public class WorkerAI : AIBase
         switch (resourceManager.ResourceType)
         {
             case ResourceType.Gold:
-                EventCenter.Instance.EventTrigger<IArgs>("ClickGoldResource",new EventParameter<GameHandler.ResourceManager>(resourceManager));
+                EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<GameHandler.ResourceManager>(resourceManager));
                 break;
             case ResourceType.Wood:
-                EventCenter.Instance.EventTrigger<IArgs>("ClickWoodResource", new EventParameter<GameHandler.ResourceManager>(resourceManager));
+                EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource, new EventParameter<GameHandler.ResourceManager>(resourceManager));
                 break;
         }
 
@@ -251,11 +298,11 @@ public class WorkerAI : AIBase
             switch (resourceType)
             {
                 case ResourceType.Gold:
-                    ResourceGameObject = GameAssets.Instance.createItemSprite(worker.gameObject.transform,
+                    ResourceGameObject = GameAssets.Instance.createItemSprite(gameObject.transform,
                         new Vector3(0, 0.5f, 0), ItemType.Gold);
                     break;
                 case ResourceType.Wood:
-                    ResourceGameObject = GameAssets.Instance.createItemSprite(worker.gameObject.transform,
+                    ResourceGameObject = GameAssets.Instance.createItemSprite(gameObject.transform,
                         new Vector3(0, 0.5f, 0), ItemType.Wood);
                     break;
             }
@@ -274,12 +321,12 @@ public class WorkerAI : AIBase
     /// <param name="storePosition"></param>
     private void ExcuteGatherBack(Vector3 storePosition)
     {
-        worker.moveTo(storePosition, (() =>
+        moveTo(storePosition, (() =>
         {
-            GameResource.AddAmount(GameResource.ResourceType.Gold, worker.GetCarryAmount());
-            worker.Drop(ResourceGameObject, (() =>
+            GameResource.AddAmount(GameResource.ResourceType.Gold, unitData.GetCarryAmount());
+            Drop(ResourceGameObject, (() =>
             {
-                worker.Idle();
+                Idle();
                 state = State.WaitingForNextTask;
             }));
         }));
@@ -290,19 +337,92 @@ public class WorkerAI : AIBase
 
     private void ExcuteTask_Move(WorkerMoveTask task)
     {
-        worker.moveTo(task.Destination,(() =>
+        moveTo(task.Destination,(() =>
         {
-            worker.Idle();
+            Idle();
             state = State.WaitingForNextTask;
         }));
     }
     
 
     #endregion
-
-    public void Disable()
+        //worker的移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
+    public void moveTo(Vector3 position, Action onArriveAtPosition = null)
     {
-        OnNotWorker?.Invoke();
-        this.enabled = false;
+        //启动移动方式,到达目标 事件赋值给移动方式的移动结束后处理,赋值而不是加,避免上次移动结束的事件仍会被触发
+       
+        moveWay.Enable();
+        moveVelocity.Enable();
+        Action idle = () => { Idle(); };
+        idle += onArriveAtPosition;
+        moveWay.BindOnPostMoveEnd(idle);
+        moveWay.SetMovePosition(position);
     }
+
+    public void moveTowards(Vector3 direction)
+    {
+        moveVelocity.Enable();
+        moveVelocity.SetVelocity(direction);
+        characterAnimation.PlayDirectMoveAnimation(characterId,direction,false);
+        
+    }
+    //worker的闲置行为
+    public void Idle()
+    {
+        moveWay.Disable();
+        moveVelocity.Disable();
+        characterAnimation.PlayobjectAnimaiton(characterId,0,ObjectAnimationType.Idle);
+    }
+    //worker的胜利行为
+    public void Victory(int loopTimes,Action onVictoryEnd)
+    {
+        characterAnimation.OnAnimationEnd = onVictoryEnd;
+        characterAnimation.PlayobjectAnimaiton(characterId,0,ObjectAnimationType.Throw);
+    }
+    //worker的清扫行为
+    public void CleanUp(int loopTimes,Action onCleanEnd)
+    {
+        characterAnimation.OnAnimationEnd = onCleanEnd;
+        characterAnimation.PlayobjectAnimaiton(characterId,loopTimes, ObjectAnimationType.Clean);
+    }
+    /// <summary>
+    /// 工人的采集行为,根据资源类型不同,采集动画也不一样
+    /// </summary>
+    /// <param name="resourceType"></param>
+    /// <param name="OnGatherEnd"></param>
+    public void Gather(int actTimes,ResourceType resourceType, Action OnGatherEnd = null)
+    {
+        characterAnimation.OnAnimationEnd = OnGatherEnd;
+        switch (resourceType)
+        {
+            case ResourceType.Gold:
+                characterAnimation.PlayobjectAnimaiton(characterId,actTimes,ObjectAnimationType.Mine);
+                break;
+            case ResourceType.Wood:
+                characterAnimation.PlayobjectAnimaiton(characterId,actTimes,ObjectAnimationType.Cut);
+                break;
+        }
+    }
+
+    public void Grab(int amount, Action OnGrabEnd = null)
+    {
+        unitData.AddCarryAmount(amount);
+        OnGrabEnd?.Invoke();
+    }
+    
+    
+
+    public void Drop(Action OnDropEnd = null)
+    {
+        unitData.ClearCarry();
+        OnDropEnd?.Invoke();
+    }
+    
+
+    public void Drop(GameObject gameObject,Action OnDropEnd = null)
+    {
+        gameObject.SetActive(false);
+        Drop(OnDropEnd);
+    }
+    
 }

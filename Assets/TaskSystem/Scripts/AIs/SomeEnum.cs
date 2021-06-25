@@ -2,7 +2,7 @@ public enum State
 {
     WaitingForNextTask,
     ExecutingTask,
-    TaskInterupt
+    Wondering,
 }
 
 //工人任务类型

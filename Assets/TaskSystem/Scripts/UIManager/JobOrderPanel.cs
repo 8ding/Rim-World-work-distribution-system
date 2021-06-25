@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 public class JobOrderPanel : MonoBehaviour
 {
-    public Dictionary<WorkerAI, OrderListHolder> holders = new Dictionary<WorkerAI, OrderListHolder>();
+    public Dictionary<UnitController, OrderListHolder> holders = new Dictionary<UnitController, OrderListHolder>();
     [FormerlySerializedAs("orderHolderTemplate")] [SerializeField]private OrderListHolder orderListHolderTemplate;
     [SerializeField] private Transform orderHolderRoot;
 
@@ -15,25 +15,25 @@ public class JobOrderPanel : MonoBehaviour
         orderListHolderTemplate.gameObject.SetActive(false);
     }
 
-    public void CreateHolder(WorkerAI workerAI)
+    public void CreateHolder(UnitController _unitController)
     {
         var orderHolder = Instantiate(orderListHolderTemplate, orderHolderRoot);
         orderHolder.gameObject.SetActive(true);
-        orderHolder.Bind(workerAI);
-        holders.Add(workerAI,orderHolder);
+        orderHolder.Bind(_unitController);
+        holders.Add(_unitController,orderHolder);
     }
 
-    public void AddWorkerOnPanel(WorkerAI _workerAi)
+    public void AddWorkerOnPanel(UnitController _unitController)
     {
         OrderListHolder temp;
-        if (holders.TryGetValue(_workerAi, out temp))
+        if (holders.TryGetValue(_unitController, out temp))
         {
             temp.gameObject.SetActive(true);
             return;
         }
         else
         {
-            CreateHolder(_workerAi);
+            CreateHolder(_unitController);
         }
     }
     

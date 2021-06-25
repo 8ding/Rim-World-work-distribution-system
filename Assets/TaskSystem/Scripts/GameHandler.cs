@@ -24,8 +24,7 @@ public class GameHandler : MonoBehaviour
     private Camera currentCamera;
     private JobOrderPanel orderPanel;
     private GameObject resourcePointGameObject;
-    private Body _m_body;
-    private WorkerAI taskAI;
+    private UnitController taskAI;
     private PlayerControlAI playerAI;
     private PathFinding pathFInding;
 
@@ -40,9 +39,17 @@ public class GameHandler : MonoBehaviour
     private void Awake()
     {
         GameResource.Init();
-        //任务中心监听任务事件
+        
         ResourceManager.OnResourceClicked += handleMinePointClicked;
-         
+        InputManager.Instance.StartOrEnd(true);
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, (_args =>
+        {
+            KeyCode keyCode = (_args as EventParameter<KeyCode>).t;
+            if(keyCode  == KeyCode.Tab)
+            {
+                EventCenter.Instance.EventTrigger<IArgs>(EventType.ChangeMode, null);
+            }
+        }));
         MineButton = GameObject.Find("MineButton").transform;
         MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
         cutButton = GameObject.Find("CutButton").transform;
@@ -74,14 +81,14 @@ public class GameHandler : MonoBehaviour
                 if(mouseState == MouseState.HitMine)
                 {
 
-                    EventCenter.Instance.EventTrigger<IArgs>("ClickGoldResource",new EventParameter<ResourceManager>(resourceManager));
+                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<ResourceManager>(resourceManager));
                     Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                 }
                 break;
             case ResourceType.Wood:
                 if (mouseState == MouseState.HitWood)
                 {
-                    EventCenter.Instance.EventTrigger("ClickWoodResource",new EventParameter<ResourceManager>(resourceManager));
+                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource,new EventParameter<ResourceManager>(resourceManager));
                     Destroy(resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>());
                 }
                 break;
@@ -113,13 +120,17 @@ public class GameHandler : MonoBehaviour
 
     private void createUnit(Vector3 position)
     {
-        _m_body = Body.Create(0,position);
-//            playerAI = _m_body.gameObject.AddComponent<PlayerControlAI>();
-        taskAI = _m_body.gameObject.AddComponent<WorkerAI>();
-        taskAI.setUp(_m_body);
+        GameObject unit = ResMgr.Instance.Load<GameObject>("Unit");
+        unit.transform.position = position;
+        UnitData unitData =  unit.AddComponent<UnitData>();
+        unitData.CharacterId = 0;
+        unitData.Speed = 6;
+
+        unit.AddComponent<MoveTransformVelocity>();
+        unit.AddComponent<MovePositionPathFinding>();
+        taskAI = unit.AddComponent<UnitController>();
         orderPanel.AddWorkerOnPanel(taskAI);
-//            taskAI.Disable();
-//            playerAI.setUp(_m_body);
+
     }
 
 
@@ -132,7 +143,7 @@ public class GameHandler : MonoBehaviour
             {
                 case MouseState.None:
                     //任务事件触发
-                    EventCenter.Instance.EventTrigger<IArgs>("RightClick",new EventParameter<Vector3>(MyClass.GetMouseWorldPosition(0, camera1)));
+                    EventCenter.Instance.EventTrigger<IArgs>(EventType.RightClick,new EventParameter<Vector3>(MyClass.GetMouseWorldPosition(0, camera1)));
                     break;
                 case MouseState.HitMine:
                     cancleHitMine();
@@ -157,19 +168,7 @@ public class GameHandler : MonoBehaviour
         }
         
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (camera1.isActiveAndEnabled)
-            {
-                camera1.enabled = false;
-                camera2.enabled = true;
-            }
-            else
-            {
-                camera1.enabled = true;
-                camera2.enabled = false;
-            }
-        }
+
     }
 
     //资源点管理类对象

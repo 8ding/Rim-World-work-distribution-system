@@ -5,7 +5,13 @@ using UnityEngine;
 public class MoveTransformVelocity : MonoBehaviour,IMoveVelocity
 {
     private Vector3 vectorVelocity;
-    [SerializeField] private float moveSpeed;
+    private UnitData unitData;
+
+    private void Awake()
+    {
+        unitData = GetComponent<UnitData>();
+    }
+
     public void SetVelocity(Vector3 velocityVector)
     {
         this.vectorVelocity = velocityVector;
@@ -13,7 +19,7 @@ public class MoveTransformVelocity : MonoBehaviour,IMoveVelocity
 
     private void Update()
     {
-        transform.position += vectorVelocity * moveSpeed * Time.deltaTime;
+        transform.position += vectorVelocity * unitData.Speed * Time.deltaTime;
     }
 
     public void Disable()

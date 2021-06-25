@@ -21,11 +21,7 @@ public class PlayerControlAI : AIBase
 
     private void MoveBehave()
     {
-        worker.moveTowards(direction);
-        if(direction.Equals(Vector3.zero))
-        {
-            worker.Idle();
-        }
+
     }
 
     private void CheckIput()

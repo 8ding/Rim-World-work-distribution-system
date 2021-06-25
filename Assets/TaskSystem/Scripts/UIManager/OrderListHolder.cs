@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class OrderListHolder : MonoBehaviour
 {
-    private WorkerAI boundWorkerAI;
+    private UnitController _m_boundUnitController;
     
     private  Dictionary<TaskType, ButtonManager> joTypeButtonDictionary;
     [SerializeField] private ButtonManager buttonTemplate;
@@ -19,12 +19,11 @@ public class OrderListHolder : MonoBehaviour
         buttonTemplate.gameObject.SetActive(false);
     }
 
-    public void Bind(WorkerAI _workerAi)
+    public void Bind(UnitController _unitController)
     {
 
-        boundWorkerAI = _workerAi;
-        boundWorkerAI.OnJobOrderChanged += handleOrderChanged;
-        boundWorkerAI.OnNotWorker += cancelOnPanel;
+        _m_boundUnitController = _unitController;
+        _m_boundUnitController.OnJobOrderChanged += handleOrderChanged;
         ButtonManager temp;
         for (int i = 0; i < (int)TaskType.enumcount; i++)
         {
@@ -34,22 +33,22 @@ public class OrderListHolder : MonoBehaviour
             }
             else
             {
-                createButton((TaskType)i,_workerAi);
+                createButton((TaskType)i,_unitController);
             }
         }
         handleOrderChanged();
     }
 
-    private void createButton(TaskType _taskType,WorkerAI _workerAi)
+    private void createButton(TaskType _taskType,UnitController _unitController)
     {
         var newbutton = Instantiate(buttonTemplate, buttonRoot);
         newbutton.gameObject.SetActive(true);
-        newbutton.SetData(_workerAi, _taskType);
+        newbutton.SetData(_unitController, _taskType);
         joTypeButtonDictionary.Add(_taskType, newbutton);
     }
     private void handleOrderChanged()
     {
-        foreach (var jobTypeOrder in boundWorkerAI.jobtypeOrderDictionary)
+        foreach (var jobTypeOrder in _m_boundUnitController.jobtypeOrderDictionary)
         {
             ButtonManager orderButton;
             if (joTypeButtonDictionary.TryGetValue(jobTypeOrder.Key, out orderButton))
@@ -64,9 +63,6 @@ public class OrderListHolder : MonoBehaviour
         
     }
 
-    private void cancelOnPanel()
-    {
-        gameObject.SetActive(false);
-    }
+
 
 }

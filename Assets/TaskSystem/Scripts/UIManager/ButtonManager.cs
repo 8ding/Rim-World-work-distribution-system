@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
-    private WorkerAI boundAI;
+    private UnitController boundAI;
     private TaskType _m_boundTaskType;
     [SerializeField] public Text orderText;
 
-    public void SetData(WorkerAI _workerAi, TaskType _taskType)
+    public void SetData(UnitController _unitController, TaskType _taskType)
     {
-        boundAI = _workerAi;
+        boundAI = _unitController;
         _m_boundTaskType = _taskType;
     }
 
