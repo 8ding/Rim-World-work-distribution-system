@@ -5,13 +5,13 @@ using UnityEngine;
 
 public enum MoveDirection
 {
-    Up,
-    Down,
-    Left,
     Right,
-    UpLeft,
     UpRight,
+    Up,
+    UpLeft,
+    Left,
     DownLeft,
+    Down,
     DownRight,
     enumCount,
 }
