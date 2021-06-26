@@ -16,6 +16,9 @@ public enum EventType
     RightClick,//右击事件
     ChangeMode,//改变玩家控制模式事件
     CreatMinePoit,
+    CreateUnit,
+    ItemOnGround,
+    UnitOccur,
     Test //测试专用事件
 }
 public interface IArgs
@@ -40,6 +43,20 @@ public class EventParameter<T1, T2> : IArgs
     {
         this.t1 = t1;
         this.t2 = t2;
+    }
+}
+public class EventParameter<T1, T2,T3,T4> : IArgs
+{
+    public T1 t1;
+    public T2 t2;
+    public T3 t3;
+    public T4 t4;
+    public EventParameter(T1 t1,T2 t2,T3 _t3,T4 _t4)
+    {
+        this.t1 = t1;
+        this.t2 = t2;
+        this.t3 = _t3;
+        this.t4 = _t4;
     }
 }
 public interface IevnetInfo

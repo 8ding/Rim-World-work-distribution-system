@@ -24,7 +24,6 @@ public class GameHandler : MonoBehaviour
     public Camera camera1;
     public Camera camera2;
     private Camera currentCamera;
-    private JobOrderPanel orderPanel;
     private GameObject resourcePointGameObject;
     private UnitController taskAI;
     private PlayerControlAI playerAI;
@@ -41,17 +40,18 @@ public class GameHandler : MonoBehaviour
     private void Awake()
     {
         GameResource.Init();
-        
+        TaskCenter.Init();
+        CreateThingManager.Init();
         ResourceManager.OnResourceClicked += handleMinePointClicked;
         InputManager.Instance.StartOrEnd(true);
         EventCenter.Instance.AddEventListener<IArgs>(EventType.Test, HandleTest);
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.CreatMinePoit,createResourcePoint);
+      
         EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, handleKeyDown);
         MineButton = GameObject.Find("MineButton").transform;
         MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
         cutButton = GameObject.Find("CutButton").transform;
         cutButton.GetComponent<Button_UI>().ClickFunc += handleCutButtonClick;
-        orderPanel = GameObject.Find("OrderPanel").GetComponent<JobOrderPanel>();
+
 
         camera1.enabled = true;
         camera2.enabled = false;
@@ -60,7 +60,7 @@ public class GameHandler : MonoBehaviour
 
     private void Start()
     {
-        createUnit(new Vector3(0,0,0));
+        EventCenter.Instance.EventTrigger<IArgs>(EventType.CreateUnit,new EventParameter<string,Vector3,int,float>("Unit",Vector3.zero, 0,6f));
     }
 
     //取消点击采矿按钮的状态
@@ -152,42 +152,8 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    private void createResourcePoint(IArgs _iArgs)
-    {
 
-        switch ((_iArgs as EventParameter<Vector3,ResourceType>).t2)
-        {
-            case ResourceType.Gold:
-                PoolMgr.Instance.GetObj("MinePoint",(_o => { resourcePointGameObject = _o;
-                    resourcePointGameObject.transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
-                    new ResourceManager(resourcePointGameObject.transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
-                }));
-                break;
-            case ResourceType.Wood:
-                PoolMgr.Instance.GetObj("004_tree",(_o => { resourcePointGameObject = _o;
-                    resourcePointGameObject.transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
-                    new ResourceManager(resourcePointGameObject.transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
-                }));
-                break;
-        }
-        
-    }
-
-    private void createUnit(Vector3 position)
-    {
-        GameObject unit = ResMgr.Instance.Load<GameObject>("Unit");
-        unit.transform.position = position;
-        UnitData unitData =  unit.AddComponent<UnitData>();
-        unitData.CharacterId = 0;
-        unitData.Speed = 6;
-
-        unit.AddComponent<MoveTransformVelocity>();
-        unit.AddComponent<MovePositionPathFinding>();
-        taskAI = unit.AddComponent<UnitController>();
-        orderPanel.AddWorkerOnPanel(taskAI);
-
-    }
-
+    
 
     private void Update()
     {

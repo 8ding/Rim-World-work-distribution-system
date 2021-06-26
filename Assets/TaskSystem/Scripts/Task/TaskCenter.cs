@@ -6,11 +6,10 @@ using System.Collections.Generic;
 
 public class TaskCenter : BaseManager<TaskCenter>
 {
-    public Dictionary<TaskType, TaskSender> taskDic;
+    public static Dictionary<TaskType, TaskSender> taskDic= new Dictionary<TaskType, TaskSender>();
     //构造函数中监听任务事件
-    public TaskCenter ()
+    public static void Init()
     {
-        taskDic = new Dictionary<TaskType, TaskSender>();
         EventCenter.Instance.AddEventListener<IArgs>(EventType.ClickGoldResource, (_o =>
         {
             if(!taskDic.ContainsKey(TaskType.GatherGold))

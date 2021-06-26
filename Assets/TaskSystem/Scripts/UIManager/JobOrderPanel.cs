@@ -13,6 +13,7 @@ public class JobOrderPanel : MonoBehaviour
     private void Awake()
     {
         orderListHolderTemplate.gameObject.SetActive(false);
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.UnitOccur, AddWorkerOnPanel);
     }
 
     public void CreateHolder(UnitController _unitController)
@@ -23,18 +24,23 @@ public class JobOrderPanel : MonoBehaviour
         holders.Add(_unitController,orderHolder);
     }
 
-    public void AddWorkerOnPanel(UnitController _unitController)
+    public void AddWorkerOnPanel(IArgs _iArgs)
     {
+        
         OrderListHolder temp;
-        if (holders.TryGetValue(_unitController, out temp))
+        if (holders.TryGetValue((_iArgs as EventParameter<UnitController>).t, out temp))
         {
             temp.gameObject.SetActive(true);
             return;
         }
         else
         {
-            CreateHolder(_unitController);
+            CreateHolder((_iArgs as EventParameter<UnitController>).t);
         }
     }
-    
+
+    private void OnDestroy()
+    {
+        EventCenter.Instance.RemoveEventListener<IArgs>(EventType.UnitOccur,AddWorkerOnPanel);
+    }
 }

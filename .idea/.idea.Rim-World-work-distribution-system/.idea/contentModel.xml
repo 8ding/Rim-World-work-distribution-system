@@ -36,10 +36,10 @@
               <e p="GameResource.cs" t="Include" />
               <e p="MyClass.cs" t="Include" />
             </e>
-            <e p="GameHandler.cs" t="Include" />
-            <e p="ItemGameObject" t="Include">
-              <e p="ItemObject.cs" t="Include" />
+            <e p="CreateThing" t="Include">
+              <e p="CreateThingManager.cs" t="Include" />
             </e>
+            <e p="GameHandler.cs" t="Include" />
             <e p="Move" t="Include">
               <e p="IMovePosition.cs" t="Include" />
               <e p="IMoveVelocity.cs" t="Include" />
