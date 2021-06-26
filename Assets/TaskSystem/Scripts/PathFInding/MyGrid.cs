@@ -71,6 +71,7 @@ public class MyGrid<TgridObect>
             return gridArray[x, z];
         else
         {
+            Debug.Log("超出网格");
             return default(TgridObect);;
         }
     }

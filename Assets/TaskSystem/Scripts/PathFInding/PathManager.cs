@@ -2,6 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum MoveDirection
+{
+    Up,
+    Down,
+    Left,
+    Right,
+    UpLeft,
+    UpRight,
+    DownLeft,
+    DownRight,
+    enumCount,
+}
 //路线及地图Grid管理模块
 public class PathManager : BaseManager<PathManager>
 {
@@ -25,14 +38,45 @@ public class PathManager : BaseManager<PathManager>
         return _m_pathFinding.FindPath(startPosition, endPosition);
     }
     /// <summary>
-    /// 将物体设置在网格位置上
+    /// 获取一个位置所在的网格位置
     /// </summary>
-    /// <param name="setGameObject">需要被设置的游戏物体</param>
-    /// <param name="currentPosition">游戏物体当前的位置</param>
-    public void SetOnGrid(GameObject setGameObject)
+    /// <param name="Position">需要获取网格位置的游戏物体</param>
+    public Vector3 GetGridPosition(Vector3 Position)
     {
-        Vector3 fixPosition = _m_pathFinding.GetNode(setGameObject.transform.position).worldPosition;
-        setGameObject.transform.position = fixPosition;
+        return _m_pathFinding.GetNode(Position).worldPosition;
+        
     }
-    
+    /// <summary>
+    /// 获取传入位置移动一个网格的位置
+    /// </summary>
+    /// <param name="_position"></param>
+    /// <param name="_moveDirection"></param>
+    /// <returns></returns>
+    public Vector3 GetOneOffsetPositon(Vector3 _position, MoveDirection _moveDirection)
+    {
+        XY xy = _m_myGrid.GetXY(_position);
+
+        switch (_moveDirection)
+        {
+            case MoveDirection.Up:
+                return _m_pathFinding.GetNode(xy.GetX(), xy.GetY() + 1).worldPosition; 
+            case MoveDirection.Down:
+                return _m_pathFinding.GetNode(xy.GetX(), xy.GetY() - 1).worldPosition;
+            case MoveDirection.Left:
+                return _m_pathFinding.GetNode(xy.GetX() - 1, xy.GetY()).worldPosition; 
+            case MoveDirection.Right:
+                return _m_pathFinding.GetNode(xy.GetX() + 1, xy.GetY()).worldPosition; 
+
+            case MoveDirection.UpLeft:
+                return _m_pathFinding.GetNode(xy.GetX() - 1, xy.GetY() + 1).worldPosition; 
+            case MoveDirection.UpRight:
+                return _m_pathFinding.GetNode(xy.GetX() + 1, xy.GetY() + 1).worldPosition; 
+            case MoveDirection.DownLeft:
+                return _m_pathFinding.GetNode(xy.GetX() - 1, xy.GetY() - 1).worldPosition; 
+            case MoveDirection.DownRight:
+                return _m_pathFinding.GetNode(xy.GetX() + 1, xy.GetY() - 1).worldPosition; 
+            
+        }
+        return Vector3.zero;
+    }
 }

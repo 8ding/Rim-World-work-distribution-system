@@ -51,6 +51,7 @@ public class InputManager : BaseManager<InputManager>
         checkKeyCode(KeyCode.D);
         checkKeyCode(KeyCode.Space);
         checkKeyCode(KeyCode.Tab);
+        checkKeyCode(KeyCode.Q);
         checkAxis();
         
     }

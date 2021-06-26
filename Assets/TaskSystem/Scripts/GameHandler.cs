@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using CodeMonkey.Utils;
+using JetBrains.Annotations;
 using TaskSystem.GatherResource;
 using UnityEngine;
 
@@ -42,20 +44,9 @@ public class GameHandler : MonoBehaviour
         
         ResourceManager.OnResourceClicked += handleMinePointClicked;
         InputManager.Instance.StartOrEnd(true);
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.Test, HandleTest);
         EventCenter.Instance.AddEventListener<IArgs>(EventType.CreatMinePoit,createResourcePoint);
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, (_args =>
-        {
-            KeyCode keyCode = (_args as EventParameter<KeyCode>).t;
-            switch (keyCode )
-            {
-                case KeyCode.Tab:
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ChangeMode, null);
-                    break;
-                case KeyCode.Space:
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.CreatMinePoit, new EventParameter<Vector3,ResourceType>(MyClass.GetMouseWorldPosition(0, camera1),ResourceType.Gold));
-                    break;
-            }
-        }));
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, handleKeyDown);
         MineButton = GameObject.Find("MineButton").transform;
         MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
         cutButton = GameObject.Find("CutButton").transform;
@@ -77,6 +68,26 @@ public class GameHandler : MonoBehaviour
     {
         mouseState = MouseState.None;
         Destroy(attachMouseSprite);
+    }
+    /// <summary>
+    /// 处理按键事件
+    /// </summary>
+    /// <param name="_iArgs"></param>
+    public void handleKeyDown(IArgs _iArgs)
+    {
+        KeyCode keyCode = (_iArgs as EventParameter<KeyCode>).t;
+        switch (keyCode )
+        {
+            case KeyCode.Tab:
+                EventCenter.Instance.EventTrigger<IArgs>(EventType.ChangeMode, null);
+                break;
+            case KeyCode.Space:
+                EventCenter.Instance.EventTrigger<IArgs>(EventType.CreatMinePoit, new EventParameter<Vector3,ResourceType>(MyClass.GetMouseWorldPosition(0, camera1),ResourceType.Gold));
+                break;
+            case KeyCode.Q:
+                EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));
+                break;
+        }
     }
     //处理点击资源点事件
     private void handleMinePointClicked(ResourceManager resourceManager)
@@ -114,7 +125,32 @@ public class GameHandler : MonoBehaviour
         attachMouseSprite = MyClass.CreateWorldSprite(null, "cutAttachMouse", "AttachIcon", GameAssets.Instance.CutKnife,
                 MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up , Vector3.one, 1, Color.white);
     }
+    /// <summary>
+    /// 专门用于测试的函数,用于在鼠标点击处测试
+    /// </summary>
+    /// <param name="_iArgs"></param>
+    private void HandleTest(IArgs _iArgs)
+    {
+        Vector3 position = (_iArgs as EventParameter<Vector3>).t;
+        PoolMgr.Instance.GetObj("Enemy",(_o =>
+                {
+                    StartCoroutine(Circle(_o, position));
+                }
+                ));
+    }
 
+    /// <summary>
+    /// 将游戏物体在八个方向每1秒放置一次的协程
+    /// </summary>
+    private IEnumerator Circle(GameObject _gameObject,Vector3 _position)
+    {
+        _gameObject.transform.position = PathManager.Instance.GetGridPosition(_position);
+        for (int i = 0; i < (int) MoveDirection.enumCount; i++)
+        {
+            yield return new WaitForSeconds(1f);
+            _gameObject.transform.position = PathManager.Instance.GetOneOffsetPositon(_position, (MoveDirection) i);
+        }
+    }
 
     private void createResourcePoint(IArgs _iArgs)
     {

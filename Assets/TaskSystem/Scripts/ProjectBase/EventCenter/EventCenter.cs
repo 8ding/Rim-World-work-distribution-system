@@ -16,6 +16,7 @@ public enum EventType
     RightClick,//右击事件
     ChangeMode,//改变玩家控制模式事件
     CreatMinePoit,
+    Test //测试专用事件
 }
 public interface IArgs
 {
