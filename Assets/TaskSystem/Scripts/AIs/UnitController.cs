@@ -187,20 +187,16 @@ public class UnitController : AIBase
     {
         if(task != null)
         {
-//           switch (task.taskType)
-//               {
-//                   case TaskType.GatherGold:
-//                   case TaskType.GatherWood:
-//                       if((task as GatherResourceTask).resourceManager.IsHasResource())
-//                       {
-//                           restoreResource((task as GatherResourceTask).resourceManager);
-//                       }
-//                       if(unitData.GetCarryAmount() > 0)
-//                       {
-//                           
-//                       }
-//                   break;
-//               } 
+           switch (task.taskType)
+               {
+                   case TaskType.GatherGold:
+                   case TaskType.GatherWood:
+                       if((task as GatherResourceTask).resourceManager.IsHasResource())
+                       {
+                           restoreResource((task as GatherResourceTask).resourceManager);
+                       }
+                       break;
+               } 
         }
     }
     
@@ -363,6 +359,8 @@ public class UnitController : AIBase
     /// <param name="OnGatherEnd"></param>
     public IEnumerator Gather(GameHandler.ResourceManager _resourceManager, Action OnGatherEnd = null)
     {
+        int temp = _resourceManager.GetResourceAmount();
+ 
         switch (_resourceManager.ResourceType)
         {
             case ResourceType.Gold:
@@ -372,10 +370,21 @@ public class UnitController : AIBase
                 characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Cut,() =>{_resourceManager.GiveResource(1);});
                 break;
         }
-        yield return new WaitWhile((() => { return _resourceManager.IsHasResource();}));
+        while (_resourceManager.IsHasResource())
+        {
+            yield return new WaitWhile(() =>
+            {
+                if(temp != _resourceManager.GetResourceAmount())
+                {
+                    temp = _resourceManager.GetResourceAmount();
+                    return false;
+                }
+                return true;
+            });
+        }
         OnGatherEnd?.Invoke();
     }
-
+    
     public void Grab(int amount, Action OnGrabEnd = null)
     {
         unitData.AddCarryAmount(amount);

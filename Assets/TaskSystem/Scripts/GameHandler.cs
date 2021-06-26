@@ -174,14 +174,6 @@ public class GameHandler : MonoBehaviour
         if(attachMouseSprite != null)
             attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;
         
-        //生成矿点的操作
-
-
-        //生成树木操作
-
-        
-
-
     }
 
     //资源点管理类对象

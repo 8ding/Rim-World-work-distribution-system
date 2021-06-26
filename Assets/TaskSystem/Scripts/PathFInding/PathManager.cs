@@ -34,4 +34,5 @@ public class PathManager : BaseManager<PathManager>
         Vector3 fixPosition = _m_pathFinding.GetNode(setGameObject.transform.position).worldPosition;
         setGameObject.transform.position = fixPosition;
     }
+    
 }
