@@ -81,6 +81,36 @@ public class PathManager : BaseManager<PathManager>
         return Vector3.zero;
     }
 
-    
-    
+    /// <summary>
+    /// 获取位置所在网格的给定可放置类型的剩余可放置数量
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="_placedObjectType"></param>
+    /// <returns></returns>
+    public int getAmountLeft(Vector3 position, PlacedObjectType _placedObjectType)
+    {
+        if(_m_pathFinding.GetNode(position).placedObjectType == PlacedObjectType.none )
+        {
+            //返回读表获得的当前可放置物的最大数量，在这里先统一设为20
+            return 20;
+        }
+        else if(_m_pathFinding.GetNode(position).placedObjectType != _placedObjectType)
+        {
+            return 0;
+        }
+        else
+        {
+            return 20 - _m_pathFinding.GetNode(position).placedObjectContentAMount;
+        }
+    }
+    /// <summary>
+    /// 增加位置所在网格的对应堆叠物的数量
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="_placedObjectType">堆叠物类型</param>
+    /// <param name="amount">增加数量</param>
+    public void AddAmount(Vector3 position, PlacedObjectType _placedObjectType, int amount)
+    {
+        CreateThingManager.Instance.CreatePlacedObject(_m_pathFinding.GetNode(position).worldPosition, _placedObjectType, amount);
+    }
 }

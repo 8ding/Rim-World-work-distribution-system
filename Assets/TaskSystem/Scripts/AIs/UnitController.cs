@@ -253,52 +253,7 @@ public class UnitController : AIBase
         }
 
     }
-
-    /// <summary>
-    /// 生成与资源对应的物品图标
-    /// </summary>
-    /// <param name="resourceType"></param>
-    private void CreateResourceIcon(ResourceType resourceType)
-    {
-        if (!resourceTypeIconDictionary.TryGetValue(resourceType,
-            out ResourceGameObject))
-        {
-            switch (resourceType)
-            {
-                case ResourceType.Gold:
-                    ResourceGameObject = GameAssets.Instance.createItemSprite(gameObject.transform,
-                        new Vector3(0, 0.5f, 0), ItemType.Gold);
-                    break;
-                case ResourceType.Wood:
-                    ResourceGameObject = GameAssets.Instance.createItemSprite(gameObject.transform,
-                        new Vector3(0, 0.5f, 0), ItemType.Wood);
-                    break;
-            }
-
-            resourceTypeIconDictionary[resourceType] = ResourceGameObject;
-        }
-        else
-        {
-            ResourceGameObject.SetActive(true);
-        }
-    }
-
-    /// <summary>
-    /// 结束资源收集回到存储点并放下资源
-    /// </summary>
-    /// <param name="storePosition"></param>
-    private void ExcuteGatherBack(Vector3 storePosition)
-    {
-        moveTo(storePosition, (() =>
-        {
-            GameResource.AddAmount(GameResource.ResourceType.Gold, unitData.GetCarryAmount());
-            Drop(ResourceGameObject, (() =>
-            {
-                Idle();
-                state = State.WaitingForNextTask;
-            }));
-        }));
-    }
+    
     #endregion
 
     #region MoveTask
@@ -400,8 +355,11 @@ public class UnitController : AIBase
             {
                 
                 Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
-                if(CreateThingManager.Instance.addItemAmount(position, ItemType.Gold, ref amount))
+                if(PathManager.Instance.getAmountLeft(position, PlacedObjectType.Gold) > amount)
+                {
+                    PathManager.Instance.AddAmount(position, PlacedObjectType.Gold, amount);
                     break;
+                }
             }
         }
         OnGatherEnd?.Invoke();

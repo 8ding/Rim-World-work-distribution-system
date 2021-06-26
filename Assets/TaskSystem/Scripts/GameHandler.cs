@@ -83,7 +83,11 @@ public class GameHandler : MonoBehaviour
                 EventCenter.Instance.EventTrigger<IArgs>(EventType.ChangeMode, null);
                 break;
             case KeyCode.Space:
-                EventCenter.Instance.EventTrigger<IArgs>(EventType.CreatMinePoit, new EventParameter<Vector3,ResourceType>(MyClass.GetMouseWorldPosition(0, camera1),ResourceType.Gold));
+                Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
+                if(PathManager.Instance.getAmountLeft(position, PlacedObjectType.minePoint) > 0)
+                {
+                    PathManager.Instance.AddAmount(position, PlacedObjectType.minePoint, 20);
+                }
                 break;
             case KeyCode.Q:
                 EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));
@@ -253,24 +257,24 @@ public class GameHandler : MonoBehaviour
         public static int oneStepAmount = 5;
         public static int twoStepAmount = 10;
         public static int threeStepAmount = MaxAmount;
-        private ItemType itemType;
+        private PlacedObjectType _m_placedObjectType;
         
-        public ItemManager(Transform itemTransform, ItemType _itemType,int amount)
+        public ItemManager(Transform itemTransform, PlacedObjectType _placedObjectType,int amount)
         {
-            this.itemType = _itemType;
+            this._m_placedObjectType = _placedObjectType;
             this.ContentTransform = itemTransform;
             ContentAmount = amount;
             setSizeWithAmount();
         }
-        public ItemType ItemType
+        public PlacedObjectType placedObjectType
         {
             set
             {
-                itemType = value;
+                _m_placedObjectType = value;
             }
             get
             {
-                return itemType;
+                return _m_placedObjectType;
             }
         }
 

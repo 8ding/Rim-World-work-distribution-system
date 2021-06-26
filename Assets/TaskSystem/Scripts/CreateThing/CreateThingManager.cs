@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class CreateThingManager : BaseManager<CreateThingManager>
 {
-    public static Dictionary<Vector3, GameHandler.ItemManager> positionItemManagerDictionary;
+    public static Dictionary<Vector3, GameObject> positionGameObjectDictionary;
     public  static void Init()
     {
         EventCenter.Instance.AddEventListener<IArgs>(EventType.CreateUnit,CreateUint);
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.CreatMinePoit,createResourcePoint);
-        positionItemManagerDictionary = new Dictionary<Vector3, GameHandler.ItemManager>();
+        positionGameObjectDictionary = new Dictionary<Vector3, GameObject>();
     }
 
 
@@ -32,86 +31,38 @@ public class CreateThingManager : BaseManager<CreateThingManager>
         UnitController unitController = unit.AddComponent<UnitController>();
         EventCenter.Instance.EventTrigger<IArgs>(EventType.UnitOccur,new EventParameter<UnitController>(unitController));
     }
-    private static void createResourcePoint(IArgs _iArgs)
+    public void  CreatePlacedObject(Vector3 position,PlacedObjectType _placedObjectType,int amount)
     {
-
-        switch ((_iArgs as EventParameter<Vector3,ResourceType>).t2)
+        if(positionGameObjectDictionary.ContainsKey(position))
         {
-            case ResourceType.Gold:
-                PoolMgr.Instance.GetObj("MinePoint",(_o => { 
-                    _o .transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
-                    new GameHandler.ResourceManager(_o .transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
-                }));
-                break;
-            case ResourceType.Wood:
-                PoolMgr.Instance.GetObj("004_tree",(_o => { 
-                    _o .transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
-                    new GameHandler.ResourceManager(_o .transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
-                }));
-                break;
+            PoolMgr.Instance.PushObj(positionGameObjectDictionary[position]);
         }
+        PoolMgr.Instance.GetObj(_placedObjectType.ToString() ,(_o =>
+        {
+            _o.transform.position = position;
+            ChangeSpriteWithAmount(_o, amount, _placedObjectType);
+            positionGameObjectDictionary[position] = _o;
+        }));
+    }
+    /// <summary>
+    /// 根据数量变换为应显示的堆叠物体精灵名字，本来应该根据表得来，现在什么都先不做用原版
+    /// </summary>
+    /// <param name="amount">堆叠数量</param>
+    /// <param name="_placedObjectType">堆叠物体类型</param>
+    /// <returns></returns>
+    private void ChangeSpriteWithAmount(GameObject _gameObject,int amount, PlacedObjectType _placedObjectType)
+    {
+        _gameObject.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_placedObjectType.ToString());
     }
 
-    private void  createItem(ItemType _itemType, Action<GameObject> _action)
+    private void  createItem(PlacedObjectType _placedObjectType, Action<GameObject> _action)
     {
         
-        PoolMgr.Instance.GetObj(_itemType.ToString(),(_o =>
+        PoolMgr.Instance.GetObj(_placedObjectType.ToString(),(_o =>
         {
             _action(_o);
         }));
     }
     
-
-    public bool addItemAmount(Vector3 position, ItemType _itemType,ref int amount)
-    {
-        if(!positionItemManagerDictionary.ContainsKey(position))
-        {
-            if(amount <= GameHandler.ItemManager.MaxAmount) 
-            {
-                int temp = amount;
-                createItem(_itemType,(_o =>
-                {
-                    _o.transform.position = position;
-                    GameHandler.ItemManager itemManager = new GameHandler.ItemManager(_o.transform, _itemType,temp);
-                    positionItemManagerDictionary.Add(position,itemManager);
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ItemOnGround,new EventParameter<GameHandler.ItemManager>(itemManager));
-                }));
-                amount = 0;
-                return true;
-            }
-            else
-            {
-                int temp = GameHandler.ItemManager.MaxAmount;
-                createItem(_itemType,(_o =>
-                {
-                    _o.transform.position = position;
-                    GameHandler.ItemManager itemManager = new GameHandler.ItemManager(_o.transform, _itemType,temp);
-                    positionItemManagerDictionary.Add(position,itemManager);
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ItemOnGround,new EventParameter<GameHandler.ItemManager>(itemManager));
-                }));
-                amount = amount - temp;
-                return false;
-            }
-        }
-        else if(positionItemManagerDictionary[position].ItemType != _itemType)
-        {
-            return false;
-        }
-        else
-        {
-            if(amount <= positionItemManagerDictionary[position].GetAmountLeft())
-            {
-                positionItemManagerDictionary[position].AddContent(amount);
-                amount = 0;
-                return true;
-            }
-            else
-            {
-                int temp = amount;
-                positionItemManagerDictionary[position].AddContent(positionItemManagerDictionary[position].GetAmountLeft());
-                amount = temp - positionItemManagerDictionary[position].GetAmountLeft();
-                return false;
-            }
-        }
-    }
+    
 }

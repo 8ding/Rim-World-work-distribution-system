@@ -5,6 +5,7 @@ using StateMachine;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Networking.PlayerConnection;
+using UnityEngine.Serialization;
 
 [Serializable]
 public enum ObjectAnimationType
@@ -25,22 +26,24 @@ public enum ResourceType
     Wood,
 }
 [Serializable]
-public enum ItemType
+public enum PlacedObjectType
 {
+    none,
+    minePoint,
     Gold,
     Wood,
 }
 [Serializable]
 public struct ItemType_Object
 {
-    public ItemType itemType;
+    [FormerlySerializedAs("itemType")] public PlacedObjectType placedObjectType;
     public GameObject itemGameObject;
 }
 
 [Serializable]
 public struct ItemType_Sprite
 {
-    public ItemType itemType;
+    [FormerlySerializedAs("itemType")] public PlacedObjectType placedObjectType;
     public Sprite itemSprite;
 }
 
@@ -74,7 +77,7 @@ public class GameAssets : MonoBehaviour
     [SerializeField] 
     public List<ResourceType_Object> ResourceTypeObjects;
 
-    private Dictionary<ItemType, Sprite> itemTypeSpriteDictionary;
+    private Dictionary<PlacedObjectType, Sprite> itemTypeSpriteDictionary;
 
     public static GameAssets Instance
     {
@@ -87,14 +90,14 @@ public class GameAssets : MonoBehaviour
 
     private void Awake()
     {
-        itemTypeSpriteDictionary = new Dictionary<ItemType, Sprite>();
+        itemTypeSpriteDictionary = new Dictionary<PlacedObjectType, Sprite>();
         if(ItemTypeSpries!=null)
         {
             for (int i = 0; i < ItemTypeSpries.Count; i++)
             {
                 if (ItemTypeSpries[i].itemSprite != null)
                 {
-                    itemTypeSpriteDictionary[ItemTypeSpries[i].itemType] = ItemTypeSpries[i].itemSprite;
+                    itemTypeSpriteDictionary[ItemTypeSpries[i].placedObjectType] = ItemTypeSpries[i].itemSprite;
                 }
             }
         }
@@ -118,10 +121,10 @@ public class GameAssets : MonoBehaviour
         }
         return null;
     }
-    public GameObject createItemSprite(Transform parent, Vector3 position,ItemType itemType)
+    public GameObject createItemSprite(Transform parent, Vector3 position,PlacedObjectType _placedObjectType)
     {
         GameObject result = null;
-        result = MyClass.CreateWorldSprite(parent, itemType.ToString(), "Item", itemTypeSpriteDictionary[itemType],
+        result = MyClass.CreateWorldSprite(parent, _placedObjectType.ToString(), "Item", itemTypeSpriteDictionary[_placedObjectType],
             position, Vector3.one, 1, Color.white);
         return result;
     }
