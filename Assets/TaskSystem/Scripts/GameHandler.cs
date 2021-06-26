@@ -42,6 +42,7 @@ public class GameHandler : MonoBehaviour
         GameResource.Init();
         TaskCenter.Init();
         CreateThingManager.Init();
+        PathManager.Init();
         ResourceManager.OnResourceClicked += handleMinePointClicked;
         InputManager.Instance.StartOrEnd(true);
         EventCenter.Instance.AddEventListener<IArgs>(EventType.Test, HandleTest);
@@ -99,14 +100,14 @@ public class GameHandler : MonoBehaviour
                 {
 
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<ResourceManager>(resourceManager));
-                    resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
+                    resourceManager.GetContentTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
                 break;
             case ResourceType.Wood:
                 if (mouseState == MouseState.HitWood)
                 {
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource,new EventParameter<ResourceManager>(resourceManager));
-                    resourceManager.GetResourcePointTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
+                    resourceManager.GetContentTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
                 break;
         }
@@ -178,22 +179,57 @@ public class GameHandler : MonoBehaviour
         
     }
 
+    //可放置物体管理对象
+    public class PlacedObjectManager
+    {
+        public Transform ContentTransform;
+        public int ContentAmount;
+        public bool IsHasContent()
+        {
+            return ContentAmount > 0;
+        }
+
+        public Transform GetContentTransform()
+        {
+            return ContentTransform;
+        }
+
+        public void GiveContent(int amount)
+        {
+            ContentAmount -= amount;
+            if (ContentAmount < 1)
+            {
+                PoolMgr.Instance.PushObj(GetContentTransform().gameObject);
+            }
+        }
+
+        public int GetContentAmount()
+        {
+            return ContentAmount;
+        }
+
+
+
+
+    }
+
+
+
     //资源点管理类对象
-    public class ResourceManager
+    public class ResourceManager : PlacedObjectManager
     {
         private ResourceType resourceType;
-        private Transform ResourcePointTransform;
-        private int resourceAmount;
-        public static int MaxAmount = 4;
+
+        public static int MaxAmount = 20;
         public static Action<ResourceManager> OnResourceClicked;
-        public ResourceManager(Transform resourcePointTransform, ResourceType resourceType)
+        public ResourceManager(Transform _contentTransform, ResourceType resourceType)
         {
             
             this.ResourceType = resourceType;
-            this.ResourcePointTransform = resourcePointTransform;
-            resourceAmount = MaxAmount;
-            resourcePointTransform.GetComponent<Button_Sprite>().enabled = true;
-            resourcePointTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
+            this.ContentTransform = _contentTransform;
+            ContentAmount = MaxAmount;
+            _contentTransform.GetComponent<Button_Sprite>().enabled = true;
+            _contentTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
             {
                 OnResourceClicked?.Invoke(this);
             };
@@ -210,29 +246,64 @@ public class GameHandler : MonoBehaviour
                 return resourceType;
             }
         }
-        public bool IsHasResource()
+    }
+    public class ItemManager: PlacedObjectManager
+    {
+        public static int MaxAmount = 20;
+        public static int oneStepAmount = 5;
+        public static int twoStepAmount = 10;
+        public static int threeStepAmount = MaxAmount;
+        private ItemType itemType;
+        
+        public ItemManager(Transform itemTransform, ItemType _itemType,int amount)
         {
-            return resourceAmount > 0;
+            this.itemType = _itemType;
+            this.ContentTransform = itemTransform;
+            ContentAmount = amount;
+            setSizeWithAmount();
         }
-
-        public Transform GetResourcePointTransform()
+        public ItemType ItemType
         {
-            return ResourcePointTransform;
-        }
-
-        public void GiveResource(int amount)
-        {
-            resourceAmount -= amount;
-            if (resourceAmount < 1)
+            set
             {
-               PoolMgr.Instance.PushObj(GetResourcePointTransform().gameObject);
+                itemType = value;
+            }
+            get
+            {
+                return itemType;
             }
         }
 
-        public int GetResourceAmount()
+        public int GetAmountLeft()
         {
-            return resourceAmount;
+            return MaxAmount - ContentAmount;
         }
+
+        private void setSizeWithAmount()
+        {
+            if(ContentAmount < oneStepAmount)
+            {
+                ContentTransform.localScale = 0.3f * Vector3.one;
+            }
+            else if(ContentAmount >= oneStepAmount && ContentAmount < twoStepAmount)
+            {
+                ContentTransform.localScale = 0.5f * Vector3.one;
+            }
+            else if(ContentAmount >= twoStepAmount && ContentAmount < threeStepAmount)
+            {
+                ContentTransform.localScale = 0.8f * Vector3.one;
+            }
+            else
+            {
+                ContentTransform.localScale = Vector3.one;
+            }
+        }
+        public void AddContent(int amount)
+        {
+            ContentAmount += amount;
+            setSizeWithAmount();
+        }
+            
     }
 }
     

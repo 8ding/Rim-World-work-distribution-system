@@ -12,6 +12,7 @@ public enum TaskType
     GatherWood,
     MakeThing,
     GoToPlace,
+    CarryItem,
     enumcount,
 }
 

@@ -174,6 +174,9 @@ public class UnitController : AIBase
                 case TaskType.GoToPlace:
                     ExcuteTask_Move(task as WorkerMoveTask);
                     break;
+                case TaskType.CarryItem:
+                    ExcuteTask_CarryItem(task as CarryItemTask);
+                    break;
                 default:
                     Debug.Log(task.taskType + "尚未编写执行方法");
                     state = State.WaitingForNextTask;
@@ -191,7 +194,7 @@ public class UnitController : AIBase
                {
                    case TaskType.GatherGold:
                    case TaskType.GatherWood:
-                       if((task as GatherResourceTask).resourceManager.IsHasResource())
+                       if((task as GatherResourceTask).resourceManager.IsHasContent())
                        {
                            restoreResource((task as GatherResourceTask).resourceManager);
                        }
@@ -221,7 +224,7 @@ public class UnitController : AIBase
     {
         GameHandler.ResourceManager resourceManager = task.resourceManager;
         //工人前往资源点
-        moveTo(resourceManager.GetResourcePointTransform().position, () =>
+        moveTo(resourceManager.GetContentTransform().position, () =>
         {
             StartCoroutine(Gather(resourceManager, (() =>
             {
@@ -312,6 +315,17 @@ public class UnitController : AIBase
 
     #endregion
 
+    #region CarryItemtask
+
+    private void ExcuteTask_CarryItem(CarryItemTask _task)
+    {
+        GameHandler.ItemManager itemManager = _task.itemManager;
+        CMDebug.TextPopup("执行搬运任务",Vector3.zero,2f);
+    }
+    
+
+    #endregion
+
     #region BeHaviar
      //移动行为之所以是行为 是因为做这件事可能不止表现层，还可能有逻辑层
     public void moveTo(Vector3 position, Action onArriveAtPosition = null)
@@ -359,28 +373,36 @@ public class UnitController : AIBase
     /// <param name="OnGatherEnd"></param>
     public IEnumerator Gather(GameHandler.ResourceManager _resourceManager, Action OnGatherEnd = null)
     {
-        int temp = _resourceManager.GetResourceAmount();
+        int temp = _resourceManager.GetContentAmount();
  
         switch (_resourceManager.ResourceType)
         {
             case ResourceType.Gold:
-                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{_resourceManager.GiveResource(1);});
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{_resourceManager.GiveContent(1);});
                 break;
             case ResourceType.Wood:
-                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Cut,() =>{_resourceManager.GiveResource(1);});
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Cut,() =>{_resourceManager.GiveContent(1);});
                 break;
         }
-        while (_resourceManager.IsHasResource())
+        while (_resourceManager.IsHasContent())
         {
             yield return new WaitWhile(() =>
             {
-                if(temp != _resourceManager.GetResourceAmount())
+                if(temp != _resourceManager.GetContentAmount())
                 {
-                    temp = _resourceManager.GetResourceAmount();
+                    temp = _resourceManager.GetContentAmount();
                     return false;
                 }
                 return true;
             });
+            int amount = 1;
+            for (int i = 0; i < (int)MoveDirection.enumCount; i++)
+            {
+                
+                Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
+                if(CreateThingManager.Instance.addItemAmount(position, ItemType.Gold, ref amount))
+                    break;
+            }
         }
         OnGatherEnd?.Invoke();
     }

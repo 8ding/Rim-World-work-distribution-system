@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathNode 
+public class PathNode
 {
+    public GameHandler.ItemManager itemManager;
+   
     public bool isWalkable;
     public int gCost;
     public int hCost;
@@ -14,6 +16,7 @@ public class PathNode
     public int y;
     public PathNode(Vector3 worldPosition,int x, int y,bool isWalkable)
     {
+        itemManager = null;
         this.worldPosition = worldPosition;
         this.isWalkable = isWalkable;
         this.x = x;
@@ -27,4 +30,10 @@ public class PathNode
     {
         this.isWalkable = isWalkable;
     }
+
+    public void setItemManager(GameHandler.ItemManager _itemManager)
+    {
+        itemManager = _itemManager;
+    }
+
 }

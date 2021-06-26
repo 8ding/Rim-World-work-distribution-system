@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -19,10 +20,10 @@ public enum MoveDirection
 public class PathManager : BaseManager<PathManager>
 {
 
-    private MyGrid<PathNode> _m_myGrid;
-    private PathFinding _m_pathFinding;
+    private static MyGrid<PathNode> _m_myGrid;
+    private static PathFinding _m_pathFinding;
 
-    public PathManager()
+    public static void  Init()
     {
         _m_myGrid = ResMgr.Instance.Load<GridSetting>("New Grid Setting").grid;
         _m_pathFinding = new PathFinding(_m_myGrid);
@@ -79,4 +80,7 @@ public class PathManager : BaseManager<PathManager>
         }
         return Vector3.zero;
     }
+
+    
+    
 }

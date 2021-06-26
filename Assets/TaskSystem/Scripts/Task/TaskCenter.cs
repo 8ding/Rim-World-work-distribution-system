@@ -49,6 +49,18 @@ public class TaskCenter : BaseManager<TaskCenter>
                 Destination = (_o as EventParameter<UnityEngine.Vector3>).t
             });
         }));
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.ItemOnGround, (_args =>
+        {
+            if(!taskDic.ContainsKey(TaskType.CarryItem))
+            {
+                taskDic[TaskType.CarryItem] = new TaskSender();
+            }
+            taskDic[TaskType.CarryItem].AddTask(new CarryItemTask
+            {
+                taskType = TaskType.CarryItem,
+                itemManager = (_args as EventParameter<GameHandler.ItemManager>).t
+            });
+        }));
     }
     
     /// <summary>

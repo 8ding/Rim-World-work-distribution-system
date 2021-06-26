@@ -17,6 +17,7 @@ public enum EventType
     ChangeMode,//改变玩家控制模式事件
     CreatMinePoit,
     CreateUnit,
+    CreateItem,
     ItemOnGround,
     UnitOccur,
     Test //测试专用事件
@@ -43,6 +44,19 @@ public class EventParameter<T1, T2> : IArgs
     {
         this.t1 = t1;
         this.t2 = t2;
+    }
+}
+public class EventParameter<T1, T2,T3> : IArgs
+{
+    public T1 t1;
+    public T2 t2;
+    public T3 t3;
+
+    public EventParameter(T1 t1,T2 t2,T3 _t3)
+    {
+        this.t1 = t1;
+        this.t2 = t2;
+        this.t3 = _t3;
     }
 }
 public class EventParameter<T1, T2,T3,T4> : IArgs
@@ -89,6 +103,7 @@ public class EventCenter : BaseManager<EventCenter>
             eventDic.Add(name,new EventInfo<T>{action = action});;
         }
     }
+
 
     /// <summary>
     /// 事件的触发
