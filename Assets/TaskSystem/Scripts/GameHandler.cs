@@ -124,15 +124,17 @@ public class GameHandler : MonoBehaviour
             case ResourceType.Gold:
                 PoolMgr.Instance.GetObj("MinePoint",(_o => { resourcePointGameObject = _o;
                     resourcePointGameObject.transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
+                    new ResourceManager(resourcePointGameObject.transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
                 }));
                 break;
             case ResourceType.Wood:
                 PoolMgr.Instance.GetObj("004_tree",(_o => { resourcePointGameObject = _o;
                     resourcePointGameObject.transform.position = (_iArgs as EventParameter<Vector3, ResourceType>).t1;
+                    new ResourceManager(resourcePointGameObject.transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
                 }));
                 break;
         }
-        new ResourceManager(resourcePointGameObject.transform, (_iArgs as EventParameter<Vector3, ResourceType>).t2);
+        
     }
 
     private void createUnit(Vector3 position)
