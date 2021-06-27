@@ -19,7 +19,7 @@ public class CharacterAnimation : MonoBehaviour
     }
     public void PlayobjectAnimaiton(int id,ObjectAnimationType objectAnimationType,  Action OnPlayOneTime = null)
     {
-        string path = "animation/" + id + "_" + objectAnimationType + "_" + faceDirectionType;
+        string path = "animation/" + id + "/" + id + "_" + objectAnimationType + "_" + faceDirectionType;
 
         if(animationobject == null || animationobject.name != path)
         {
