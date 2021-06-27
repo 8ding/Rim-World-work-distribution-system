@@ -135,11 +135,10 @@ public class GameHandler : MonoBehaviour
     private void HandleTest(IArgs _iArgs)
     {
         Vector3 position = (_iArgs as EventParameter<Vector3>).t;
-        PoolMgr.Instance.GetObj("Enemy",(_o =>
-                {
-                    StartCoroutine(Circle(_o, position));
-                }
-                ));
+        if(PathManager.Instance.GetContentRoomLeft(position, PlacedObjectType.WoodPoint) > 0)
+        {
+            PathManager.Instance.AddContentAmount(position, PlacedObjectType.WoodPoint, 20);
+        }
     }
 
     /// <summary>
@@ -186,7 +185,7 @@ public class GameHandler : MonoBehaviour
                     }
                     break;
                 case MouseState.HitWood:
-                    if(PathManager.Instance.IsHave(position, PlacedObjectType.Wood))
+                    if(PathManager.Instance.IsHave(position, PlacedObjectType.WoodPoint))
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherWood);
                     }

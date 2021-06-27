@@ -115,8 +115,8 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/CreateThing/CreateThingManager.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/SomeEnum.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskCenter.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
@@ -341,7 +341,7 @@
       <workItem from="1624776459798" duration="11000" />
       <workItem from="1624776764927" duration="385000" />
       <workItem from="1624777174268" duration="1569000" />
-      <workItem from="1624778765335" duration="19069000" />
+      <workItem from="1624778765335" duration="21055000" />
     </task>
     <servers />
   </component>
@@ -487,6 +487,32 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/CreateThing/CreateThingManager.cs</url>
+          <line>44</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\CreateThing\CreateThingManager.cs" initialLine="44" containingFunctionPresentation="method 'HandlePlacedObject'">
+            <startOffsets>
+              <option value="1855" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1920" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/CreateThing/CreateThingManager.cs</url>
+          <line>52</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\CreateThing\CreateThingManager.cs" initialLine="52" containingFunctionPresentation="method 'HandlePlacedObject'">
+            <startOffsets>
+              <option value="2170" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2685" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/CreateThing/CreateThingManager.cs</url>
           <line>40</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\CreateThing\CreateThingManager.cs" initialLine="40" containingFunctionPresentation="method 'HandlePlacedObject'">
             <startOffsets>
@@ -496,7 +522,7 @@
               <option value="1755" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="97" />
+          <option name="timeStamp" value="100" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
