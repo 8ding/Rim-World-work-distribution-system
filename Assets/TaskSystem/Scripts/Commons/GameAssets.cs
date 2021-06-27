@@ -29,7 +29,9 @@ public enum ResourceType
 public enum PlacedObjectType
 {
     none,
-    minePoint,
+    MinePoint,
+    WoodPoint,
+    DividingLine,
     Gold,
     Wood,
 }

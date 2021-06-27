@@ -167,8 +167,7 @@ public class UnitController : AIBase
             state = State.ExecutingTask;
             switch (task.taskType)
             {
-                case TaskType.GatherGold:
-                case TaskType.GatherWood:
+                case TaskType.GatherResource:
                     ExecuteTask_Gather(task as GatherResourceTask);
                     break;
                 case TaskType.GoToPlace:
@@ -192,12 +191,15 @@ public class UnitController : AIBase
         {
            switch (task.taskType)
                {
-                   case TaskType.GatherGold:
-                   case TaskType.GatherWood:
-                       if((task as GatherResourceTask).resourceManager.IsHasContent())
+                   case TaskType.GatherResource:
+                       if(PathManager.Instance.IsHaveAny((task as GatherResourceTask).ResourcePosition))
                        {
-                           restoreResource((task as GatherResourceTask).resourceManager);
+                           //资源点仍剩余资源,重新构建任务
+                           TaskCenter.Instance.BuildTask((task as GatherResourceTask).ResourcePosition,TaskType.GatherResource);
                        }
+                       break;
+                   case TaskType.GoToPlace:
+                       Idle();
                        break;
                } 
         }
@@ -222,35 +224,25 @@ public class UnitController : AIBase
     #region GatherResourceTask
     private void ExecuteTask_Gather(GatherResourceTask task)
     {
-        GameHandler.ResourceManager resourceManager = task.resourceManager;
+        Vector3 position = task.ResourcePosition;
         //工人前往资源点
-        moveTo(resourceManager.GetContentTransform().position, () =>
+        moveTo(position, () =>
         {
-            StartCoroutine(Gather(resourceManager, (() =>
+            //开启采集协程
+            StartCoroutine(Gather(1,position, () =>
             {
                 Idle();
                 state = State.WaitingForNextTask;
-            })));
+            }));
         });
     }
 
     /// <summary>
     /// 回收资源点生成新任务,并由事件中心发布
     /// </summary>
-    /// <param name="resourceManager"></param>
-    private void restoreResource(GameHandler.ResourceManager resourceManager)
+    /// <param name="_position"></param>
+    private void restoreResource(Vector3 _position)
     {
-        //资源点仍剩余资源,重新触发事件
-        
-        switch (resourceManager.ResourceType)
-        {
-            case ResourceType.Gold:
-                EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<GameHandler.ResourceManager>(resourceManager));
-                break;
-            case ResourceType.Wood:
-                EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource, new EventParameter<GameHandler.ResourceManager>(resourceManager));
-                break;
-        }
 
     }
     
@@ -274,7 +266,8 @@ public class UnitController : AIBase
 
     private void ExcuteTask_CarryItem(CarryItemTask _task)
     {
-        GameHandler.ItemManager itemManager = _task.itemManager;
+        Vector3 itemPosition = _task.ItemPosition;
+        Vector3 storePosition = _task.StorePosition;
         CMDebug.TextPopup("执行搬运任务",Vector3.zero,2f);
     }
     
@@ -322,47 +315,65 @@ public class UnitController : AIBase
         onCleanEnd?.Invoke();
     }
     /// <summary>
-    /// 工人的采集行为,根据资源类型不同,采集动画也不一样
+    /// 单位的采集行为，根据采集资源不同，播放不同的动画
     /// </summary>
-    /// <param name="resourceType"></param>
-    /// <param name="OnGatherEnd"></param>
-    public IEnumerator Gather(GameHandler.ResourceManager _resourceManager, Action OnGatherEnd = null)
+    /// <param name="_amount">工人一次采集动作所采集的数量</param>
+    /// <param name="_position">资源位置</param>
+    /// <param name="_onGatherEnd">采集完成后的回调函数</param>
+    /// <returns></returns>
+    public IEnumerator Gather(int _amount,Vector3 _position, Action _onGatherEnd = null)
     {
-        int temp = _resourceManager.GetContentAmount();
- 
-        switch (_resourceManager.ResourceType)
+        PlacedObjectType placedObjectType = PathManager.Instance.GetPlacedObjectType(_position);
+        //根据资源点的类型决定其播放的动画，资源点也是一中堆叠类型，每播放完一次动画，触发一次回调，减少所在位置的堆叠类型内容物的数量
+        switch (placedObjectType)
         {
-            case ResourceType.Gold:
-                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{_resourceManager.GiveContent(1);});
+            case PlacedObjectType.MinePoint:
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{
+                    PathManager.Instance.MinusContentAmount(_position, placedObjectType, 1);
+                });
                 break;
-            case ResourceType.Wood:
-                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Cut,() =>{_resourceManager.GiveContent(1);});
+            case PlacedObjectType.WoodPoint:
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId, ObjectAnimationType.Cut, () =>
+                {
+                    PathManager.Instance.MinusContentAmount(_position, placedObjectType, 1);
+                });
                 break;
         }
-        while (_resourceManager.IsHasContent())
+        //暂存所在位置堆叠类型的内容物数量
+        int temp = PathManager.Instance.GetContentAmount(_position, placedObjectType);
+        while (PathManager.Instance.GetContentAmount(_position, placedObjectType) > 0)
         {
+            //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
             yield return new WaitWhile(() =>
             {
-                if(temp != _resourceManager.GetContentAmount())
+                if(temp != PathManager.Instance.GetContentAmount(_position, placedObjectType))
                 {
-                    temp = _resourceManager.GetContentAmount();
+                    temp = PathManager.Instance.GetContentAmount(_position, placedObjectType);
                     return false;
                 }
                 return true;
             });
-            int amount = 1;
-            for (int i = 0; i < (int)MoveDirection.enumCount; i++)
+            //逆时针遍历单位周围一格的位置，并放置堆叠类型，增加内容物数量
+            for (int i = 0; i < (int) MoveDirection.enumCount; i++)
             {
-                
                 Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
-                if(PathManager.Instance.getAmountLeft(position, PlacedObjectType.Gold) > amount)
+                switch (placedObjectType)
                 {
-                    PathManager.Instance.AddAmount(position, PlacedObjectType.Gold, amount);
-                    break;
+                    //这里如果换成资源与物品对应表更好
+                    case PlacedObjectType.MinePoint:
+                        _amount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Gold, _amount);
+                        break;
+                    case PlacedObjectType.WoodPoint:
+                        _amount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Wood, _amount);
+                        break;
                 }
+ 
+                if(_amount == 0)
+                    break;
             }
         }
-        OnGatherEnd?.Invoke();
+        //采集完毕的回调
+        _onGatherEnd?.Invoke();
     }
     
     public void Grab(int amount, Action OnGrabEnd = null)

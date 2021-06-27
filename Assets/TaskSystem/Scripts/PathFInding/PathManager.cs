@@ -82,35 +82,191 @@ public class PathManager : BaseManager<PathManager>
     }
 
     /// <summary>
-    /// 获取位置所在网格的给定可放置类型的剩余可放置数量
+    /// 获取给定位置所在网格的给定堆叠类型的剩余可放置内容物数量
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="_placedObjectType"></param>
+    /// <param name="position">给定位置</param>
+    /// <param name="_placedObjectType">给定的堆叠类型</param>
     /// <returns></returns>
-    public int getAmountLeft(Vector3 position, PlacedObjectType _placedObjectType)
+    public int GetContentRoomLeft(Vector3 position, PlacedObjectType _placedObjectType)
     {
-        if(_m_pathFinding.GetNode(position).placedObjectType == PlacedObjectType.none )
+        PathNode pathNode = _m_pathFinding.GetNode(position);
+        if(pathNode != null)
         {
-            //返回读表获得的当前可放置物的最大数量，在这里先统一设为20
-            return 20;
-        }
-        else if(_m_pathFinding.GetNode(position).placedObjectType != _placedObjectType)
-        {
-            return 0;
+            if(pathNode.placedObjectType == PlacedObjectType.none )
+            {
+                //返回读表获得的当前可放置物的最大数量，在这里先统一设为20
+                return 20;
+            }
+            else if(pathNode.placedObjectType != _placedObjectType)
+            {
+                return 0;
+            }
+            else
+            {
+                return 20 - pathNode.placedObjectContentAMount;
+            }
         }
         else
         {
-            return 20 - _m_pathFinding.GetNode(position).placedObjectContentAMount;
+            Debug.Log("网格错误");
+            return 0;
+        }
+    }
+
+    public int GetContentAmount(Vector3 _position, PlacedObjectType _placedObjectType)
+    {
+        PathNode pathNode = _m_pathFinding.GetNode(_position);
+        if(pathNode != null)
+        {
+            if(pathNode.placedObjectType == PlacedObjectType.none )
+            {
+                return 0;
+            }
+            else if(pathNode.placedObjectType != _placedObjectType)
+            {
+                return 0;
+            }
+            else
+            {
+                return pathNode.placedObjectContentAMount;
+            }
+        }
+        else
+        {
+            Debug.Log("网格错误");
+            return 0;
         }
     }
     /// <summary>
-    /// 增加位置所在网格的对应堆叠物的数量
+    /// 增加位置所在网格的对应堆叠类型的内容物数量,返回剩余未放置的数量
     /// </summary>
-    /// <param name="position">位置</param>
+    /// <param name="_position">位置</param>
     /// <param name="_placedObjectType">堆叠物类型</param>
     /// <param name="amount">增加数量</param>
-    public void AddAmount(Vector3 position, PlacedObjectType _placedObjectType, int amount)
+    public int AddContentAmount(Vector3 _position, PlacedObjectType _placedObjectType, int amount)
     {
-        CreateThingManager.Instance.CreatePlacedObject(_m_pathFinding.GetNode(position).worldPosition, _placedObjectType, amount);
+        PathNode pathNode = _m_pathFinding.GetNode(_position);
+        int contentRoomLeft;
+        if(pathNode != null)
+        {
+            contentRoomLeft= GetContentRoomLeft(_position, _placedObjectType);
+            if(contentRoomLeft > 0)
+            {
+                if(amount <= contentRoomLeft)
+                {
+                    pathNode.placedObjectContentAMount += amount;
+                    amount = 0;
+                }
+                else
+                {
+                    pathNode.placedObjectContentAMount += contentRoomLeft;
+                    amount = amount - contentRoomLeft;
+                }
+                pathNode.placedObjectType = _placedObjectType;
+                CreateThingManager.Instance.HandlePlacedObject(pathNode.worldPosition, _placedObjectType, pathNode.placedObjectContentAMount);
+            }
+        }
+        else
+        {
+            Debug.Log("网格错误");
+        }
+        return amount;
+
     }
+    /// <summary>
+    /// 减少指定数量的给定位置所在网格的给定堆叠类型的内容物，返回未减少成功的数量
+    /// </summary>
+    /// <param name="_position">指定位置</param>
+    /// <param name="_placedObjectType">指定堆叠类型</param>
+    /// <param name="_amount">指定减少的数量</param>
+    public int MinusContentAmount(Vector3 _position, PlacedObjectType _placedObjectType,  int _amount)
+    {
+        PathNode pathNode = _m_pathFinding.GetNode(_position);
+        int aMount;
+        if(pathNode != null)
+        {
+            aMount= GetContentAmount(_position, _placedObjectType);
+            if(aMount > 0)
+            {
+                if(_amount < aMount)
+                {
+                    pathNode.placedObjectContentAMount -= _amount;
+                    _amount = 0;
+                }
+                else
+                {
+                    pathNode.placedObjectContentAMount = 0;
+                    pathNode.placedObjectType = PlacedObjectType.none;
+                    _amount = _amount - aMount;
+                }
+                CreateThingManager.Instance.HandlePlacedObject(pathNode.worldPosition, pathNode.placedObjectType, pathNode.placedObjectContentAMount);
+            }
+        }
+        else
+        {
+            Debug.Log("网格错误");
+        }
+        return _amount;
+    }
+    /// <summary>
+    /// 检测给定位置是否有给定类型的堆叠物
+    /// </summary>
+    /// <param name="_placedObjectType">给定类型</param>
+    ///<param name="_position">给定的位置</param>
+    public bool IsHave(Vector3 _position,PlacedObjectType _placedObjectType)
+    {
+        PathNode pathNode = _m_pathFinding.GetNode(_position);
+        if(pathNode != null)
+        {
+            if(pathNode.placedObjectType == PlacedObjectType.none)
+            {
+                return false;
+            }
+            else if(pathNode.placedObjectType != _placedObjectType)
+            {
+                return false;
+            }
+            return true;
+        }
+        Debug.Log("网格超出");
+        return false;
+    }
+    /// <summary>
+    /// 检测给定位置是否有任何堆叠物
+    /// </summary>
+    /// <param name="_position"></param>
+    /// <returns></returns>
+    public bool IsHaveAny(Vector3 _position)
+    {
+        PathNode pathNode = _m_pathFinding.GetNode(_position);
+        if(pathNode != null)
+        {
+            if(pathNode.placedObjectType == PlacedObjectType.none)
+            {
+                return false;
+            }
+            return true;
+        }
+        Debug.Log("网格超出");
+        return false;
+    }
+    /// <summary>
+    /// 获取制定位置的堆叠物类型
+    /// </summary>
+    /// <param name="_position">指定位置</param>
+    /// <returns></returns>
+    public PlacedObjectType GetPlacedObjectType(Vector3 _position)
+    {
+        PathNode pathNode = _m_pathFinding.GetNode(_position);
+        if(pathNode != null)
+        {
+            return pathNode.placedObjectType;
+        }
+        else
+        {
+            Debug.Log("网格错误");
+            return PlacedObjectType.none;
+        }
+    }
+    
 }

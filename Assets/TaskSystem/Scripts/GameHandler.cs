@@ -40,7 +40,6 @@ public class GameHandler : MonoBehaviour
     private void Awake()
     {
         GameResource.Init();
-        TaskCenter.Init();
         CreateThingManager.Init();
         PathManager.Init();
         ResourceManager.OnResourceClicked += handleMinePointClicked;
@@ -84,9 +83,9 @@ public class GameHandler : MonoBehaviour
                 break;
             case KeyCode.Space:
                 Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
-                if(PathManager.Instance.getAmountLeft(position, PlacedObjectType.minePoint) > 0)
+                if(PathManager.Instance.GetContentRoomLeft(position, PlacedObjectType.MinePoint) > 0)
                 {
-                    PathManager.Instance.AddAmount(position, PlacedObjectType.minePoint, 20);
+                    PathManager.Instance.AddContentAmount(position, PlacedObjectType.MinePoint, 20);
                 }
                 break;
             case KeyCode.Q:
@@ -102,7 +101,6 @@ public class GameHandler : MonoBehaviour
             case ResourceType.Gold:
                 if(mouseState == MouseState.HitMine)
                 {
-
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<ResourceManager>(resourceManager));
                     resourceManager.GetContentTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
@@ -176,7 +174,26 @@ public class GameHandler : MonoBehaviour
                     break;
             }
         }
-        
+        if(Input.GetMouseButtonDown(0))
+        {
+            Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
+            switch (mouseState)
+            {
+                case MouseState.HitMine:
+                    if(PathManager.Instance.IsHave(position, PlacedObjectType.MinePoint))
+                    {
+                        TaskCenter.Instance.BuildTask(position,TaskType.GatherResource);
+                    }
+                    break;
+                case MouseState.HitWood:
+                    if(PathManager.Instance.IsHave(position, PlacedObjectType.Wood))
+                    {
+                        TaskCenter.Instance.BuildTask(position,TaskType.GatherResource);
+                    }
+                    break;
+
+            }
+        }
         //采集资源图标跟随鼠标
         if(attachMouseSprite != null)
             attachMouseSprite.transform.position = MyClass.GetMouseWorldPosition(0, Camera.main) - Vector3.up;

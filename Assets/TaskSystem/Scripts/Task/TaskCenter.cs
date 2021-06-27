@@ -1,68 +1,165 @@
 
 using System.Collections.Generic;
+using UnityEngine;
 
 
-//任务中心，从事件中心订阅事件，并在触发事件时，获得任务，并给予相应的任务发布者
+public interface IArgPack
+{
+    
+}
+/// <summary>
+/// 任务参数封装对象，封装后接口改为可传任意参数
+/// </summary>
+/// <typeparam name="_TT"></typeparam>
+public class TaskArgs<_TT> : IArgPack
+{
+    private _TT t1;
+    public TaskArgs(_TT _t)
+    {
+        t1 = _t;
+    }
 
+    public _TT T1
+    {
+        get
+        {
+            return t1;
+        }
+        set
+        {
+            t1 = value;
+        }
+    }
+}
+public class TaskArgs<_TT1,_TT2> : IArgPack
+{
+    private _TT1 t1;
+    private _TT2 t2;
+    public TaskArgs(_TT1 _t1,_TT2 _t2)
+    {
+        t1 = _t1;
+        t2 = _t2;
+    }
+
+    public _TT1 T1
+    {
+        get
+        {
+            return t1;
+        }
+        set
+        {
+            t1 = value;
+        }
+    }
+
+    public _TT2 T2
+    {
+        get
+        {
+            return t2;
+        }
+        set
+        {
+            t2 = value;
+        }
+    }
+}
+public class TaskArgs<_TT1,_TT2,_TT3> : IArgPack
+{
+    private _TT1 t1;
+    private _TT2 t2;
+    private _TT3 t3;
+    public TaskArgs(_TT1 _t1,_TT2 _t2,_TT3 _t3)
+    {
+        t1 = _t1;
+        t2 = _t2;
+        t3 = _t3;
+    }
+
+    public _TT1 T1
+    {
+        get
+        {
+            return t1;
+        }
+        set
+        {
+            t1 = value;
+        }
+    }
+
+    public _TT2 T2
+    {
+        get
+        {
+            return t2;
+        }
+        set
+        {
+            t2 = value;
+        }
+    }
+
+    public _TT3 T3
+    {
+        get
+        {
+            return t3;
+        }
+        set
+        {
+            t3 = value;
+        }
+    }
+}
+    
+/// <summary>
+/// 任务中心，生成任务并分发给相应的任务发布器，单位向任务中心请求任务，任务中心制定对应的任务发布器发布任务
+/// </summary>
 public class TaskCenter : BaseManager<TaskCenter>
 {
     public static Dictionary<TaskType, TaskSender> taskDic= new Dictionary<TaskType, TaskSender>();
-    //构造函数中监听任务事件
-    public static void Init()
+
+
+    public void BuildTask<T>(T _arg1, TaskType _taskType)
     {
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.ClickGoldResource, (_o =>
-        {
-            if(!taskDic.ContainsKey(TaskType.GatherGold))
-            {
-                taskDic[TaskType.GatherGold] = new TaskSender();
-            }
-            taskDic[TaskType.GatherGold].AddTask(new GatherResourceTask
-            {
-                taskType =  TaskType.GatherGold,
-                resourceManager = (_o as EventParameter<GameHandler.ResourceManager>).t
-            });
-        }));
-        
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.ClickWoodResource, (_o =>
-        {
-            
-            if(!taskDic.ContainsKey(TaskType.GatherWood))
-            {
-                taskDic[TaskType.GatherWood] = new TaskSender();
-            }
-            taskDic[TaskType.GatherWood].AddTask(new GatherResourceTask
-            {
-                taskType = TaskType.GatherWood,
-                resourceManager = (_o as EventParameter<GameHandler.ResourceManager>).t,
-            });
-        }));
-        
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.RightClick,(_o =>
-        {
-            if(!taskDic.ContainsKey(TaskType.GoToPlace))
-            {
-                taskDic[TaskType.GoToPlace] = new TaskSender();
-            }
-            taskDic[TaskType.GoToPlace].AddTask(new WorkerMoveTask
-            {
-                taskType = TaskType.GoToPlace,
-                Destination = (_o as EventParameter<UnityEngine.Vector3>).t
-            });
-        }));
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.ItemOnGround, (_args =>
-        {
-            if(!taskDic.ContainsKey(TaskType.CarryItem))
-            {
-                taskDic[TaskType.CarryItem] = new TaskSender();
-            }
-            taskDic[TaskType.CarryItem].AddTask(new CarryItemTask
-            {
-                taskType = TaskType.CarryItem,
-                itemManager = (_args as EventParameter<GameHandler.ItemManager>).t
-            });
-        }));
+        buildTask(new TaskArgs<T>(_arg1),_taskType);
     }
-    
+
+    public void BuildTask<T1, T2>(T1 _arg1, T2 _arg2, TaskType _taskType)
+    {
+        buildTask(new TaskArgs<T1,T2>(_arg1,_arg2), _taskType);
+    }
+
+    private void buildTask(IArgPack _argPack, TaskType _taskType)
+    {
+        if(_argPack != null)
+        {
+            if(!taskDic.ContainsKey(_taskType))
+            {
+                taskDic[_taskType] = new TaskSender();
+            }
+            switch (_taskType)
+            {
+                case TaskType.GatherResource:
+                    TaskArgs<Vector3> taskArgs1 = _argPack as TaskArgs<Vector3>;
+                    taskDic[_taskType].AddTask(new GatherResourceTask(taskArgs1.T1, _taskType));
+                    break;
+                case TaskType.GoToPlace:
+                    TaskArgs<Vector3> taskArgs2 = _argPack as TaskArgs<Vector3>;
+                    taskDic[_taskType].AddTask(new WorkerMoveTask(taskArgs2.T1, _taskType));
+                    break;
+                case TaskType.CarryItem:
+                    TaskArgs<Vector3, Vector3> taskArgs3 = _argPack as TaskArgs<Vector3, Vector3>;
+                    taskDic[_taskType].AddTask(new CarryItemTask(taskArgs3.T1, taskArgs3.T2, _taskType));
+                    break;
+            }
+        }
+    }
+
+
+
     /// <summary>
     /// 处理任务请求
     /// </summary>

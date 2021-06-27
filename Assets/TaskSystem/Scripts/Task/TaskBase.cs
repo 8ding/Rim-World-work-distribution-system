@@ -3,29 +3,92 @@ using System.Collections.Generic;
 using TaskSystem;
 using UnityEngine;
 
-public abstract class TaskBase
+public  class TaskBase
 {
     public TaskType taskType;
+
+    public TaskBase(TaskType _taskType)
+    {
+        taskType = _taskType;
+    }
 }
 
 public class GatherResourceTask : TaskBase
 {
-    public GameHandler.ResourceManager resourceManager;
+    private Vector3 resourcePosition;
 
+    public GatherResourceTask(Vector3 _position, TaskType _taskType) : base(_taskType)
+    {
+        resourcePosition = _position;
+    }
+
+    public Vector3 ResourcePosition
+    {
+        get
+        {
+            return resourcePosition;
+        }
+        set
+        {
+            resourcePosition = value;
+        }
+    }
 }
 
 public class WorkerMoveTask : TaskBase
 {
-    public Vector3 Destination;
+    private Vector3 destination;
+
+    public WorkerMoveTask(Vector3 _posiiton, TaskType _taskType) : base(_taskType)
+    {
+        destination = _posiiton;
+    }
+    public Vector3 Destination
+    {
+        get
+        {
+            return destination;
+        }
+        set
+        {
+            destination = value;
+        }
+    }
 }
 
-//NPC移动到并进行某种行为,该行为只有动画表现没有逻辑影响
-public class NPCMoveAndBahaveTask : TaskBase
-{
-    public Vector3 Destination;
-}
 
 public class CarryItemTask : TaskBase
 {
-    public GameHandler.ItemManager itemManager;
+    private Vector3 itemPosition;
+    private Vector3 storePosition;
+
+    public CarryItemTask(Vector3 _itemPosition, Vector3 _storePosition, TaskType _taskType) : base(_taskType)
+    {
+        itemPosition = _itemPosition;
+        storePosition = _storePosition;
+    }
+
+    public Vector3 ItemPosition
+    {
+        get
+        {
+            return itemPosition;
+        }
+        set
+        {
+            itemPosition = value;
+        }
+    }
+
+    public Vector3 StorePosition
+    {
+        get
+        {
+            return storePosition;
+        }
+        set
+        {
+            storePosition = value;
+        }
+    }
 }
