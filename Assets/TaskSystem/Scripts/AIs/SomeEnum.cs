@@ -8,7 +8,8 @@ public enum State
 //工人任务类型
 public enum TaskType
 {
-    GatherResource,
+    GatherGold,
+    GatherWood,
     MakeThing,
     GoToPlace,
     CarryItem,

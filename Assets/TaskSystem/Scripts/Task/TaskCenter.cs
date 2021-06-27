@@ -142,7 +142,8 @@ public class TaskCenter : BaseManager<TaskCenter>
             }
             switch (_taskType)
             {
-                case TaskType.GatherResource:
+                case TaskType.GatherGold:
+                    case TaskType.GatherWood:
                     TaskArgs<Vector3> taskArgs1 = _argPack as TaskArgs<Vector3>;
                     taskDic[_taskType].AddTask(new GatherResourceTask(taskArgs1.T1, _taskType));
                     break;

@@ -167,7 +167,8 @@ public class UnitController : AIBase
             state = State.ExecutingTask;
             switch (task.taskType)
             {
-                case TaskType.GatherResource:
+                case TaskType.GatherGold:
+                case TaskType.GatherWood:
                     ExecuteTask_Gather(task as GatherResourceTask);
                     break;
                 case TaskType.GoToPlace:
@@ -191,11 +192,12 @@ public class UnitController : AIBase
         {
            switch (task.taskType)
                {
-                   case TaskType.GatherResource:
+                   case TaskType.GatherGold:
+                       case TaskType.GatherWood:
                        if(PathManager.Instance.IsHaveAny((task as GatherResourceTask).ResourcePosition))
                        {
                            //资源点仍剩余资源,重新构建任务
-                           TaskCenter.Instance.BuildTask((task as GatherResourceTask).ResourcePosition,TaskType.GatherResource);
+                           TaskCenter.Instance.BuildTask((task as GatherResourceTask).ResourcePosition,task.taskType);
                        }
                        break;
                    case TaskType.GoToPlace:
@@ -341,6 +343,7 @@ public class UnitController : AIBase
         }
         //暂存所在位置堆叠类型的内容物数量
         int temp = PathManager.Instance.GetContentAmount(_position, placedObjectType);
+        int tempAmount = _amount;
         while (PathManager.Instance.GetContentAmount(_position, placedObjectType) > 0)
         {
             //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
@@ -361,16 +364,18 @@ public class UnitController : AIBase
                 {
                     //这里如果换成资源与物品对应表更好
                     case PlacedObjectType.MinePoint:
-                        _amount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Gold, _amount);
+                        tempAmount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Gold, tempAmount);
                         break;
                     case PlacedObjectType.WoodPoint:
-                        _amount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Wood, _amount);
+                        tempAmount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Wood, tempAmount);
                         break;
                 }
- 
-                if(_amount == 0)
+                if(tempAmount == 0)
+                {
                     break;
+                }
             }
+            tempAmount = _amount;
         }
         //采集完毕的回调
         _onGatherEnd?.Invoke();

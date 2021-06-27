@@ -110,13 +110,13 @@
   <component name="IdeDocumentHistory">
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskBase.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/SomeEnum.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskCenter.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/CreateThing/CreateThingManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/SomeEnum.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskCenter.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
@@ -341,7 +341,7 @@
       <workItem from="1624776459798" duration="11000" />
       <workItem from="1624776764927" duration="385000" />
       <workItem from="1624777174268" duration="1569000" />
-      <workItem from="1624778765335" duration="16825000" />
+      <workItem from="1624778765335" duration="19069000" />
     </task>
     <servers />
   </component>
@@ -448,29 +448,55 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
-          <line>268</line>
+          <line>270</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" initialLine="321">
             <startOffsets>
-              <option value="7262" />
+              <option value="7335" />
             </startOffsets>
             <endOffsets>
-              <option value="7263" />
+              <option value="7336" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="91" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskCenter.cs</url>
-          <line>138</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\Task\TaskCenter.cs" initialLine="138" containingFunctionPresentation="method 'buildTask'">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
+          <line>366</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="365" containingFunctionPresentation="method 'Gather'">
             <startOffsets>
-              <option value="2212" />
+              <option value="11009" />
             </startOffsets>
             <endOffsets>
-              <option value="2247" />
+              <option value="11105" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="94" />
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs</url>
+          <line>147</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\PathManager.cs" initialLine="147" containingFunctionPresentation="method 'AddContentAmount'">
+            <startOffsets>
+              <option value="4486" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4540" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="96" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/CreateThing/CreateThingManager.cs</url>
+          <line>40</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\CreateThing\CreateThingManager.cs" initialLine="40" containingFunctionPresentation="method 'HandlePlacedObject'">
+            <startOffsets>
+              <option value="1701" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1755" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="97" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

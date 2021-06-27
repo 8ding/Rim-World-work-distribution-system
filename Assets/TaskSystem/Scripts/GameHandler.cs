@@ -182,16 +182,15 @@ public class GameHandler : MonoBehaviour
                 case MouseState.HitMine:
                     if(PathManager.Instance.IsHave(position, PlacedObjectType.MinePoint))
                     {
-                        TaskCenter.Instance.BuildTask(position,TaskType.GatherResource);
+                        TaskCenter.Instance.BuildTask(position,TaskType.GatherGold);
                     }
                     break;
                 case MouseState.HitWood:
                     if(PathManager.Instance.IsHave(position, PlacedObjectType.Wood))
                     {
-                        TaskCenter.Instance.BuildTask(position,TaskType.GatherResource);
+                        TaskCenter.Instance.BuildTask(position,TaskType.GatherWood);
                     }
                     break;
-
             }
         }
         //采集资源图标跟随鼠标
