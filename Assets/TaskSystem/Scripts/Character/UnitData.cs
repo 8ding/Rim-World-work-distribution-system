@@ -42,15 +42,14 @@ public class UnitData : MonoBehaviour
     {
         return carryAmount;
     }
-
-    public void AddCarryAomunt()
-    {
-        carryAmount++;
-    }
-
-    public void AddCarryAmount(int amount)
+    
+    public void AddCarryAmount(int amount,PlacedObjectType _placedObjectType)
     {
         carryAmount += amount;
+        placedObjectType = _placedObjectType;
+        handleOjbect = CreateThingManager.Instance.ProducePlacedObject(handleOjbect, placedObjectType, carryAmount);
+        handleOjbect.transform.SetParent(gameObject.transform);
+        handleOjbect.transform.localPosition = Vector3.zero;
     }
 
     public int GetCarryLeft()
@@ -60,5 +59,7 @@ public class UnitData : MonoBehaviour
     public void ClearCarry()
     {
         carryAmount = 0;
+        placedObjectType = PlacedObjectType.none;
+        handleOjbect = CreateThingManager.Instance.ProducePlacedObject(handleOjbect, placedObjectType, carryAmount);
     }
 }

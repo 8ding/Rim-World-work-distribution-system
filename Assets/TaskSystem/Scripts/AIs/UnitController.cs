@@ -270,7 +270,21 @@ public class UnitController : AIBase
     {
         Vector3 itemPosition = _task.ItemPosition;
         Vector3 storePosition = _task.StorePosition;
-        CMDebug.TextPopup("执行搬运任务",Vector3.zero,2f);
+        moveTo(itemPosition,(() =>
+                {
+                    Grab(itemPosition,(() =>
+                    {
+                        moveTo(storePosition,(() =>
+                        {
+                            Drop((() =>
+                            {
+                                Idle();
+                                state = State.WaitingForNextTask;
+                            }));
+                        }));
+                    }));
+                }
+                ));
     }
     
 
@@ -381,9 +395,23 @@ public class UnitController : AIBase
         _onGatherEnd?.Invoke();
     }
     
-    public void Grab(int amount, Action OnGrabEnd = null)
+    public void Grab(Vector3 _position, Action OnGrabEnd = null)
     {
-        unitData.AddCarryAmount(amount);
+        PlacedObjectType placedObjectType = PathManager.Instance.GetPlacedObjectType(_position);
+        int amount = PathManager.Instance.GetContentAmount(_position, placedObjectType);
+        int res = 0;
+        if(unitData.GetCarryLeft() >= amount)
+        {
+            res = amount;
+        }
+        else if(unitData.GetCarryLeft() < amount)
+        {
+            res = unitData.GetCarryLeft();
+            TaskCenter.Instance.BuildTask(_position,GameObject.Find("Crate").transform.position,TaskType.CarryItem);
+        }
+        
+        unitData.AddCarryAmount(res,placedObjectType);
+        PathManager.Instance.MinusContentAmount(_position, placedObjectType, res);
         OnGrabEnd?.Invoke();
     }
     

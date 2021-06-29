@@ -31,9 +31,8 @@ public class CreateThingManager : BaseManager<CreateThingManager>
         EventCenter.Instance.EventTrigger<IArgs>(EventType.UnitOccur,new EventParameter<UnitController>(unitController));
     }
     /// <summary>
-    /// 处理指定位置的堆叠类型,其显示由其堆叠数量决定
+    /// 处理堆叠类型,其显示由其堆叠数量决定
     /// </summary>
-    /// <param name="position">位置</param>
     /// <param name="_placedObjectType">堆叠物体类型</param>
     /// <param name="_amount">数量</param>
     public GameObject  ProducePlacedObject(GameObject _product,PlacedObjectType _placedObjectType,int _amount)
