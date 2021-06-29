@@ -5,6 +5,7 @@ using UnityEngine;
 public class PathNode
 {
     public PlacedObjectType placedObjectType;
+    public GameObject PlacedObject;
     public int placedObjectContentAMount;
     public bool isWalkable;
     public int gCost;

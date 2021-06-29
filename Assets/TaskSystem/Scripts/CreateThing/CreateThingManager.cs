@@ -35,41 +35,32 @@ public class CreateThingManager : BaseManager<CreateThingManager>
     /// </summary>
     /// <param name="position">位置</param>
     /// <param name="_placedObjectType">堆叠物体类型</param>
-    /// <param name="amount">数量</param>
-    public void  HandlePlacedObject(Vector3 position,PlacedObjectType _placedObjectType,int amount)
+    /// <param name="_amount">数量</param>
+    public GameObject  ProducePlacedObject(GameObject _product,PlacedObjectType _placedObjectType,int _amount)
     {
-        if(positionGameObjectDictionary.ContainsKey(position))
+
+        if(_amount == 0)
         {
-            if(_placedObjectType == PlacedObjectType.none)
-            {
-                PoolMgr.Instance.PushObj(positionGameObjectDictionary[position]);
-                positionGameObjectDictionary.Remove(position);
-                return;
-            }
-            ChangeSpriteWithAmount(positionGameObjectDictionary[position], amount, _placedObjectType);
+            PoolMgr.Instance.PushObj(_product);
+            return null;
         }
         else
         {
-            PoolMgr.Instance.GetObj(_placedObjectType.ToString() ,(_o =>
+            if(_product == null)
             {
-                _o.transform.position = position;
-                positionGameObjectDictionary[position] = _o;
-                //生成了新的堆叠类型并且其枚举大于分界线则证明其为堆叠的物品而不是资源点
-                //此时构建搬运任务
-                if(_placedObjectType > PlacedObjectType.DividingLine)
-                {
-                    TaskCenter.Instance.BuildTask(position, GameObject.Find("Crate").transform.position, TaskType.CarryItem);
-                }
-            }));
+                _product = PoolMgr.Instance.GetObj(_placedObjectType.ToString());
+            }
+            ChangeSpriteWithAmount(_product, _amount, _placedObjectType);
         }
+        return _product;
     }
     /// <summary>
     /// 根据数量变换为应显示的堆叠物体精灵名字，本来应该根据表得来，现在什么都先不做用原版
     /// </summary>
-    /// <param name="amount">堆叠数量</param>
+    /// <param name="_amount">堆叠数量</param>
     /// <param name="_placedObjectType">堆叠物体类型</param>
     /// <returns></returns>
-    private void ChangeSpriteWithAmount(GameObject _gameObject,int amount, PlacedObjectType _placedObjectType)
+    public void ChangeSpriteWithAmount(GameObject _gameObject,int _amount, PlacedObjectType _placedObjectType)
     {
         _gameObject.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_placedObjectType.ToString());
     }

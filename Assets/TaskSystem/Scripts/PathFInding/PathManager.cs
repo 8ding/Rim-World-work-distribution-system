@@ -162,8 +162,15 @@ public class PathManager : BaseManager<PathManager>
                     pathNode.placedObjectContentAMount += contentRoomLeft;
                     amount = amount - contentRoomLeft;
                 }
+                if(pathNode.placedObjectType == PlacedObjectType.none && _placedObjectType > PlacedObjectType.DividingLine)
+                {
+                    //构建搬运任务
+                    TaskCenter.Instance.BuildTask(_position, GameObject.Find("Crate").transform.position,TaskType.CarryItem);
+                }
                 pathNode.placedObjectType = _placedObjectType;
-                CreateThingManager.Instance.HandlePlacedObject(pathNode.worldPosition, _placedObjectType, pathNode.placedObjectContentAMount);
+                pathNode.PlacedObject =
+                    CreateThingManager.Instance.ProducePlacedObject(pathNode.PlacedObject, _placedObjectType, pathNode.placedObjectContentAMount);
+                pathNode.PlacedObject.transform.position = pathNode.worldPosition;
             }
         }
         else
@@ -199,7 +206,8 @@ public class PathManager : BaseManager<PathManager>
                     pathNode.placedObjectType = PlacedObjectType.none;
                     _amount = _amount - aMount;
                 }
-                CreateThingManager.Instance.HandlePlacedObject(pathNode.worldPosition, pathNode.placedObjectType, pathNode.placedObjectContentAMount);
+                pathNode.PlacedObject =
+                    CreateThingManager.Instance.ProducePlacedObject(pathNode.PlacedObject, pathNode.placedObjectType, pathNode.placedObjectContentAMount);
             }
         }
         else

@@ -9,6 +9,8 @@ public class UnitData : MonoBehaviour
     private float speed;
     private const int MaxCarryAmount = 3;
     private int carryAmount = 0;
+    public PlacedObjectType placedObjectType;
+    public GameObject handleOjbect;
     public int CharacterId
     {
         get
@@ -51,6 +53,10 @@ public class UnitData : MonoBehaviour
         carryAmount += amount;
     }
 
+    public int GetCarryLeft()
+    {
+        return MaxCarryAmount - carryAmount;
+    }
     public void ClearCarry()
     {
         carryAmount = 0;

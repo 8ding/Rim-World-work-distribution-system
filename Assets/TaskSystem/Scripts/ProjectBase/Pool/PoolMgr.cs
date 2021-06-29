@@ -26,7 +26,7 @@ public class PoolData
         obj.transform.SetParent(fatherObj.transform);
     }
 
-    public void GetObj(Action<GameObject> callback)
+    public void GetObjAsyn(Action<GameObject> callback)
     {
         
         GameObject obj = null;
@@ -48,6 +48,23 @@ public class PoolData
             }));;
         }
     }
+
+    public GameObject GetObj()
+    {
+        GameObject obj = null;
+        if(poolList.Count > 0)
+        {
+            obj = poolList[0];
+            obj.transform.SetParent(null);
+            poolList.RemoveAt(0);
+        }
+        else
+        {
+            obj = ResMgr.Instance.Load<GameObject>(fatherObj.name);
+            obj.name = fatherObj.name;
+        }
+        return obj;
+    }
 }
 /// <summary>
 /// 缓存池模块
@@ -59,7 +76,7 @@ public class PoolMgr:BaseManager<PoolMgr>
     public Dictionary<string,PoolData> poolDic = new Dictionary<string, PoolData>();
     
     //取对象
-    public void GetObj(string name,Action<GameObject> callback)
+    public void GetObjAsync(string name,Action<GameObject> callback)
     {
         //没有抽屉
         if(!poolDic.ContainsKey(name))
@@ -74,13 +91,29 @@ public class PoolMgr:BaseManager<PoolMgr>
         //已经有抽屉了，从抽屉里拿出衣服
         else
         {
-             poolDic[name].GetObj((o =>
+             poolDic[name].GetObjAsyn((o =>
              {
                  o.SetActive(true);
                  callback?.Invoke(o);
              }));
 
         }
+    }
+
+    public GameObject GetObj(string name)
+    {
+        GameObject res;
+        if(!poolDic.ContainsKey(name))
+        {
+            res = ResMgr.Instance.Load<GameObject>(name);
+            res.name = name;
+        }
+        else
+        {
+           res = poolDic[name].GetObj();
+        }
+        res.SetActive(true);
+        return res;
     }
     //还对象
     public void PushObj(GameObject obj)

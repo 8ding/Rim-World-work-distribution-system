@@ -24,7 +24,7 @@ public class CharacterAnimation : MonoBehaviour
         if(animationobject == null || animationobject.name != path)
         {
 
-            PoolMgr.Instance.GetObj(path,(_o =>
+            PoolMgr.Instance.GetObjAsync(path,(_o =>
             {
                 if(animationobject != null)
                 {
