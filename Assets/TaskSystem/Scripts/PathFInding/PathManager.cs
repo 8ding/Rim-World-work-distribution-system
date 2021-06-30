@@ -112,11 +112,23 @@ public class PathManager : BaseManager<PathManager>
         return _m_pathFinding.GetNode(_position).resourceManager;
     }
 
+    public ResourcePointType GetResourceType(Vector3 _position)
+    {
+        return _m_pathFinding.GetNode(_position).resourceManager.resourcePointType;
+    }
     public void AddResourcePointContent(Vector3 _position, ResourcePointType _resourcePointType,int _amount)
     {
         _m_pathFinding.GetNode(_position).resourceManager.AddResourceContent(_m_pathFinding.GetNode(_position).worldPosition, _resourcePointType, _amount);
     }
 
+    public int GetResourcePointContentAmount(Vector3 _position)
+    {
+        return _m_pathFinding.GetNode(_position).resourceManager.ContentAmount;
+    }
+    public void MinusResourcePointContent(Vector3 _position, int _amount)
+    {
+        _m_pathFinding.GetNode(_position).resourceManager.MinusResourceContent(_amount);
+    }
     public int AddItemContent(Vector3 _position, ItemType _itemType, int _amount)
     {
         return _m_pathFinding.GetNode(_position).itemManager.AddItemContent(_m_pathFinding.GetNode(_position).worldPosition, _itemType, _amount);

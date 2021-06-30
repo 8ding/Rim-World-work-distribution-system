@@ -22,12 +22,14 @@ public enum ObjectAnimationType
 [Serializable]
 public enum ResourcePointType
 {
+    None,
     GoldPoint,
     WoodPoint,
 }
 [Serializable]
 public enum ItemType
 {
+    None,
     Gold,
     Wood,
 }

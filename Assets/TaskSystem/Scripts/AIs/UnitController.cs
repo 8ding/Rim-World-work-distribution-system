@@ -341,60 +341,63 @@ public class UnitController : AIBase
     {
         Debug.Log("Gathter");
         yield return null;
-//        PlacedObjectType placedObjectType = PathManager.Instance.GetPlacedObjectType(_position);
-//        //根据资源点的类型决定其播放的动画，资源点也是一中堆叠类型，每播放完一次动画，触发一次回调，减少所在位置的堆叠类型内容物的数量
-//        switch (placedObjectType)
-//        {
-//            case PlacedObjectType.MinePoint:
-//                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{
-//                    PathManager.Instance.MinusContentAmount(_position, placedObjectType, 1);
-//                });
-//                break;
-//            case PlacedObjectType.WoodPoint:
-//                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId, ObjectAnimationType.Cut, () =>
-//                {
-//                    PathManager.Instance.MinusContentAmount(_position, placedObjectType, 1);
-//                });
-//                break;
-//        }
-//        //暂存所在位置堆叠类型的内容物数量
-//        int temp = PathManager.Instance.GetContentAmount(_position, placedObjectType);
-//        int tempAmount = _amount;
-//        while (PathManager.Instance.GetContentAmount(_position, placedObjectType) > 0)
-//        {
-//            //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
-//            yield return new WaitWhile(() =>
-//            {
-//                if(temp != PathManager.Instance.GetContentAmount(_position, placedObjectType))
-//                {
-//                    temp = PathManager.Instance.GetContentAmount(_position, placedObjectType);
-//                    return false;
-//                }
-//                return true;
-//            });
-//            //逆时针遍历单位周围一格的位置，并放置堆叠类型，增加内容物数量
-//            for (int i = 0; i < (int) MoveDirection.enumCount; i++)
-//            {
-//                Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
-//                switch (placedObjectType)
-//                {
-//                    //这里如果换成资源与物品对应表更好
-//                    case PlacedObjectType.MinePoint:
-//                        tempAmount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Gold, tempAmount);
-//                        break;
-//                    case PlacedObjectType.WoodPoint:
-//                        tempAmount = PathManager.Instance.AddContentAmount(position, PlacedObjectType.Wood, tempAmount);
-//                        break;
-//                }
-//                if(tempAmount == 0)
-//                {
-//                    break;
-//                }
-//            }
-//            tempAmount = _amount;
-//        }
-//        //采集完毕的回调
-//        _onGatherEnd?.Invoke();
+        ResourcePointType resourcePointType = PathManager.Instance.GetResourceType(_position);
+        if(resourcePointType != ResourcePointType.None)
+        {
+                    //根据资源点的类型决定其播放的动画，资源点也是一中堆叠类型，每播放完一次动画，触发一次回调，减少所在位置的堆叠类型内容物的数量
+        switch (resourcePointType)
+        {
+            case ResourcePointType.GoldPoint:
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{
+                    PathManager.Instance.MinusResourcePointContent(_position, 1);
+                });
+                break;
+            case ResourcePointType.WoodPoint:
+                characterAnimation.PlayobjectAnimaiton(unitData.CharacterId, ObjectAnimationType.Cut, () =>
+                {
+                    PathManager.Instance.MinusResourcePointContent(_position, 1);
+                });
+                break;
+        }
+        //暂存所在位置堆叠类型的内容物数量
+        int temp = PathManager.Instance.GetResourcePointContentAmount(_position);
+        int tempAmount = _amount;
+        while (PathManager.Instance.GetResourcePointContentAmount(_position) > 0)
+        {
+            //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
+            yield return new WaitWhile(() =>
+            {
+                if(temp != PathManager.Instance.GetResourcePointContentAmount(_position))
+                {
+                    temp = PathManager.Instance.GetResourcePointContentAmount(_position);
+                    return false;
+                }
+                return true;
+            });
+            //逆时针遍历单位周围一格的位置，并放置堆叠类型，增加内容物数量
+            for (int i = 0; i < (int) MoveDirection.enumCount; i++)
+            {
+                Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
+                switch (resourcePointType)
+                {
+                    //这里如果换成资源与物品对应表更好
+                    case ResourcePointType.GoldPoint:
+                        tempAmount = PathManager.Instance.AddItemContent(position, ItemType.Gold, tempAmount);
+                        break;
+                    case ResourcePointType.WoodPoint:
+                        tempAmount = PathManager.Instance.AddItemContent(position, ItemType.Gold, tempAmount);
+                        break;
+                }
+                if(tempAmount == 0)
+                {
+                    break;
+                }
+            }
+            tempAmount = _amount;
+        }
+        //采集完毕的回调
+        }
+        _onGatherEnd?.Invoke();
     }
     
     public void Grab(Vector3 _position, Action OnGrabEnd = null)

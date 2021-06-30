@@ -246,6 +246,23 @@ public class GameHandler : MonoBehaviour
                 return amount;
             }
         }
+
+        protected int MinusContent(int _amount)
+        {
+            if(_amount <= ContentAmount)
+            {
+                ContentAmount -= _amount;
+                SetPerformanceWithAmount();
+                return 0;
+            }
+            else
+            {
+                _amount -= ContentAmount;
+                ContentAmount = 0;
+                SetPerformanceWithAmount();
+                return _amount;
+            }
+        }
         protected virtual int GetAmountLeft()
         {
             return 0;
@@ -256,9 +273,6 @@ public class GameHandler : MonoBehaviour
         }
 
     }
-
-
-
     //资源点管理类对象
     public class ResourceManager : PlacedObjectManager
     {
@@ -287,7 +301,7 @@ public class GameHandler : MonoBehaviour
         }
         public  void SetNewResourcePointContent(Vector3 _position, ResourcePointType _resourcePointType, int amount)
         {
-            this.resourcePointType = _m_resourcePointType;
+            this.resourcePointType = _resourcePointType;
             this.ContenObj = PoolMgr.Instance.GetObj(_m_resourcePointType.ToString());
             this.ContenObj.transform.position = _position;
             ContentAmount = MaxAmount;
@@ -310,14 +324,24 @@ public class GameHandler : MonoBehaviour
                 return base.AddContent(amount);
             }
         }
+
+        public int MinusResourceContent(int amount)
+        {
+            return base.MinusContent(amount);
+        }
         protected override void SetPerformanceWithAmount()
         {
             if(ContentAmount == 0)
+            {
                 PoolMgr.Instance.PushObj(ContenObj.gameObject);
+                resourcePointType = ResourcePointType.None;
+                return;
+            }
             ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_m_resourcePointType.ToString());
         }
 
     }
+    //放置物品管理对象
     public class ItemManager: PlacedObjectManager
     {
         //一个单位和一个地面网格所能承载的最大物品数
@@ -387,7 +411,11 @@ public class GameHandler : MonoBehaviour
         protected override void SetPerformanceWithAmount()
         {
             if(ContentAmount == 0)
+            {
                 PoolMgr.Instance.PushObj(ContenObj.gameObject);
+                itemType = ItemType.None;
+                return;
+            }
             ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(itemType.ToString());
         }
     }
