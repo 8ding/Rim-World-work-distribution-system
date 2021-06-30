@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PathNode
 {
-    public PlacedObjectType placedObjectType;
-    public GameObject PlacedObject;
-    public int placedObjectContentAMount;
+    public GameHandler.ItemManager itemManager;
+    public GameHandler.ResourceManager resourceManager;
     public bool isWalkable;
     public int gCost;
     public int hCost;
@@ -17,7 +16,8 @@ public class PathNode
     public int y;
     public PathNode(Vector3 worldPosition,int x, int y,bool isWalkable)
     {
-        placedObjectContentAMount = 0;
+        itemManager = new GameHandler.ItemManager();
+        resourceManager = new GameHandler.ResourceManager();
         this.worldPosition = worldPosition;
         this.isWalkable = isWalkable;
         this.x = x;

@@ -5,7 +5,7 @@ using CodeMonkey.Utils;
 using JetBrains.Annotations;
 using TaskSystem.GatherResource;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 
 
 public enum PlayerControlWay
@@ -42,7 +42,6 @@ public class GameHandler : MonoBehaviour
         GameResource.Init();
         CreateThingManager.Init();
         PathManager.Init();
-        ResourceManager.OnResourceClicked += handleMinePointClicked;
         InputManager.Instance.StartOrEnd(true);
         EventCenter.Instance.AddEventListener<IArgs>(EventType.Test, HandleTest);
       
@@ -84,10 +83,7 @@ public class GameHandler : MonoBehaviour
                 break;
             case KeyCode.Space:
                 Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
-                if(PathManager.Instance.GetContentRoomLeft(position, PlacedObjectType.MinePoint) > 0)
-                {
-                    PathManager.Instance.AddContentAmount(position, PlacedObjectType.MinePoint, 20);
-                }
+                PathManager.Instance.AddResourcePointContent(position, ResourcePointType.GoldPoint, 20);
                 break;
             case KeyCode.Q:
                 EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));
@@ -97,20 +93,20 @@ public class GameHandler : MonoBehaviour
     //处理点击资源点事件
     private void handleMinePointClicked(ResourceManager resourceManager)
     {
-        switch (resourceManager.ResourceType)
+        switch (resourceManager.resourcePointType)
         {
-            case ResourceType.Gold:
+            case ResourcePointType.GoldPoint:
                 if(mouseState == MouseState.HitMine)
                 {
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<ResourceManager>(resourceManager));
-                    resourceManager.GetContentTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
+                    resourceManager.GetContentObj().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
                 break;
-            case ResourceType.Wood:
+            case ResourcePointType.WoodPoint:
                 if (mouseState == MouseState.HitWood)
                 {
                     EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource,new EventParameter<ResourceManager>(resourceManager));
-                    resourceManager.GetContentTransform().gameObject.GetComponent<Button_Sprite>().enabled = false;
+                    resourceManager.GetContentObj().gameObject.GetComponent<Button_Sprite>().enabled = false;
                 }
                 break;
         }
@@ -136,10 +132,8 @@ public class GameHandler : MonoBehaviour
     private void HandleTest(IArgs _iArgs)
     {
         Vector3 position = (_iArgs as EventParameter<Vector3>).t;
-        if(PathManager.Instance.GetContentRoomLeft(position, PlacedObjectType.WoodPoint) > 0)
-        {
-            PathManager.Instance.AddContentAmount(position, PlacedObjectType.WoodPoint, 20);
-        }
+        PathManager.Instance.AddResourcePointContent(position, ResourcePointType.WoodPoint, 20);
+        
     }
 
     /// <summary>
@@ -180,13 +174,13 @@ public class GameHandler : MonoBehaviour
             switch (mouseState)
             {
                 case MouseState.HitMine:
-                    if(PathManager.Instance.IsHave(position, PlacedObjectType.MinePoint))
+                    if(PathManager.Instance.IsHave(position, ResourcePointType.GoldPoint))
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherGold);
                     }
                     break;
                 case MouseState.HitWood:
-                    if(PathManager.Instance.IsHave(position, PlacedObjectType.WoodPoint))
+                    if(PathManager.Instance.IsHave(position, ResourcePointType.WoodPoint))
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherWood);
                     }
@@ -202,34 +196,64 @@ public class GameHandler : MonoBehaviour
     //可放置物体管理对象
     public class PlacedObjectManager
     {
-        public Transform ContentTransform;
+        public GameObject ContenObj;
         public int ContentAmount;
+        public PlacedObjectType placedObjectType;
         public bool IsHasContent()
         {
             return ContentAmount > 0;
         }
 
-        public Transform GetContentTransform()
+        public GameObject GetContentObj()
         {
-            return ContentTransform;
+            return ContenObj;
         }
-
-        public void GiveContent(int amount)
-        {
-            ContentAmount -= amount;
-            if (ContentAmount < 1)
-            {
-                PoolMgr.Instance.PushObj(GetContentTransform().gameObject);
-            }
-        }
-
+        
         public int GetContentAmount()
         {
             return ContentAmount;
         }
 
 
+        public int GiveContent(int amount)
+        {
+            if(amount <= ContentAmount)
+            {
+                ContentAmount -= amount;
+                return 0;
+            }
+            else
+            {
+                amount -= ContentAmount;
+                ContentAmount = 0;
+                return amount;
+            }
+        }
 
+        protected  int AddContent(int amount)
+        {
+            if(amount <= GetAmountLeft())
+            {
+                ContentAmount += amount;
+                SetPerformanceWithAmount();
+                return 0;
+            }
+            else
+            {
+                amount -= GetAmountLeft();
+                ContentAmount += GetAmountLeft();
+                SetPerformanceWithAmount();
+                return amount;
+            }
+        }
+        protected virtual int GetAmountLeft()
+        {
+            return 0;
+        }
+        protected virtual void SetPerformanceWithAmount()
+        {
+            
+        }
 
     }
 
@@ -238,92 +262,134 @@ public class GameHandler : MonoBehaviour
     //资源点管理类对象
     public class ResourceManager : PlacedObjectManager
     {
-        private ResourceType resourceType;
+        private ResourcePointType _m_resourcePointType;
 
         public static int MaxAmount = 20;
-        public static Action<ResourceManager> OnResourceClicked;
-        public ResourceManager(Transform _contentTransform, ResourceType resourceType)
+        public ResourceManager()
         {
-            
-            this.ResourceType = resourceType;
-            this.ContentTransform = _contentTransform;
-            ContentAmount = MaxAmount;
-            _contentTransform.GetComponent<Button_Sprite>().enabled = true;
-            _contentTransform.GetComponent<Button_Sprite>().ClickFunc = () =>
-            {
-                OnResourceClicked?.Invoke(this);
-            };
+            placedObjectType = PlacedObjectType.ResourcePoint;
         }
 
-        public ResourceType ResourceType
+        public ResourcePointType resourcePointType
         {
             set
             {
-                resourceType = value;
+                _m_resourcePointType = value;
             }
             get
             {
-                return resourceType;
+                return _m_resourcePointType;
             }
         }
+        protected override int GetAmountLeft()
+        {
+            return MaxAmount - ContentAmount;
+        }
+        public  void SetNewResourcePointContent(Vector3 _position, ResourcePointType _resourcePointType, int amount)
+        {
+            this.resourcePointType = _m_resourcePointType;
+            this.ContenObj = PoolMgr.Instance.GetObj(_m_resourcePointType.ToString());
+            this.ContenObj.transform.position = _position;
+            ContentAmount = MaxAmount;
+            SetPerformanceWithAmount();
+        }
+
+        public int AddResourceContent(Vector3 _position, ResourcePointType _resourcePointType, int amount)
+        {
+            if(ContentAmount == 0)
+            {
+                SetNewResourcePointContent(_position,_resourcePointType,amount);
+                return 0;
+            }
+            else if(_resourcePointType != resourcePointType)
+            {
+                return 0;
+            }
+            else
+            {
+                return base.AddContent(amount);
+            }
+        }
+        protected override void SetPerformanceWithAmount()
+        {
+            if(ContentAmount == 0)
+                PoolMgr.Instance.PushObj(ContenObj.gameObject);
+            ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_m_resourcePointType.ToString());
+        }
+
     }
     public class ItemManager: PlacedObjectManager
     {
-        public static int MaxAmount = 20;
+        //一个单位和一个地面网格所能承载的最大物品数
+        public static int MaxAmount = 10;
         public static int oneStepAmount = 5;
         public static int twoStepAmount = 10;
         public static int threeStepAmount = MaxAmount;
-        private PlacedObjectType _m_placedObjectType;
-        
-        public ItemManager(Transform itemTransform, PlacedObjectType _placedObjectType,int amount)
-        {
-            this._m_placedObjectType = _placedObjectType;
-            this.ContentTransform = itemTransform;
-            ContentAmount = amount;
-            setSizeWithAmount();
-        }
-        public PlacedObjectType placedObjectType
-        {
-            set
-            {
-                _m_placedObjectType = value;
-            }
-            get
-            {
-                return _m_placedObjectType;
-            }
-        }
+        private ItemType itemType;
 
-        public int GetAmountLeft()
+        public ItemManager()
+        {
+            placedObjectType = PlacedObjectType.Item;
+        }
+        public  void SetNewItemContent(Vector3 position,ItemType _itemType,int amount)
+        {
+            this.itemType = _itemType;
+            this.ContenObj = PoolMgr.Instance.GetObj(itemType.ToString());
+            ContentAmount = amount;
+            this.ContenObj.transform.position = position;
+            SetPerformanceWithAmount();
+        }
+        public  void SetNewItemContent(GameObject _gameObject,ItemType _itemType,int amount)
+        {
+            this.itemType = _itemType;
+            this.ContenObj = PoolMgr.Instance.GetObj(itemType.ToString());
+            ContentAmount = amount;
+            this.ContenObj.transform.SetParent(_gameObject.transform);
+            SetPerformanceWithAmount();
+        }
+        public int AddItemContent(Vector3 _position, ItemType _itemtype, int amount)
+        {
+            if(ContentAmount == 0)
+            {
+                SetNewItemContent(_position,_itemtype,amount);
+                return 0;
+            }
+            else if(_itemtype != itemType)
+            {
+                return 0;
+            }
+            else
+            {
+                return base.AddContent(amount);
+            }
+        }
+        public int AddItemContent(GameObject _gameObject, ItemType _itemtype, int amount)
+        {
+            if(ContentAmount == 0)
+            {
+                SetNewItemContent(_gameObject,_itemtype,amount);
+                return 0;
+            }
+            else if(_itemtype != itemType)
+            {
+                return 0;
+            }
+            else
+            {
+                return base.AddContent(amount);
+            }
+        }
+        protected override int GetAmountLeft()
         {
             return MaxAmount - ContentAmount;
         }
 
-        private void setSizeWithAmount()
+        protected override void SetPerformanceWithAmount()
         {
-            if(ContentAmount < oneStepAmount)
-            {
-                ContentTransform.localScale = 0.3f * Vector3.one;
-            }
-            else if(ContentAmount >= oneStepAmount && ContentAmount < twoStepAmount)
-            {
-                ContentTransform.localScale = 0.5f * Vector3.one;
-            }
-            else if(ContentAmount >= twoStepAmount && ContentAmount < threeStepAmount)
-            {
-                ContentTransform.localScale = 0.8f * Vector3.one;
-            }
-            else
-            {
-                ContentTransform.localScale = Vector3.one;
-            }
+            if(ContentAmount == 0)
+                PoolMgr.Instance.PushObj(ContenObj.gameObject);
+            ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(itemType.ToString());
         }
-        public void AddContent(int amount)
-        {
-            ContentAmount += amount;
-            setSizeWithAmount();
-        }
-            
     }
 }
     

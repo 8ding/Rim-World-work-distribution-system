@@ -20,7 +20,13 @@ public enum ObjectAnimationType
 }
 
 [Serializable]
-public enum ResourceType
+public enum ResourcePointType
+{
+    GoldPoint,
+    WoodPoint,
+}
+[Serializable]
+public enum ItemType
 {
     Gold,
     Wood,
@@ -28,12 +34,8 @@ public enum ResourceType
 [Serializable]
 public enum PlacedObjectType
 {
-    none,
-    MinePoint,
-    WoodPoint,
-    DividingLine,
-    Gold,
-    Wood,
+    ResourcePoint,
+    Item,
 }
 [Serializable]
 public struct ItemType_Object
@@ -52,7 +54,7 @@ public struct ItemType_Sprite
 [Serializable]
 public struct ResourceType_Object
 {
-    public ResourceType ResourceType;
+    [FormerlySerializedAs("ResourceType")] public ResourcePointType resourcePointType;
     public GameObject ResourceGameObject;
 }
 public class GameAssets : MonoBehaviour
@@ -112,11 +114,11 @@ public class GameAssets : MonoBehaviour
         return Gb;
     }
 
-    public GameObject createResource(Transform parent, Vector3 position,ResourceType resourceType)
+    public GameObject createResource(Transform parent, Vector3 position,ResourcePointType _resourcePointType)
     {
         for (int i = 0; i < ResourceTypeObjects.Count; i++)
         {
-            if (resourceType == ResourceTypeObjects[i].ResourceType)
+            if (_resourcePointType == ResourceTypeObjects[i].resourcePointType)
             {
                 return Instantiate(ResourceTypeObjects[i].ResourceGameObject, position, Quaternion.identity);
             }

@@ -9,8 +9,13 @@ public class UnitData : MonoBehaviour
     private float speed;
     private const int MaxCarryAmount = 3;
     private int carryAmount = 0;
-    public PlacedObjectType placedObjectType;
-    public GameObject handleOjbect;
+    public GameHandler.ItemManager itemManager;
+
+    private void Awake()
+    {
+        itemManager = new GameHandler.ItemManager();
+    }
+
     public int CharacterId
     {
         get
@@ -33,33 +38,30 @@ public class UnitData : MonoBehaviour
             speed = value;
         }
     }
-    public int GetMaxCarryAmount()
-    {
-        return MaxCarryAmount;
-    }
-
-    public int GetCarryAmount()
-    {
-        return carryAmount;
-    }
-    
-    public void AddCarryAmount(int amount,PlacedObjectType _placedObjectType)
-    {
-        carryAmount += amount;
-        placedObjectType = _placedObjectType;
-        handleOjbect = CreateThingManager.Instance.ProducePlacedObject(handleOjbect, placedObjectType, carryAmount);
-        handleOjbect.transform.SetParent(gameObject.transform);
-        handleOjbect.transform.localPosition = Vector3.zero;
-    }
-
-    public int GetCarryLeft()
-    {
-        return MaxCarryAmount - carryAmount;
-    }
-    public void ClearCarry()
-    {
-        carryAmount = 0;
-        placedObjectType = PlacedObjectType.none;
-        handleOjbect = CreateThingManager.Instance.ProducePlacedObject(handleOjbect, placedObjectType, carryAmount);
-    }
+//    public int GetMaxCarryAmount()
+//    {
+//        return MaxCarryAmount;
+//    }
+//
+//    public int GetCarryAmount()
+//    {
+//        return carryAmount;
+//    }
+//    
+//    public void AddCarryAmount(int amount,ItemType _itemType)
+//    {
+//        carryAmount += amount;
+//        if(itemManager != null)
+//    }
+//
+//    public int GetCarryLeft()
+//    {
+//        return MaxCarryAmount - carryAmount;
+//    }
+//    public void ClearCarry()
+//    {
+//        carryAmount = 0;
+//        placedObjectType = PlacedObjectType.none;
+//        handleOjbect = CreateThingManager.Instance.ProducePlacedObject(handleOjbect, placedObjectType, carryAmount);
+//    }
 }
