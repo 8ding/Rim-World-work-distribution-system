@@ -45,7 +45,8 @@ public class PathManager : BaseManager<PathManager>
     /// <param name="Position">需要获取网格位置的游戏物体</param>
     public Vector3 GetGridPosition(Vector3 Position)
     {
-        return _m_pathFinding.GetNode(Position).worldPosition;
+        PathNode pathNode = _m_pathFinding.GetNode(Position);
+        return pathNode.worldPosition;
         
     }
     /// <summary>
@@ -85,14 +86,21 @@ public class PathManager : BaseManager<PathManager>
     
     public GameHandler.ResourceManager GetResourceManager(Vector3 _position)
     {
-        return _m_pathFinding.GetNode(_position).resourceManager;
+        PathNode pathNode= _m_pathFinding.GetNode(_position);
+        return pathNode.resourceManager;
     }
 
 
+    public void NewResource(Vector3 _position)
+    {
+        _m_pathFinding.GetNode(_position).NewResourceManager();
+    }
 
-
-
-    public GameHandler.ItemManager getItemManager(Vector3 _position)
+    public void NewItem(Vector3 _position)
+    {
+        _m_pathFinding.GetNode(_position).NeWItemManager();
+    }
+    public GameHandler.ItemManager GetItemManager(Vector3 _position)
     {
         return _m_pathFinding.GetNode(_position).itemManager;
     }

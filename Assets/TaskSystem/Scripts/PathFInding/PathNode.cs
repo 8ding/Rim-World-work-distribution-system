@@ -29,5 +29,15 @@ public class PathNode
     {
         this.isWalkable = isWalkable;
     }
+
+    public void NewResourceManager()
+    {
+        resourceManager = new GameHandler.ResourceManager();
+    }
+
+    public void NeWItemManager()
+    {
+        itemManager = new GameHandler.ItemManager();
+    }
     
 }

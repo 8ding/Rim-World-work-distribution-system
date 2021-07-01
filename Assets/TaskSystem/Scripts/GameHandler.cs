@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CodeMonkey.Utils;
 using JetBrains.Annotations;
 using TaskSystem.GatherResource;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -83,12 +84,13 @@ public class GameHandler : MonoBehaviour
                 break;
             case KeyCode.Space:
                 Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
-                ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
-                if(resourceManager == null)
+                if(PathManager.Instance.GetResourceManager(position) == null)
                 {
-                    resourceManager = new ResourceManager();
+                    PathManager.Instance.NewResource(position);
                 }
-                resourceManager.AddResourceContent(PathManager.Instance.GetGridPosition(position), ResourcePointType.GoldPoint, 20);
+                ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
+                Vector3 fixedposition = PathManager.Instance.GetGridPosition(position);
+                resourceManager.AddResourceContent(fixedposition, ResourcePointType.GoldPoint, 20);
                 break;
             case KeyCode.Q:
                 EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));
@@ -137,12 +139,13 @@ public class GameHandler : MonoBehaviour
     private void HandleTest(IArgs _iArgs)
     {
         Vector3 position = (_iArgs as EventParameter<Vector3>).t;
-        ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
-        if(resourceManager == null)
+        if(PathManager.Instance.GetResourceManager(position) == null)
         {
-            resourceManager = new ResourceManager();
+            PathManager.Instance.NewResource(position);
         }
-        resourceManager.AddResourceContent(PathManager.Instance.GetGridPosition(position), ResourcePointType.WoodPoint, 20);
+        ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
+        Vector3 fixedPosition = PathManager.Instance.GetGridPosition(position);
+        resourceManager.AddResourceContent(fixedPosition, ResourcePointType.WoodPoint, 20);
     }
 
     /// <summary>
@@ -180,23 +183,31 @@ public class GameHandler : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
-            ResourceManager resourceManager;
+            ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
             switch (mouseState)
             {
 
                 case MouseState.HitMine:
-                    resourceManager = PathManager.Instance.GetResourceManager(position);
+                    if(resourceManager == null)
+                    {
+                        break;
+                    }
                     if(resourceManager.resourcePointType == ResourcePointType.GoldPoint && resourceManager.IsHasContent())
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherGold);
                     }
                     break;
                 case MouseState.HitWood:
-                    resourceManager = PathManager.Instance.GetResourceManager(position);
+                    if(resourceManager == null)
+                    {
+                        break;
+                    }
                     if(resourceManager.resourcePointType == ResourcePointType.WoodPoint && resourceManager.IsHasContent())
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherWood);
                     }
+                    break;
+                default:
                     break;
             }
         }
@@ -375,6 +386,7 @@ public class GameHandler : MonoBehaviour
             ContentAmount = amount;
             this.ContenObj.transform.position = position;
             SetPerformanceWithAmount();
+            TaskCenter.Instance.BuildTask(position,GameObject.Find("Crate").transform.position,TaskType.CarryItem);
         }
         public  void SetNewItemContent(GameObject _gameObject,ItemType _itemType,int amount)
         {

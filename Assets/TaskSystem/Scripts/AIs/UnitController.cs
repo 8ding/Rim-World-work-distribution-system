@@ -340,11 +340,9 @@ public class UnitController : AIBase
     /// <returns></returns>
     public IEnumerator Gather(int _amount,Vector3 _position, Action _onGatherEnd = null)
     {
-        Debug.Log("Gathter");
-        yield return null;
         GameHandler.ResourceManager resourceManager = PathManager.Instance.GetResourceManager(_position);
         
-        if(resourceManager.resourcePointType != ResourcePointType.None)
+        if(resourceManager != null && resourceManager.resourcePointType != ResourcePointType.None)
         {
             //根据资源点的类型决定其播放的动画，资源点也是一中堆叠类型，每播放完一次动画，触发一次回调，减少所在位置的堆叠类型内容物的数量
             switch (resourceManager.resourcePointType)
@@ -380,11 +378,12 @@ public class UnitController : AIBase
                 for (int i = 0; i < (int) MoveDirection.enumCount; i++)
                 {
                     UnityEngine.Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
-                    GameHandler.ItemManager itemManager = PathManager.Instance.getItemManager(position);
-                    if(itemManager == null)
+                    
+                    if(PathManager.Instance.GetItemManager(position) == null)
                     {
-                        itemManager = new GameHandler.ItemManager();
+                        PathManager.Instance.NewItem(position);
                     }
+                    GameHandler.ItemManager itemManager = PathManager.Instance.GetItemManager(position);
                     switch (resourceManager.resourcePointType)
                     {
                         //这里如果换成资源与物品对应表更好
