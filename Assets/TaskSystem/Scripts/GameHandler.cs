@@ -83,7 +83,12 @@ public class GameHandler : MonoBehaviour
                 break;
             case KeyCode.Space:
                 Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
-                PathManager.Instance.AddResourcePointContent(position, ResourcePointType.GoldPoint, 20);
+                ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
+                if(resourceManager == null)
+                {
+                    resourceManager = new ResourceManager();
+                }
+                resourceManager.AddResourceContent(PathManager.Instance.GetGridPosition(position), ResourcePointType.GoldPoint, 20);
                 break;
             case KeyCode.Q:
                 EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));
@@ -132,8 +137,12 @@ public class GameHandler : MonoBehaviour
     private void HandleTest(IArgs _iArgs)
     {
         Vector3 position = (_iArgs as EventParameter<Vector3>).t;
-        PathManager.Instance.AddResourcePointContent(position, ResourcePointType.WoodPoint, 20);
-        
+        ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
+        if(resourceManager == null)
+        {
+            resourceManager = new ResourceManager();
+        }
+        resourceManager.AddResourceContent(PathManager.Instance.GetGridPosition(position), ResourcePointType.WoodPoint, 20);
     }
 
     /// <summary>
@@ -171,16 +180,20 @@ public class GameHandler : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
+            ResourceManager resourceManager;
             switch (mouseState)
             {
+
                 case MouseState.HitMine:
-                    if(PathManager.Instance.IsHave(position, ResourcePointType.GoldPoint))
+                    resourceManager = PathManager.Instance.GetResourceManager(position);
+                    if(resourceManager.resourcePointType == ResourcePointType.GoldPoint && resourceManager.IsHasContent())
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherGold);
                     }
                     break;
                 case MouseState.HitWood:
-                    if(PathManager.Instance.IsHave(position, ResourcePointType.WoodPoint))
+                    resourceManager = PathManager.Instance.GetResourceManager(position);
+                    if(resourceManager.resourcePointType == ResourcePointType.WoodPoint && resourceManager.IsHasContent())
                     {
                         TaskCenter.Instance.BuildTask(position,TaskType.GatherWood);
                     }

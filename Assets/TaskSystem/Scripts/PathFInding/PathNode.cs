@@ -16,8 +16,6 @@ public class PathNode
     public int y;
     public PathNode(Vector3 worldPosition,int x, int y,bool isWalkable)
     {
-        itemManager = new GameHandler.ItemManager();
-        resourceManager = new GameHandler.ResourceManager();
         this.worldPosition = worldPosition;
         this.isWalkable = isWalkable;
         this.x = x;
