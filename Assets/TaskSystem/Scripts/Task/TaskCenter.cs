@@ -152,8 +152,8 @@ public class TaskCenter : BaseManager<TaskCenter>
                     taskDic[_taskType].AddTask(new WorkerMoveTask(taskArgs2.T1, _taskType));
                     break;
                 case TaskType.CarryItem:
-                    TaskArgs<Vector3, Vector3> taskArgs3 = _argPack as TaskArgs<Vector3, Vector3>;
-                    taskDic[_taskType].AddTask(new CarryItemTask(taskArgs3.T1, taskArgs3.T2, _taskType));
+                    TaskArgs<Vector3> taskArgs3 = _argPack as TaskArgs<Vector3>;
+                    taskDic[_taskType].AddTask(new CarryItemTask(taskArgs3.T1, _taskType));
                     break;
             }
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,11 +24,13 @@ public class PathManager : BaseManager<PathManager>
 
     private static MyGrid<PathNode> _m_myGrid;
     private static PathFinding _m_pathFinding;
+    private static List<GameHandler.ItemManager> _m_ItemManagerOnGroundList;
 
     public static void  Init()
     {
         _m_myGrid = ResMgr.Instance.Load<GridSetting>("New Grid Setting").grid;
         _m_pathFinding = new PathFinding(_m_myGrid);
+        _m_ItemManagerOnGroundList = new List<GameHandler.ItemManager>();
     }
     /// <summary>
     /// 自动寻路接口
@@ -105,6 +108,61 @@ public class PathManager : BaseManager<PathManager>
         return _m_pathFinding.GetNode(_position).itemManager;
     }
 
+    public void AddItemManagerOnGround(GameHandler.ItemManager _itemManager)
+    {
+        _m_ItemManagerOnGroundList.Add(_itemManager);
+        TaskCenter.Instance.BuildTask(GameObject.Find("Crate").gameObject.transform.position,TaskType.CarryItem);
+    }
+
+    public bool IsHaveItemOnGround()
+    {
+        return _m_ItemManagerOnGroundList.Count > 0;
+    }
+
+    public GameHandler.ItemManager GetNearestItem(Vector3 _computePosition)
+    {
+        float distance = float.MaxValue;
+        GameHandler.ItemManager res = null;
+        int index = 0;
+        for (int i = 0; i < _m_ItemManagerOnGroundList.Count; i++)
+        {
+            if(_m_ItemManagerOnGroundList[i] != null)
+            {
+                if(Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition) < distance)
+                {
+                    distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition);
+                    res = _m_ItemManagerOnGroundList[i];
+                    index = i;
+                }
+            }
+        }
+        if(res != null)
+            _m_ItemManagerOnGroundList.RemoveAt(index);
+        return res;
+    }
+
+    public GameHandler.ItemManager GetNearestItem(Vector3 _computePosition,ItemType _itemType)
+    {
+        float distance = float.MaxValue;
+        GameHandler.ItemManager res = null;
+        int index = 0;
+        for (int i = 0; i < _m_ItemManagerOnGroundList.Count; i++)
+        {
+            if(_m_ItemManagerOnGroundList[i] != null && _m_ItemManagerOnGroundList[i].itemType == _itemType)
+            {
+                if(Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition) < distance)
+                {
+                    distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition);
+                    res = _m_ItemManagerOnGroundList[i];
+                }
+            }
+        }
+        if(res != null)
+        {
+            _m_ItemManagerOnGroundList.RemoveAt(index);
+        }
+        return res;
+    }
 //    /// <summary>
 //    /// 获取给定位置所在网格的给定堆叠类型的剩余可放置内容物数量
 //    /// </summary>

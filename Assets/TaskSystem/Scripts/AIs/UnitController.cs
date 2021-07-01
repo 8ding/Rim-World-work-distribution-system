@@ -175,7 +175,7 @@ public class UnitController : AIBase
                     ExcuteTask_Move(task as WorkerMoveTask);
                     break;
                 case TaskType.CarryItem:
-                    ExcuteTask_CarryItem(task as CarryItemTask);
+                    StartCoroutine(ExcuteTask_CarryItem(task as CarryItemTask));
                     break;
                 default:
                     Debug.Log(task.taskType + "尚未编写执行方法");
@@ -267,25 +267,48 @@ public class UnitController : AIBase
 
     #region CarryItemtask
 
-    private void ExcuteTask_CarryItem(CarryItemTask _task)
+    private IEnumerator ExcuteTask_CarryItem(CarryItemTask _task)
     {
-        Vector3 itemPosition = _task.ItemPosition;
-        Vector3 storePosition = _task.StorePosition;
-        moveTo(itemPosition,(() =>
+        if(PathManager.Instance.IsHaveItemOnGround())
+        {
+            GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
+            Vector3 storePosition = _task.StorePosition;
+            ItemType itemType = itemManager.itemType;
+            while (itemManager != null )
+            {
+                bool notGrabDone = true;
+                Vector3 position = itemManager.position;
+                moveTo(position,(() =>
                 {
-                    Grab(itemPosition,(() =>
+                    Grab(position,(() =>
                     {
-                        moveTo(storePosition,(() =>
-                        {
-                            Drop((() =>
-                            {
-                                Idle();
-                                state = State.WaitingForNextTask;
-                            }));
-                        }));
+                        notGrabDone = false;
                     }));
+                }));
+                yield return new WaitWhile(() => { return notGrabDone; });
+                if(unitData.itemManager.GetAmountLeft() > 0)
+                {
+                    itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
                 }
-                ));
+                else
+                {
+                    break;
+                }
+            } 
+            moveTo(storePosition,(() =>
+            {
+                Drop((() =>
+                {
+                    Idle();
+                    state = State.WaitingForNextTask;
+                }));
+            }));
+        }
+        else
+        {
+            Idle();
+            state = State.WaitingForNextTask;
+        }
     }
     
 
@@ -382,6 +405,7 @@ public class UnitController : AIBase
                     {
                         continue;
                     }
+                    
                     if(PathManager.Instance.GetItemManager(position) == null)
                     {
                         PathManager.Instance.NewItem(position);
@@ -426,8 +450,10 @@ public class UnitController : AIBase
     public void Drop(Action OnDropEnd = null)
     {
         Debug.Log("Drop");
+        unitData.itemManager.MinusItemContent(unitData.itemManager.ContentAmount);
 //        unitData.ClearCarry();
 //        OnDropEnd?.Invoke();
+        OnDropEnd?.Invoke();
     }
     
 

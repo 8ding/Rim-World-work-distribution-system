@@ -59,26 +59,15 @@ public class WorkerMoveTask : TaskBase
 
 public class CarryItemTask : TaskBase
 {
-    private Vector3 itemPosition;
+
     private Vector3 storePosition;
 
-    public CarryItemTask(Vector3 _itemPosition, Vector3 _storePosition, TaskType _taskType) : base(_taskType)
+    public CarryItemTask(Vector3 _storePosition, TaskType _taskType) : base(_taskType)
     {
-        itemPosition = _itemPosition;
         storePosition = _storePosition;
     }
 
-    public Vector3 ItemPosition
-    {
-        get
-        {
-            return itemPosition;
-        }
-        set
-        {
-            itemPosition = value;
-        }
-    }
+
 
     public Vector3 StorePosition
     {

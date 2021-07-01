@@ -274,7 +274,7 @@ public class GameHandler : MonoBehaviour
                 return _amount;
             }
         }
-        protected virtual int GetAmountLeft()
+        public virtual int GetAmountLeft()
         {
             return 0;
         }
@@ -306,7 +306,7 @@ public class GameHandler : MonoBehaviour
                 return _m_resourcePointType;
             }
         }
-        protected override int GetAmountLeft()
+        public override int GetAmountLeft()
         {
             return MaxAmount - ContentAmount;
         }
@@ -357,10 +357,11 @@ public class GameHandler : MonoBehaviour
     {
         //一个单位和一个地面网格所能承载的最大物品数
         public static int MaxAmount = 10;
+        public Vector3 position;
         public static int oneStepAmount = 5;
         public static int twoStepAmount = 10;
         public static int threeStepAmount = MaxAmount;
-        private ItemType itemType;
+        public ItemType itemType;
 
         public ItemManager()
         {
@@ -368,12 +369,13 @@ public class GameHandler : MonoBehaviour
         }
         public  void SetNewItemContent(Vector3 position,ItemType _itemType,int amount)
         {
+            this.position = position;
             this.itemType = _itemType;
             this.ContenObj = PoolMgr.Instance.GetObj(itemType.ToString());
             ContentAmount = amount;
             this.ContenObj.transform.position = position;
             SetPerformanceWithAmount();
-            TaskCenter.Instance.BuildTask(position,GameObject.Find("Crate").transform.position,TaskType.CarryItem);
+            PathManager.Instance.AddItemManagerOnGround(this);
         }
         public  void SetNewItemContent(GameObject _gameObject,ItemType _itemType,int amount)
         {
@@ -381,6 +383,7 @@ public class GameHandler : MonoBehaviour
             this.ContenObj = PoolMgr.Instance.GetObj(itemType.ToString());
             ContentAmount = amount;
             this.ContenObj.transform.SetParent(_gameObject.transform);
+            this.ContenObj.transform.localPosition = Vector3.zero;
             SetPerformanceWithAmount();
         }
         public int AddItemContent(Vector3 _position, ItemType _itemtype, int amount)
@@ -415,12 +418,12 @@ public class GameHandler : MonoBehaviour
                 return base.AddContent(amount);
             }
         }
-        protected override int GetAmountLeft()
+        public override int GetAmountLeft()
         {
             return MaxAmount - ContentAmount;
         }
 
-        private int MinusItemContent(int _amount)
+        public int MinusItemContent(int _amount)
         {
             return base.MinusContent(_amount);
         }
@@ -441,6 +444,10 @@ public class GameHandler : MonoBehaviour
             int fordebug = ContentAmount;
             ItemType tempItemType = this.itemType;
             int left = MinusItemContent(_itemManager.GetAmountLeft());
+            if(left > 0)
+            {
+                PathManager.Instance.AddItemManagerOnGround(this);
+            }
             _itemManager.AddItemContent(_gameObject, tempItemType, _itemManager.GetAmountLeft() - left);
         }
     }
