@@ -11,7 +11,10 @@ public class UnitData : MonoBehaviour
     private int carryAmount = 0;
     public GameHandler.ItemManager itemManager;
 
-
+    private void Awake()
+    {
+        itemManager = new GameHandler.ItemManager();
+    }
 
     public int CharacterId
     {

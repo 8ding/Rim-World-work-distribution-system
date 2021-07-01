@@ -378,7 +378,10 @@ public class UnitController : AIBase
                 for (int i = 0; i < (int) MoveDirection.enumCount; i++)
                 {
                     UnityEngine.Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
-                    
+                    if(PathManager.Instance.GetResourceManager(position) != null && PathManager.Instance.GetResourceManager(position).IsHasContent())
+                    {
+                        continue;
+                    }
                     if(PathManager.Instance.GetItemManager(position) == null)
                     {
                         PathManager.Instance.NewItem(position);
@@ -408,23 +411,14 @@ public class UnitController : AIBase
     
     public void Grab(Vector3 _position, Action OnGrabEnd = null)
     {
-        Debug.Log("Grab");
-        // ItemType_Object itemType = PathManager.Instance.GEt(_position);
-        // int amount = PathManager.Instance.GetContentAmount(_position, placedObjectType);
-        // int res = 0;
-        // if(unitData.GetCarryLeft() >= amount)
-        // {
-        //     res = amount;
-        // }
-        // else if(unitData.GetCarryLeft() < amount)
-        // {
-        //     res = unitData.GetCarryLeft();
-        //     TaskCenter.Instance.BuildTask(_position,GameObject.Find("Crate").transform.position,TaskType.CarryItem);
-        // }
-        //
-        // unitData.AddCarryAmount(res,placedObjectType);
-        // PathManager.Instance.MinusContentAmount(_position, placedObjectType, res);
-        // OnGrabEnd?.Invoke();
+
+        GameHandler.ItemManager itemManagerGround = PathManager.Instance.GetItemManager(_position);
+        if(itemManagerGround != null && itemManagerGround.IsHasContent())
+        {
+            GameHandler.ItemManager itemManagerUnit = unitData.itemManager;
+            itemManagerGround.GiveAmountToAnother(gameObject, itemManagerUnit);
+        }
+        OnGrabEnd?.Invoke();
     }
     
     

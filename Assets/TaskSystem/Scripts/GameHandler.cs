@@ -239,20 +239,7 @@ public class GameHandler : MonoBehaviour
         }
 
 
-        public int GiveContent(int amount)
-        {
-            if(amount <= ContentAmount)
-            {
-                ContentAmount -= amount;
-                return 0;
-            }
-            else
-            {
-                amount -= ContentAmount;
-                ContentAmount = 0;
-                return amount;
-            }
-        }
+
 
         protected  int AddContent(int amount)
         {
@@ -433,6 +420,11 @@ public class GameHandler : MonoBehaviour
             return MaxAmount - ContentAmount;
         }
 
+        private int MinusItemContent(int _amount)
+        {
+            return base.MinusContent(_amount);
+        }
+
         protected override void SetPerformanceWithAmount()
         {
             if(ContentAmount == 0)
@@ -442,6 +434,14 @@ public class GameHandler : MonoBehaviour
                 return;
             }
             ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(itemType.ToString());
+        }
+
+        public void GiveAmountToAnother(GameObject _gameObject,ItemManager _itemManager)
+        {
+            int fordebug = ContentAmount;
+            ItemType tempItemType = this.itemType;
+            int left = MinusItemContent(_itemManager.GetAmountLeft());
+            _itemManager.AddItemContent(_gameObject, tempItemType, _itemManager.GetAmountLeft() - left);
         }
     }
 }
