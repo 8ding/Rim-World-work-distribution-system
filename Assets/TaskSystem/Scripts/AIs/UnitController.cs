@@ -274,8 +274,13 @@ public class UnitController : AIBase
             GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
             Vector3 storePosition = _task.StorePosition;
             ItemType itemType = itemManager.itemType;
-            while (itemManager != null )
+            while (unitData.itemManager.GetAmountLeft() > 0)
             {
+                itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
+                if(itemManager == null)
+                {
+                    break;
+                }
                 bool notGrabDone = true;
                 Vector3 position = itemManager.position;
                 moveTo(position,(() =>
@@ -286,14 +291,7 @@ public class UnitController : AIBase
                     }));
                 }));
                 yield return new WaitWhile(() => { return notGrabDone; });
-                if(unitData.itemManager.GetAmountLeft() > 0)
-                {
-                    itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
-                }
-                else
-                {
-                    break;
-                }
+
             } 
             moveTo(storePosition,(() =>
             {

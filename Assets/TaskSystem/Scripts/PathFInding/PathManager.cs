@@ -123,7 +123,6 @@ public class PathManager : BaseManager<PathManager>
     {
         float distance = float.MaxValue;
         GameHandler.ItemManager res = null;
-        int index = 0;
         for (int i = 0; i < _m_ItemManagerOnGroundList.Count; i++)
         {
             if(_m_ItemManagerOnGroundList[i] != null)
@@ -132,12 +131,9 @@ public class PathManager : BaseManager<PathManager>
                 {
                     distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition);
                     res = _m_ItemManagerOnGroundList[i];
-                    index = i;
                 }
             }
         }
-        if(res != null)
-            _m_ItemManagerOnGroundList.RemoveAt(index);
         return res;
     }
 

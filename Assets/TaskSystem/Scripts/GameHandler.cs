@@ -221,6 +221,7 @@ public class GameHandler : MonoBehaviour
     public class PlacedObjectManager
     {
         public GameObject ContenObj;
+        public GameObject Number;
         public int ContentAmount;
         public PlacedObjectType placedObjectType;
         public bool IsHasContent()
@@ -246,6 +247,10 @@ public class GameHandler : MonoBehaviour
             if(amount <= GetAmountLeft())
             {
                 ContentAmount += amount;
+                if(Number != null)
+                {
+                    Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
+                }
                 SetPerformanceWithAmount();
                 return 0;
             }
@@ -253,6 +258,10 @@ public class GameHandler : MonoBehaviour
             {
                 amount -= GetAmountLeft();
                 ContentAmount += GetAmountLeft();
+                if(Number != null)
+                {
+                    Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
+                }
                 SetPerformanceWithAmount();
                 return amount;
             }
@@ -263,6 +272,10 @@ public class GameHandler : MonoBehaviour
             if(_amount <= ContentAmount)
             {
                 ContentAmount -= _amount;
+                if(Number != null)
+                {
+                    Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
+                }
                 SetPerformanceWithAmount();
                 return 0;
             }
@@ -270,6 +283,10 @@ public class GameHandler : MonoBehaviour
             {
                 _amount -= ContentAmount;
                 ContentAmount = 0;
+                if(Number != null)
+                {
+                    Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
+                }
                 SetPerformanceWithAmount();
                 return _amount;
             }
@@ -316,6 +333,8 @@ public class GameHandler : MonoBehaviour
             this.ContenObj = PoolMgr.Instance.GetObj(_m_resourcePointType.ToString());
             this.ContenObj.transform.position = _position;
             ContentAmount = MaxAmount;
+            Number = ContenObj.transform.GetChild(0).gameObject;
+            Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
             SetPerformanceWithAmount();
         }
 
@@ -362,7 +381,6 @@ public class GameHandler : MonoBehaviour
         public static int twoStepAmount = 10;
         public static int threeStepAmount = MaxAmount;
         public ItemType itemType;
-
         public ItemManager()
         {
             placedObjectType = PlacedObjectType.Item;
@@ -375,6 +393,8 @@ public class GameHandler : MonoBehaviour
             ContentAmount = amount;
             this.ContenObj.transform.position = position;
             SetPerformanceWithAmount();
+            Number = ContenObj.transform.GetChild(0).gameObject;
+            Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
             PathManager.Instance.AddItemManagerOnGround(this);
         }
         public  void SetNewItemContent(GameObject _gameObject,ItemType _itemType,int amount)
@@ -444,7 +464,7 @@ public class GameHandler : MonoBehaviour
             int fordebug = ContentAmount;
             ItemType tempItemType = this.itemType;
             int left = MinusItemContent(_itemManager.GetAmountLeft());
-            if(left > 0)
+            if(ContentAmount  > 0)
             {
                 PathManager.Instance.AddItemManagerOnGround(this);
             }
