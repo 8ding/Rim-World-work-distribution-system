@@ -84,6 +84,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Mono/MonoMgr.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Input/InputManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Scenes/ScenesMgr.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9C2BABAB-467C-4D89-BEEB-E2F694DC090F/dc/786b46cb/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/EventCenter/EventCenter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/Utils/UtilsClass.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/TaskSystem/StateMachine/IdleState.cs" root0="FORCE_HIGHLIGHTING" />
@@ -118,9 +119,10 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Factory/Factory.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -438,68 +440,81 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
-          <line>401</line>
+          <line>402</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" initialLine="379">
             <startOffsets>
-              <option value="13626" />
+              <option value="13774" />
             </startOffsets>
             <endOffsets>
-              <option value="13652" />
+              <option value="13800" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="120" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
-          <line>273</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="273" containingFunctionPresentation="method 'ExcuteTask_CarryItem'">
-            <startOffsets>
-              <option value="7502" />
-            </startOffsets>
-            <endOffsets>
-              <option value="7607" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="122" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs</url>
-          <line>123</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\PathManager.cs" initialLine="123" containingFunctionPresentation="method 'GetNearestItem'">
-            <startOffsets>
-              <option value="3912" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3944" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="123" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs</url>
-          <line>136</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\PathManager.cs" initialLine="136" containingFunctionPresentation="method 'GetNearestItem'">
-            <startOffsets>
-              <option value="4472" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4483" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="124" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
-          <line>468</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="468" containingFunctionPresentation="method 'GiveAmountToAnother'">
+          <line>448</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="447" containingFunctionPresentation="method 'MinusItemContent'">
             <startOffsets>
-              <option value="15785" />
+              <option value="15183" />
             </startOffsets>
             <endOffsets>
-              <option value="15835" />
+              <option value="15217" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="125" />
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
+          <line>236</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="236" containingFunctionPresentation="lambda expression inside method 'ExecuteTask_Gather'">
+            <startOffsets>
+              <option value="6803" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6810" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="139" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs</url>
+          <line>73</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\MyGrid.cs" initialLine="73" containingFunctionPresentation="method 'GetGridObject'">
+            <startOffsets>
+              <option value="2345" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2363" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="141" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
+          <line>415</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="410" containingFunctionPresentation="method 'Gather'">
+            <startOffsets>
+              <option value="12695" />
+            </startOffsets>
+            <endOffsets>
+              <option value="12765" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
+          <line>459</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="454" containingFunctionPresentation="method 'putTest'">
+            <startOffsets>
+              <option value="14341" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14448" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="143" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -269,44 +269,48 @@ public class UnitController : AIBase
 
     private IEnumerator ExcuteTask_CarryItem(CarryItemTask _task)
     {
-        if(PathManager.Instance.IsHaveItemOnGround())
-        {
-            GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
-            Vector3 storePosition = _task.StorePosition;
-            ItemType itemType = itemManager.itemType;
-            while (unitData.itemManager.GetAmountLeft() > 0)
-            {
-                itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
-                if(itemManager == null)
-                {
-                    break;
-                }
-                bool notGrabDone = true;
-                Vector3 position = itemManager.position;
-                moveTo(position,(() =>
-                {
-                    Grab(position,(() =>
-                    {
-                        notGrabDone = false;
-                    }));
-                }));
-                yield return new WaitWhile(() => { return notGrabDone; });
-
-            } 
-            moveTo(storePosition,(() =>
-            {
-                Drop((() =>
-                {
-                    Idle();
-                    state = State.WaitingForNextTask;
-                }));
-            }));
-        }
-        else
-        {
-            Idle();
-            state = State.WaitingForNextTask;
-        }
+        // if(PathManager.Instance.IsHaveItemOnGround())
+        // {
+        //     GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
+        //     Vector3 storePosition = _task.StorePosition;
+        //     ItemType itemType = itemManager.itemType;
+        //     while (unitData.itemManager.GetAmountLeft() > 0)
+        //     {
+        //         itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
+        //         if(itemManager == null)
+        //         {
+        //             break;
+        //         }
+        //         bool notGrabDone = true;
+        //         Vector3 position = itemManager.position;
+        //         moveTo(position,(() =>
+        //         {
+        //             Grab(position,(() =>
+        //             {
+        //                 notGrabDone = false;
+        //             }));
+        //         }));
+        //         yield return new WaitWhile(() => { return notGrabDone; });
+        //
+        //     } 
+        //     moveTo(storePosition,(() =>
+        //     {
+        //         Drop((() =>
+        //         {
+        //             Idle();
+        //             state = State.WaitingForNextTask;
+        //         }));
+        //     }));
+        // }
+        // else
+        // {
+        //     Idle();
+        //     state = State.WaitingForNextTask;
+        // }
+        Debug.Log("CarryItem");
+        Idle();
+        state = State.WaitingForNextTask;
+        yield return null;
     }
     
 
@@ -365,8 +369,9 @@ public class UnitController : AIBase
         
         if(resourceManager != null && resourceManager.resourcePointType != ResourcePointType.None)
         {
+            ResourcePointType resourcePointType = resourceManager.resourcePointType;
             //根据资源点的类型决定其播放的动画，资源点也是一中堆叠类型，每播放完一次动画，触发一次回调，减少所在位置的堆叠类型内容物的数量
-            switch (resourceManager.resourcePointType)
+            switch (resourcePointType)
             {
                 case ResourcePointType.GoldPoint:
                     characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{
@@ -380,11 +385,12 @@ public class UnitController : AIBase
                     });
                     break;
             }
-        //暂存所在位置堆叠类型的内容物数量
+            //暂存所在位置堆叠类型的内容物数量
             int temp = resourceManager.ContentAmount;
             int tempAmount = _amount;
-            while (resourceManager.IsHasContent())
+            do
             {
+
                 //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
                 yield return new WaitWhile(() =>
                 {
@@ -395,42 +401,91 @@ public class UnitController : AIBase
                     }
                     return true;
                 });
-                //逆时针遍历单位周围一格的位置，并放置堆叠类型，增加内容物数量
-                for (int i = 0; i < (int) MoveDirection.enumCount; i++)
+                bool hasPut = false;
+                int CircleTime = 1;
+                while (!hasPut)
                 {
-                    UnityEngine.Vector3 position = PathManager.Instance.GetOneOffsetPositon(gameObject.transform.position, (MoveDirection) i);
-                    if(PathManager.Instance.GetResourceManager(position) != null && PathManager.Instance.GetResourceManager(position).IsHasContent())
+                    for (int i = -1 * CircleTime; i <= CircleTime; i++)
                     {
-                        continue;
+                        if(Mathf.Abs(i) != CircleTime)
+                        {
+                            int j = -1 * CircleTime;
+                            int count = 0; 
+                            while (count < 2)
+                            {
+                                tempAmount = putTest(i, j, resourcePointType, tempAmount, ref hasPut);
+                                if(tempAmount == 0)
+                                {
+                                    break;
+                                }
+                                j *= -1;
+                                Debug.Log(i + " " + j);
+                                count++;
+                            }
+                            if(hasPut)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            for (int j = -1 * CircleTime; j <= CircleTime; j++)
+                            {
+                                Debug.Log(i + " " + j);
+                                tempAmount = putTest(i, j, resourcePointType, tempAmount, ref hasPut);
+                                if(tempAmount == 0)
+                                {
+                                    break;
+                                }
+                            }
+                            if(hasPut)
+                            {
+                                break;
+                            }
+                        }
+
                     }
-                    
-                    if(PathManager.Instance.GetItemManager(position) == null)
-                    {
-                        PathManager.Instance.NewItem(position);
-                    }
-                    GameHandler.ItemManager itemManager = PathManager.Instance.GetItemManager(position);
-                    switch (resourceManager.resourcePointType)
-                    {
-                        //这里如果换成资源与物品对应表更好
-                        case ResourcePointType.GoldPoint:
-                            tempAmount = itemManager.AddItemContent(position, ItemType.Gold, tempAmount);
-                            break;
-                        case ResourcePointType.WoodPoint:
-                            tempAmount = itemManager.AddItemContent(position, ItemType.Wood, tempAmount);
-                            break;
-                    }
-                    if(tempAmount == 0)
-                    {
-                        break;
-                    }
+                    CircleTime++;
                 }
                 tempAmount = _amount;
-            }
-        //采集完毕的回调
+            } while (resourceManager.IsHasContent());
+            //采集完毕的回调;
+            Debug.Log("GatherOver");
         }
         _onGatherEnd?.Invoke();
     }
-    
+
+    private int putTest(int i, int j, ResourcePointType _resourcePointType, int tempAmount, ref bool hasPut)
+    {
+        UnityEngine.Vector3 position = PathManager.Instance.GetMoveXYPosition(gameObject.transform.position, i, j);
+        if(PathManager.Instance.GetResourceManager(position) != null && PathManager.Instance.GetResourceManager(position).IsHasContent())
+        {
+            return tempAmount;
+        }
+
+        if(PathManager.Instance.GetItemManager(position) == null)
+        {
+            PathManager.Instance.NewItem(position);
+        }
+        GameHandler.ItemManager itemManager = PathManager.Instance.GetItemManager(position);
+        switch (_resourcePointType)
+        {
+            //这里如果换成资源与物品对应表更好
+            case ResourcePointType.GoldPoint:
+                tempAmount = itemManager.AddItemContent(position, ItemType.Gold, tempAmount);
+                break;
+            case ResourcePointType.WoodPoint:
+                tempAmount = itemManager.AddItemContent(position, ItemType.Wood, tempAmount);
+                break;
+        }
+        if(tempAmount == 0)
+        {
+            hasPut = true;
+            return 0;
+        }
+        return tempAmount;
+    }
+
     public void Grab(Vector3 _position, Action OnGrabEnd = null)
     {
 

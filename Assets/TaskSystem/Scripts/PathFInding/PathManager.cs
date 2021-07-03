@@ -85,7 +85,18 @@ public class PathManager : BaseManager<PathManager>
         }
         return Vector3.zero;
     }
-    
+    /// <summary>
+    /// 获取在X轴上移动x个网格，Y轴上移动y个网格后的世界位置
+    /// </summary>
+    /// <param name="x">X轴上移动的网格数</param>
+    /// <param name="y">Y轴上移动的网格数</param>
+    /// <param name="_position">原先的位置</param>
+    /// <returns></returns>
+    public Vector3 GetMoveXYPosition(Vector3 _position,int x, int y)
+    {
+        XY xy = _m_myGrid.GetXY(_position);
+        return _m_pathFinding.GetNode(xy.GetX() + x, xy.GetY() + y).worldPosition; 
+    }
     
     public GameHandler.ResourceManager GetResourceManager(Vector3 _position)
     {
