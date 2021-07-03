@@ -269,48 +269,44 @@ public class UnitController : AIBase
 
     private IEnumerator ExcuteTask_CarryItem(CarryItemTask _task)
     {
-        // if(PathManager.Instance.IsHaveItemOnGround())
-        // {
-        //     GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
-        //     Vector3 storePosition = _task.StorePosition;
-        //     ItemType itemType = itemManager.itemType;
-        //     while (unitData.itemManager.GetAmountLeft() > 0)
-        //     {
-        //         itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
-        //         if(itemManager == null)
-        //         {
-        //             break;
-        //         }
-        //         bool notGrabDone = true;
-        //         Vector3 position = itemManager.position;
-        //         moveTo(position,(() =>
-        //         {
-        //             Grab(position,(() =>
-        //             {
-        //                 notGrabDone = false;
-        //             }));
-        //         }));
-        //         yield return new WaitWhile(() => { return notGrabDone; });
-        //
-        //     } 
-        //     moveTo(storePosition,(() =>
-        //     {
-        //         Drop((() =>
-        //         {
-        //             Idle();
-        //             state = State.WaitingForNextTask;
-        //         }));
-        //     }));
-        // }
-        // else
-        // {
-        //     Idle();
-        //     state = State.WaitingForNextTask;
-        // }
-        Debug.Log("CarryItem");
-        Idle();
-        state = State.WaitingForNextTask;
-        yield return null;
+        if(PathManager.Instance.IsHaveItemOnGround())
+        {
+            GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
+            Vector3 storePosition = _task.StorePosition;
+            ItemType itemType = itemManager.itemType;
+            while (unitData.itemManager.GetAmountLeft() > 0)
+            {
+                itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
+                if(itemManager == null)
+                {
+                    break;
+                }
+                bool notGrabDone = true;
+                Vector3 position = itemManager.position;
+                moveTo(position,(() =>
+                {
+                    Grab(position,(() =>
+                    {
+                        notGrabDone = false;
+                    }));
+                }));
+                yield return new WaitWhile(() => { return notGrabDone; });
+            }
+            Debug.Log("一次拾取完毕");
+            moveTo(storePosition,(() =>
+            {
+                Drop((() =>
+                {
+                    Idle();
+                    state = State.WaitingForNextTask;
+                }));
+            }));
+        }
+        else
+        {
+            Idle();
+            state = State.WaitingForNextTask;
+        }
     }
     
 
@@ -388,7 +384,7 @@ public class UnitController : AIBase
             //暂存所在位置堆叠类型的内容物数量
             int temp = resourceManager.ContentAmount;
             int tempAmount = _amount;
-            do
+            while (resourceManager.IsHasContent())
             {
 
                 //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
@@ -419,7 +415,6 @@ public class UnitController : AIBase
                                     break;
                                 }
                                 j *= -1;
-                                Debug.Log(i + " " + j);
                                 count++;
                             }
                             if(hasPut)
@@ -431,7 +426,6 @@ public class UnitController : AIBase
                         {
                             for (int j = -1 * CircleTime; j <= CircleTime; j++)
                             {
-                                Debug.Log(i + " " + j);
                                 tempAmount = putTest(i, j, resourcePointType, tempAmount, ref hasPut);
                                 if(tempAmount == 0)
                                 {
@@ -448,7 +442,7 @@ public class UnitController : AIBase
                     CircleTime++;
                 }
                 tempAmount = _amount;
-            } while (resourceManager.IsHasContent());
+            }
             //采集完毕的回调;
             Debug.Log("GatherOver");
         }
@@ -502,7 +496,6 @@ public class UnitController : AIBase
 
     public void Drop(Action OnDropEnd = null)
     {
-        Debug.Log("Drop");
         unitData.itemManager.MinusItemContent(unitData.itemManager.ContentAmount);
 //        unitData.ClearCarry();
 //        OnDropEnd?.Invoke();

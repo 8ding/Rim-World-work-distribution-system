@@ -161,6 +161,7 @@ public class PathManager : BaseManager<PathManager>
                 {
                     distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition);
                     res = _m_ItemManagerOnGroundList[i];
+                    index = i;
                 }
             }
         }

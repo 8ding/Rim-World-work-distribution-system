@@ -119,10 +119,10 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Factory/Factory.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Factory/Factory.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -443,10 +443,10 @@
           <line>402</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" initialLine="379">
             <startOffsets>
-              <option value="13774" />
+              <option value="13768" />
             </startOffsets>
             <endOffsets>
-              <option value="13800" />
+              <option value="13794" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="120" />
@@ -456,26 +456,13 @@
           <line>448</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\GameHandler.cs" initialLine="447" containingFunctionPresentation="method 'MinusItemContent'">
             <startOffsets>
-              <option value="15183" />
+              <option value="15177" />
             </startOffsets>
             <endOffsets>
-              <option value="15217" />
+              <option value="15211" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="126" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
-          <line>236</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="236" containingFunctionPresentation="lambda expression inside method 'ExecuteTask_Gather'">
-            <startOffsets>
-              <option value="6803" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6810" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="139" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/MyGrid.cs</url>
@@ -492,29 +479,55 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
-          <line>415</line>
+          <line>411</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="410" containingFunctionPresentation="method 'Gather'">
             <startOffsets>
-              <option value="12695" />
+              <option value="12524" />
             </startOffsets>
             <endOffsets>
-              <option value="12765" />
+              <option value="12594" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="142" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
-          <line>459</line>
-          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="454" containingFunctionPresentation="method 'putTest'">
+          <line>278</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="278" containingFunctionPresentation="method 'ExcuteTask_CarryItem'">
             <startOffsets>
-              <option value="14341" />
+              <option value="7810" />
             </startOffsets>
             <endOffsets>
-              <option value="14448" />
+              <option value="7900" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="143" />
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs</url>
+          <line>155</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\PathFInding\PathManager.cs" initialLine="155" containingFunctionPresentation="method 'GetNearestItem'">
+            <startOffsets>
+              <option value="5144" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5202" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Pool/PoolMgr.cs</url>
+          <line>84</line>
+          <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\ProjectBase\Pool\PoolMgr.cs" initialLine="84" containingFunctionPresentation="method 'GetObjAsync'">
+            <startOffsets>
+              <option value="2031" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2165" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="148" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

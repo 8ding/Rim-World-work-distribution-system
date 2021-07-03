@@ -86,7 +86,7 @@ public class PoolMgr:BaseManager<PoolMgr>
                o.name = name;
                callback?.Invoke(o);
            }));
-           
+            
         }
         //已经有抽屉了，从抽屉里拿出衣服
         else

@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5216748400040948988}
   m_Layer: 0
-  m_Name: 1_Mine_Down 1
+  m_Name: 1_Mine_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
