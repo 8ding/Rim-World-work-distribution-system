@@ -30,7 +30,7 @@ namespace CodeMonkey.Utils {
         public static void SetGetWorldCamera(Func<Camera> GetWorldCamera) {
             Button_Sprite.GetWorldCamera = GetWorldCamera;
         }
-
+        
 
 
 

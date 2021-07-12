@@ -246,7 +246,7 @@ public class UnitController : AIBase
     /// <param name="_position"></param>
     private void restoreResource(Vector3 _position)
     {
-
+        
     }
     
     #endregion
@@ -292,7 +292,6 @@ public class UnitController : AIBase
                 }));
                 yield return new WaitWhile(() => { return notGrabDone; });
             }
-            Debug.Log("一次拾取完毕");
             moveTo(storePosition,(() =>
             {
                 Drop((() =>

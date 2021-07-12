@@ -26,13 +26,8 @@ public enum ResourcePointType
     GoldPoint,
     WoodPoint,
 }
-[Serializable]
-public enum ItemType
-{
-    None,
-    Gold,
-    Wood,
-}
+
+
 [Serializable]
 public enum PlacedObjectType
 {

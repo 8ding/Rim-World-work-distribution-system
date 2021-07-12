@@ -311,6 +311,7 @@ public class GameHandler : MonoBehaviour
         public ResourceManager()
         {
             placedObjectType = PlacedObjectType.ResourcePoint;
+            
         }
 
         public ResourcePointType resourcePointType
@@ -331,7 +332,10 @@ public class GameHandler : MonoBehaviour
         public  void SetNewResourcePointContent(Vector3 _position, ResourcePointType _resourcePointType, int amount)
         {
             this.resourcePointType = _resourcePointType;
-            this.ContenObj = PoolMgr.Instance.GetObj(_m_resourcePointType.ToString());
+            this.ContenObj = PoolMgr.Instance.GetObj("PlacedObject");
+            this.ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_resourcePointType.ToString());
+            this.ContenObj.GetComponent<SpriteRenderer>().sortingLayerName = "Environment";
+            this.ContenObj.transform.localScale = Vector3.one;
             this.ContenObj.transform.position = _position;
             ContentAmount = MaxAmount;
             Number = ContenObj.transform.GetChild(0).gameObject;
@@ -390,9 +394,12 @@ public class GameHandler : MonoBehaviour
         {
             this.position = position;
             this.itemType = _itemType;
-            this.ContenObj = PoolMgr.Instance.GetObj(itemType.ToString());
+            this.ContenObj = PoolMgr.Instance.GetObj("PlacedObject");
+            this.ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_itemType.ToString());
+            this.ContenObj.GetComponent<SpriteRenderer>().sortingLayerName = "Item";
             ContentAmount = amount;
             this.ContenObj.transform.position = position;
+            this.ContenObj.transform.localScale = Vector3.one;
             SetPerformanceWithAmount();
             Number = ContenObj.transform.GetChild(0).gameObject;
             Number.GetComponent<TextMesh>().text = ContentAmount.ToString();
@@ -401,7 +408,10 @@ public class GameHandler : MonoBehaviour
         public  void SetNewItemContent(GameObject _gameObject,ItemType _itemType,int amount)
         {
             this.itemType = _itemType;
-            this.ContenObj = PoolMgr.Instance.GetObj(itemType.ToString());
+            this.ContenObj = PoolMgr.Instance.GetObj("PlacedObject");
+            this.ContenObj.GetComponent<SpriteRenderer>().sprite = ResMgr.Instance.Load<Sprite>(_itemType.ToString());
+            this.ContenObj.GetComponent<SpriteRenderer>().sortingLayerName = "Item";
+            this.ContenObj.transform.localScale = Vector3.one;
             ContentAmount = amount;
             this.ContenObj.transform.SetParent(_gameObject.transform);
             this.ContenObj.transform.localPosition = Vector3.zero;
@@ -462,7 +472,6 @@ public class GameHandler : MonoBehaviour
 
         public void GiveAmountToAnother(GameObject _gameObject,ItemManager _itemManager)
         {
-            int fordebug = ContentAmount;
             ItemType tempItemType = this.itemType;
             int left = MinusItemContent(_itemManager.GetAmountLeft());
             if(ContentAmount  > 0)

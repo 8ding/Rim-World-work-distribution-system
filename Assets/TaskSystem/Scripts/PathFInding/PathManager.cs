@@ -6,18 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public enum MoveDirection
-{
-    Right,
-    UpRight,
-    Up,
-    UpLeft,
-    Left,
-    DownLeft,
-    Down,
-    DownRight,
-    enumCount,
-}
+
 //路线及地图Grid管理模块
 public class PathManager : BaseManager<PathManager>
 {
@@ -170,6 +159,25 @@ public class PathManager : BaseManager<PathManager>
             _m_ItemManagerOnGroundList.RemoveAt(index);
         }
         return res;
+    }
+
+    public Item GetItemInGrid(Vector3 _Position)
+    {
+        return _m_pathFinding.GetNode(_Position).item;
+    }
+
+    public void SetItemOnGrid(Item _item, Vector3 _Position)
+    { 
+        PathNode pathNode =  _m_pathFinding.GetNode(_Position);
+        pathNode.item = _item;
+        _item.Position = pathNode.worldPosition;
+        _item.itemState = ItemState.OnGround;
+    }
+
+    public void RemoveItemOnGrid(Vector3 _Position)
+    {
+        PathNode pathNode = _m_pathFinding.GetNode(_Position);
+        pathNode.item = null;
     }
 //    /// <summary>
 //    /// 获取给定位置所在网格的给定堆叠类型的剩余可放置内容物数量

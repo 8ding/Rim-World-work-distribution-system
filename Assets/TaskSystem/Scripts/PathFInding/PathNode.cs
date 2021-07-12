@@ -6,6 +6,7 @@ public class PathNode
 {
     public GameHandler.ItemManager itemManager;
     public GameHandler.ResourceManager resourceManager;
+    public Item item;
     public bool isWalkable;
     public int gCost;
     public int hCost;

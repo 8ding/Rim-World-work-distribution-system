@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d5dd529343f2949a13ec5d84d979b7, type: 3}
+  m_Name: so_ItemList
+  m_EditorClassIdentifier: 
+  itemDetailsList:
+  - itemCode: 1001
+    itemType: 0
+    itemDescription: "\u91D1\u77FF\u70B9"
+    itemSpritelittle: {fileID: 21300000, guid: d7d015bffe9579e4fb729ba8398dda14, type: 3}
+    itemSpriteful: {fileID: 21300000, guid: b5069404e18b35a479f15710158f92e4, type: 3}
+    MaxItemQuantity: 75
+    productItemCode: 1003
+    itemLongDescription: 
+    itemUseGridRadius: 0
+    itemUseRadius: 0
+    isStartingItem: 0
+    canBePickedUp: 0
+    canBeDropped: 0
+    canBeEaten: 0
+    canBeCarried: 0
+  - itemCode: 1002
+    itemType: 0
+    itemDescription: "\u6728\u6750\u70B9"
+    itemSpritelittle: {fileID: -723210975712422358, guid: c94c2e2b9bf12ca4680516aeed0708df, type: 3}
+    itemSpriteful: {fileID: -2911837710446230168, guid: c94c2e2b9bf12ca4680516aeed0708df, type: 3}
+    MaxItemQuantity: 75
+    productItemCode: 0
+    itemLongDescription: 
+    itemUseGridRadius: 0
+    itemUseRadius: 0
+    isStartingItem: 0
+    canBePickedUp: 0
+    canBeDropped: 0
+    canBeEaten: 0
+    canBeCarried: 0
+  - itemCode: 1003
+    itemType: 3
+    itemDescription: "\u91D1\u5B50"
+    itemSpritelittle: {fileID: 21300000, guid: 8042daf4c7190bf49ba25891ddabb962, type: 3}
+    itemSpriteful: {fileID: 21300000, guid: 2134876f4d6eafb488b5256c50d8fd1a, type: 3}
+    MaxItemQuantity: 75
+    productItemCode: 0
+    itemLongDescription: 
+    itemUseGridRadius: 0
+    itemUseRadius: 0
+    isStartingItem: 0
+    canBePickedUp: 1
+    canBeDropped: 1
+    canBeEaten: 0
+    canBeCarried: 1

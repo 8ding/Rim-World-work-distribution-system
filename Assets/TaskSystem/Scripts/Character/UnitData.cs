@@ -8,7 +8,7 @@ public class UnitData : MonoBehaviour
     private int characterId;
     private float speed;
     private const int MaxCarryAmount = 3;
-    private int carryAmount = 0;
+
     public GameHandler.ItemManager itemManager;
 
     private void Awake()

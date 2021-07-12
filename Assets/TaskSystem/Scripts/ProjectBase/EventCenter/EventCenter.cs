@@ -20,6 +20,7 @@ public enum EventType
     CreateItem,
     ItemOnGround,
     UnitOccur,
+    ItemRemoveFromUnit,
     Test //测试专用事件
 }
 public interface IArgs
