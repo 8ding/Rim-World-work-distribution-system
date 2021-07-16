@@ -44,7 +44,7 @@ public class GameHandler : MonoBehaviour
         CreateThingManager.Init();
         PathManager.Init();
         InputManager.Instance.StartOrEnd(true);
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.Test, HandleTest);
+        EventCenter.Instance.AddEventListener<string>(EventType.Test, HandleTest);
       
         EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, handleKeyDown);
         MineButton = GameObject.Find("MineButton").transform;
@@ -93,7 +93,7 @@ public class GameHandler : MonoBehaviour
                 }
                 break;
             case KeyCode.Q:
-                EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));
+                EventCenter.Instance.EventTrigger(EventType.Test,"看看会不会输出");
                 break;
         }
     }
@@ -136,16 +136,9 @@ public class GameHandler : MonoBehaviour
     /// 专门用于测试的函数,用于在鼠标点击处测试
     /// </summary>
     /// <param name="_iArgs"></param>
-    private void HandleTest(IArgs _iArgs)
+    private void HandleTest(string _outPut)
     {
-        Vector3 position = (_iArgs as EventParameter<Vector3>).t;
-        if(PathManager.Instance.GetResourceManager(position) == null)
-        {
-            PathManager.Instance.NewResource(position);
-        }
-        ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
-        Vector3 fixedPosition = PathManager.Instance.GetGridPosition(position);
-        resourceManager.AddResourceContent(fixedPosition, ResourcePointType.WoodPoint, 20);
+        Debug.Log(_outPut);
     }
 
     /// <summary>

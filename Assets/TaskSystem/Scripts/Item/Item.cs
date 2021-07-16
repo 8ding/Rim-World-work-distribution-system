@@ -114,7 +114,7 @@ public class Item : MonoBehaviour
                     PathManager.Instance.RemoveItemOnGrid(Position);
                     break;
                 case ItemState.OnUnit:
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ItemRemoveFromUnit, new EventParameter<int>(UnitCode));
+                    EventCenter.Instance.EventTrigger(EventType.ItemRemoveFromUnit, UnitCode);
                     break;
             }
             PoolMgr.Instance.PushObj(gameObject);

@@ -82,6 +82,19 @@ public class EventInfo<T> : IevnetInfo
 {
     public Action<T> action;
 }
+
+public class EventInfo<T1, T2> : IevnetInfo
+{
+    public Action<T1, T2> action;
+}
+public class EventInfo<T1, T2,T3> : IevnetInfo
+{
+    public Action<T1, T2,T3> action;
+}
+public class EventInfo<T1, T2,T3,T4> : IevnetInfo
+{
+    public Action<T1, T2,T3,T4>action;
+}
 public class EventCenter : BaseManager<EventCenter>
 {
     //key-事件的名字（比如怪物死亡)
@@ -104,7 +117,39 @@ public class EventCenter : BaseManager<EventCenter>
             eventDic.Add(name,new EventInfo<T>{action = action});;
         }
     }
-
+    public void AddEventListener<T1,T2>(EventType name, Action<T1,T2> action)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1,T2>).action += action;
+        }
+        else
+        {
+            eventDic.Add(name,new EventInfo<T1,T2>{action = action});;
+        }
+    }
+    public void AddEventListener<T1,T2,T3>(EventType name, Action<T1,T2,T3> action)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1,T2,T3>).action += action;
+        }
+        else
+        {
+            eventDic.Add(name,new EventInfo<T1,T2,T3>{action = action});;
+        }
+    }
+    public void AddEventListener<T1,T2,T3,T4>(EventType name, Action<T1,T2,T3,T4> action)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1,T2,T3,T4>).action += action;
+        }
+        else
+        {
+            eventDic.Add(name,new EventInfo<T1,T2,T3,T4>{action = action});;
+        }
+    }
 
     /// <summary>
     /// 事件的触发
@@ -118,6 +163,27 @@ public class EventCenter : BaseManager<EventCenter>
             (eventDic[name]as EventInfo<T>).action?.Invoke(args);
         }
     }
+    public void EventTrigger<T1,T2>(EventType name,  T1 args1,T2 args2)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1, T2>).action?.Invoke(args1, args2);
+        }
+    }
+    public void EventTrigger<T1,T2,T3>(EventType name,  T1 args1,T2 args2,T3 args3)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1, T2, T3>).action?.Invoke(args1, args2, args3);
+        }
+    }
+    public void EventTrigger<T1,T2,T3,T4>(EventType name,  T1 args1,T2 args2,T3 args3,T4 args4)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1, T2, T3,T4>).action?.Invoke(args1, args2, args3,args4);
+        }
+    }
     /// <summary>
     /// 移除事件监听
     /// </summary>
@@ -127,7 +193,28 @@ public class EventCenter : BaseManager<EventCenter>
     {
         if(eventDic.ContainsKey(name))
         {
-            (eventDic[name] as EventInfo<T>).action -= action;;
+            (eventDic[name] as EventInfo<T>).action -= action;
+        }
+    }
+    public void RemoveEventListener<T1,T2>(EventType name, Action<T1,T2> action)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1,T2>).action -= action;
+        }
+    }
+    public void RemoveEventListener<T1,T2,T3>(EventType name, Action<T1,T2,T3> action)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1,T2,T3>).action -= action;
+        }
+    }
+    public void RemoveEventListener<T1,T2,T3,T4>(EventType name, Action<T1,T2,T3,T4> action)
+    {
+        if(eventDic.ContainsKey(name))
+        {
+            (eventDic[name] as EventInfo<T1,T2,T3,T4>).action -= action;
         }
     }
     /// <summary>

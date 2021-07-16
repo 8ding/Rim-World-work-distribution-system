@@ -20,12 +20,12 @@ public class UnitData : MonoBehaviour
 
     private void OnEnable()
     {
-        EventCenter.Instance.AddEventListener<IArgs>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
+        EventCenter.Instance.AddEventListener<int>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
     }
 
     private void OnDisable()
     {
-        EventCenter.Instance.RemoveEventListener<IArgs>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
+        EventCenter.Instance.RemoveEventListener<int>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
     }
 
     public int CharacterId
@@ -63,9 +63,9 @@ public class UnitData : MonoBehaviour
         return item;
     }
 
-    public void RemovItemOnUnit(IArgs _iArgs)
+    public void RemovItemOnUnit(int unitCode)
     {
-        if((_iArgs as EventParameter<int>).t == characterId)
+        if(unitCode == characterId)
         {
             item = null;
         }
