@@ -7,7 +7,8 @@ public class UnitData : MonoBehaviour
 {
     private int characterId;
     private float speed;
-    private const int MaxCarryAmount = 3;
+    private Item item;
+
 
     public GameHandler.ItemManager itemManager;
 
@@ -37,6 +38,22 @@ public class UnitData : MonoBehaviour
         {
             speed = value;
         }
+    }
+
+    public void SetItemOnUnit(Item _item)
+    {
+        item = _item;
+        _item.itemState = ItemState.OnUnit;
+    }
+
+    public Item GetItemOnUnit()
+    {
+        return item;
+    }
+
+    public void RemovItemOnUnit()
+    {
+        item = null;
     }
 //    public int GetMaxCarryAmount()
 //    {

@@ -170,6 +170,7 @@ public class PathManager : BaseManager<PathManager>
     { 
         PathNode pathNode =  _m_pathFinding.GetNode(_Position);
         pathNode.item = _item;
+        _item.gameObject.transform.position = pathNode.worldPosition;
         _item.Position = pathNode.worldPosition;
         _item.itemState = ItemState.OnGround;
     }

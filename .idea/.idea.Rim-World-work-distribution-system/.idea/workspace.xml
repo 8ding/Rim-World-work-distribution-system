@@ -130,17 +130,17 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/SomeEnum.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Base/SingletonAutoMono.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/UnitData.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Utils/Button_Sprite.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Inventory/InventoryManager.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Item/ItemDetails.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/Setting.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Enums/Enums.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/EventCenter/EventCenter.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Item/Item.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/UnitData.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/Setting.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -363,7 +363,8 @@
       <workItem from="1625381698717" duration="2220000" />
       <workItem from="1625919749074" duration="1136000" />
       <workItem from="1625995282858" duration="6604000" />
-      <workItem from="1626059369210" duration="6791000" />
+      <workItem from="1626059369210" duration="7243000" />
+      <workItem from="1626403323823" duration="2063000" />
     </task>
     <servers />
   </component>
@@ -463,13 +464,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
-          <line>409</line>
+          <line>408</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" initialLine="379">
             <startOffsets>
-              <option value="14309" />
+              <option value="14252" />
             </startOffsets>
             <endOffsets>
-              <option value="14335" />
+              <option value="14278" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="120" />

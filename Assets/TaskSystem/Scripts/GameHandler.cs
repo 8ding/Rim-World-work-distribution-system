@@ -85,13 +85,12 @@ public class GameHandler : MonoBehaviour
                 break;
             case KeyCode.Space:
                 Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
-                if(PathManager.Instance.GetResourceManager(position) == null)
+                if(PathManager.Instance.GetItemInGrid(position) == null)
                 {
-                    PathManager.Instance.NewResource(position);
+                    int itemCode = Setting.GetItemCodeWithName("GoldPoint");
+                    Item item = InventoryManager.Instance().CreateItem(itemCode, InventoryManager.Instance().GetItemDeatails(itemCode).MaxItemQuantity);
+                    PathManager.Instance.SetItemOnGrid(item,position);
                 }
-                ResourceManager resourceManager = PathManager.Instance.GetResourceManager(position);
-                Vector3 fixedposition = PathManager.Instance.GetGridPosition(position);
-                resourceManager.AddResourceContent(fixedposition, ResourcePointType.GoldPoint, 20);
                 break;
             case KeyCode.Q:
                 EventCenter.Instance.EventTrigger<IArgs>(EventType.Test,new EventParameter<Vector3>((MyClass.GetMouseWorldPosition(0, camera1))));

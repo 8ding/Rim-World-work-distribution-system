@@ -12,7 +12,7 @@ public static class Setting
         {"Gold",1003}
     };
 
-    static int GetItemCodeWithName(string name)
+    public static int GetItemCodeWithName(string name)
     {
         if(itemNameCodeDictionary.ContainsKey(name))
         {
