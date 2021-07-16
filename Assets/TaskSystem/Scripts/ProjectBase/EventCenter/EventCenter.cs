@@ -21,6 +21,7 @@ public enum EventType
     ItemOnGround,
     UnitOccur,
     ItemRemoveFromUnit,
+    ClickOnItem,
     Test //测试专用事件
 }
 public interface IArgs

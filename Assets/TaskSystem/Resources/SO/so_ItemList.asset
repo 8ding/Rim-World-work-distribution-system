@@ -18,7 +18,7 @@ MonoBehaviour:
     itemDescription: "\u91D1\u77FF\u70B9"
     itemSpritelittle: {fileID: 21300000, guid: d7d015bffe9579e4fb729ba8398dda14, type: 3}
     itemSpriteful: {fileID: 21300000, guid: b5069404e18b35a479f15710158f92e4, type: 3}
-    MaxItemQuantity: 75
+    MaxItemQuantity: 10
     productItemCode: 1003
     itemLongDescription: 
     itemUseGridRadius: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
     itemDescription: "\u6728\u6750\u70B9"
     itemSpritelittle: {fileID: -723210975712422358, guid: c94c2e2b9bf12ca4680516aeed0708df, type: 3}
     itemSpriteful: {fileID: -2911837710446230168, guid: c94c2e2b9bf12ca4680516aeed0708df, type: 3}
-    MaxItemQuantity: 75
+    MaxItemQuantity: 10
     productItemCode: 0
     itemLongDescription: 
     itemUseGridRadius: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
     itemDescription: "\u91D1\u5B50"
     itemSpritelittle: {fileID: 21300000, guid: 8042daf4c7190bf49ba25891ddabb962, type: 3}
     itemSpriteful: {fileID: 21300000, guid: 2134876f4d6eafb488b5256c50d8fd1a, type: 3}
-    MaxItemQuantity: 75
+    MaxItemQuantity: 10
     productItemCode: 0
     itemLongDescription: 
     itemUseGridRadius: 0

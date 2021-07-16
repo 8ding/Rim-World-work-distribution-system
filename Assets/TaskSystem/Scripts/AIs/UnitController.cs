@@ -360,45 +360,46 @@ public class UnitController : AIBase
     /// <returns></returns>
     public IEnumerator Gather(int _amount,Vector3 _position, Action _onGatherEnd = null)
     {
-        GameHandler.ResourceManager resourceManager = PathManager.Instance.GetResourceManager(_position);
+        Item ResourcePoint = PathManager.Instance.GetItemInGrid(_position);
         
-        if(resourceManager != null && resourceManager.resourcePointType != ResourcePointType.None)
+        if(ResourcePoint != null && ResourcePoint.ItemQuantity != 0)
         {
-            ResourcePointType resourcePointType = resourceManager.resourcePointType;
+
             //根据资源点的类型决定其播放的动画，资源点也是一中堆叠类型，每播放完一次动画，触发一次回调，减少所在位置的堆叠类型内容物的数量
-            switch (resourcePointType)
+            switch (ResourcePoint.ItemCode)
             {
-                case ResourcePointType.GoldPoint:
+                case Item.GoldPoint:
                     characterAnimation.PlayobjectAnimaiton(unitData.CharacterId,ObjectAnimationType.Mine,() =>{
-                        resourceManager.MinusResourceContent(1);
+                        ResourcePoint.RemoveQuantity(1);
                     });
                     break;
-                case ResourcePointType.WoodPoint:
+                case Item.WoodPoint:
                     characterAnimation.PlayobjectAnimaiton(unitData.CharacterId, ObjectAnimationType.Cut, () =>
                     {
-                        resourceManager.MinusResourceContent(1);
+                        ResourcePoint.RemoveQuantity(1);
                     });
                     break;
             }
             //暂存所在位置堆叠类型的内容物数量
-            int temp = resourceManager.ContentAmount;
+            int temp = ResourcePoint.ItemQuantity;
             int tempAmount = _amount;
-            while (resourceManager.IsHasContent())
+            int produceCode = InventoryManager.Instance().GetItemDeatails(ResourcePoint.ItemCode).productItemCode;
+            while (ResourcePoint.IsHasContent())
             {
 
                 //协程直到内容物数量发生变化，即一次采集动作完毕,才继续执行后面的代码
                 yield return new WaitWhile(() =>
                 {
-                    if(temp != resourceManager.ContentAmount)
+                    if(temp != ResourcePoint.ItemQuantity)
                     {
-                        temp = resourceManager.ContentAmount;
+                        temp = ResourcePoint.ItemQuantity;
                         return false;
                     }
                     return true;
                 });
                 bool hasPut = false;
                 int CircleTime = 1;
-                while (!hasPut)
+                while (tempAmount > 0)
                 {
                     for (int i = -1 * CircleTime; i <= CircleTime; i++)
                     {
@@ -408,7 +409,8 @@ public class UnitController : AIBase
                             int count = 0; 
                             while (count < 2)
                             {
-                                tempAmount = putTest(i, j, resourcePointType, tempAmount, ref hasPut);
+                                tempAmount = putTest(i, j, produceCode, tempAmount);
+                                
                                 if(tempAmount == 0)
                                 {
                                     break;
@@ -416,7 +418,7 @@ public class UnitController : AIBase
                                 j *= -1;
                                 count++;
                             }
-                            if(hasPut)
+                            if(tempAmount == 0)
                             {
                                 break;
                             }
@@ -425,13 +427,13 @@ public class UnitController : AIBase
                         {
                             for (int j = -1 * CircleTime; j <= CircleTime; j++)
                             {
-                                tempAmount = putTest(i, j, resourcePointType, tempAmount, ref hasPut);
+                                tempAmount = putTest(i, j, produceCode, tempAmount);
                                 if(tempAmount == 0)
                                 {
                                     break;
                                 }
                             }
-                            if(hasPut)
+                            if(tempAmount == 0)
                             {
                                 break;
                             }
@@ -448,33 +450,21 @@ public class UnitController : AIBase
         _onGatherEnd?.Invoke();
     }
 
-    private int putTest(int i, int j, ResourcePointType _resourcePointType, int tempAmount, ref bool hasPut)
+    private int putTest(int i, int j, int _prouduceCode, int tempAmount)
     {
         UnityEngine.Vector3 position = PathManager.Instance.GetMoveXYPosition(gameObject.transform.position, i, j);
-        if(PathManager.Instance.GetResourceManager(position) != null && PathManager.Instance.GetResourceManager(position).IsHasContent())
+        Item _item = PathManager.Instance.GetItemInGrid(position);
+        ItemDetails  produceDetails = InventoryManager.Instance().GetItemDeatails(_prouduceCode);
+        if(_item != null)
         {
-            return tempAmount;
+            if(_item.ItemCode == _prouduceCode)
+                tempAmount =  _item.AddQuantity(tempAmount);
         }
-
-        if(PathManager.Instance.GetItemManager(position) == null)
+        else
         {
-            PathManager.Instance.NewItem(position);
-        }
-        GameHandler.ItemManager itemManager = PathManager.Instance.GetItemManager(position);
-        switch (_resourcePointType)
-        {
-            //这里如果换成资源与物品对应表更好
-            case ResourcePointType.GoldPoint:
-                tempAmount = itemManager.AddItemContent(position, ItemType.Gold, tempAmount);
-                break;
-            case ResourcePointType.WoodPoint:
-                tempAmount = itemManager.AddItemContent(position, ItemType.Wood, tempAmount);
-                break;
-        }
-        if(tempAmount == 0)
-        {
-            hasPut = true;
-            return 0;
+            _item = InventoryManager.Instance().CreateItem(_prouduceCode, tempAmount);
+            PathManager.Instance.SetItemOnGrid(_item,position);
+            tempAmount = 0;
         }
         return tempAmount;
     }

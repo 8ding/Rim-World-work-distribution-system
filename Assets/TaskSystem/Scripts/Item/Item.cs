@@ -14,9 +14,16 @@ public class Item : MonoBehaviour
     public Vector3 Position;
     private SpriteRenderer spriteRenderer;
     //物品堆积数量
+    [SerializeField]
     private int itemQuantity;
     //持有物品的单位码
     public int UnitCode;
+
+    private bool isInTask = false;
+    //物品码
+    public const int GoldPoint = 1001;
+    public const int WoodPoint = 1002;
+    public const int Gold = 1003;
    
 
     public int ItemCode
@@ -52,10 +59,16 @@ public class Item : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("TestClickFunc");
+        if(!isInTask)
+        {
+            EventCenter.Instance.EventTrigger(EventType.ClickOnItem, this);
+        }
     }
 
-   
+    public void SetWhetherInTask(bool res)
+    {
+        isInTask = res;
+    }
     public void SetContent(int _itemCodeParam,int _itemQuantity)
     {
         if (_itemCodeParam != 0)
@@ -64,6 +77,8 @@ public class Item : MonoBehaviour
             
             ItemDetails itemDetails = InventoryManager.Instance().GetItemDeatails(ItemCode);
             itemQuantity = _itemQuantity;
+            SetWhetherInTask(false);
+            Position = gameObject.transform.position;
             SetContentWithNumber();
             if (itemDetails.itemType == ItemType.Reapable_Scenary)
             {
@@ -102,6 +117,10 @@ public class Item : MonoBehaviour
         return res;
     }
 
+    public bool IsHasContent()
+    {
+        return itemQuantity > 0;
+    }
     public int RemoveQuantity(int number)
     {
         int res = 0;
@@ -117,6 +136,7 @@ public class Item : MonoBehaviour
                     EventCenter.Instance.EventTrigger(EventType.ItemRemoveFromUnit, UnitCode);
                     break;
             }
+            itemQuantity = 0;
             PoolMgr.Instance.PushObj(gameObject);
         }
         else

@@ -127,7 +127,6 @@
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Factory/Factory.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Pool/PoolMgr.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/SomeEnum.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/GameAssets.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/Base/SingletonAutoMono.cs" />
@@ -137,11 +136,14 @@
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathNode.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Enums/Enums.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/PathFInding/PathManager.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/Setting.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/EventCenter/EventCenter.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Character/UnitData.cs" />
-      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Item/Item.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/ProjectBase/EventCenter/EventCenter.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskCenter.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Task/TaskBase.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Commons/Setting.cs" />
       <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs" />
+      <option value="$PROJECT_DIR$/Assets/TaskSystem/Scripts/Item/Item.cs" />
     </changedPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
@@ -297,10 +299,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="19284">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="19284" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -465,13 +467,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs</url>
-          <line>401</line>
+          <line>402</line>
           <properties documentPath="$PROJECT_DIR$/Assets/TaskSystem/Scripts/GameHandler.cs" initialLine="379">
             <startOffsets>
-              <option value="13736" />
+              <option value="13501" />
             </startOffsets>
             <endOffsets>
-              <option value="13762" />
+              <option value="13527" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="120" />
@@ -491,13 +493,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/TaskSystem/Scripts/AIs/UnitController.cs</url>
-          <line>410</line>
+          <line>411</line>
           <properties documentPath="D:\Learn\8ding\Rim-World-work-distribution-system\Assets\TaskSystem\Scripts\AIs\UnitController.cs" initialLine="410" containingFunctionPresentation="method 'Gather'">
             <startOffsets>
-              <option value="12499" />
+              <option value="12429" />
             </startOffsets>
             <endOffsets>
-              <option value="12569" />
+              <option value="12429" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="142" />

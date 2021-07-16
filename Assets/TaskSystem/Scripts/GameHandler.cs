@@ -47,6 +47,7 @@ public class GameHandler : MonoBehaviour
         EventCenter.Instance.AddEventListener<string>(EventType.Test, HandleTest);
       
         EventCenter.Instance.AddEventListener<IArgs>(EventType.GetSomeKeyDown, handleKeyDown);
+        EventCenter.Instance.AddEventListener<Item>(EventType.ClickOnItem,handleItemClicked);
         MineButton = GameObject.Find("MineButton").transform;
         MineButton.GetComponent<Button_UI>().ClickFunc += handleMineButtonClick;
         cutButton = GameObject.Find("CutButton").transform;
@@ -87,7 +88,7 @@ public class GameHandler : MonoBehaviour
                 Vector3 position = MyClass.GetMouseWorldPosition(0, camera1);
                 if(PathManager.Instance.GetItemInGrid(position) == null)
                 {
-                    int itemCode = Setting.GetItemCodeWithName("GoldPoint");
+                    int itemCode = Item.GoldPoint;
                     Item item = InventoryManager.Instance().CreateItem(itemCode, InventoryManager.Instance().GetItemDeatails(itemCode).MaxItemQuantity);
                     PathManager.Instance.SetItemOnGrid(item,position);
                 }
@@ -98,22 +99,22 @@ public class GameHandler : MonoBehaviour
         }
     }
     //处理点击资源点事件
-    private void handleMinePointClicked(ResourceManager resourceManager)
+    private void handleItemClicked(Item _item)
     {
-        switch (resourceManager.resourcePointType)
+        switch (_item.ItemCode)
         {
-            case ResourcePointType.GoldPoint:
+            case Item.GoldPoint:
                 if(mouseState == MouseState.HitMine)
                 {
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickGoldResource,new EventParameter<ResourceManager>(resourceManager));
-                    resourceManager.GetContentObj().gameObject.GetComponent<Button_Sprite>().enabled = false;
+                    TaskCenter.Instance.BuildTask(_item.Position, TaskType.GatherGold);
+                    _item.SetWhetherInTask(true);
                 }
                 break;
-            case ResourcePointType.WoodPoint:
+            case Item.WoodPoint:
                 if (mouseState == MouseState.HitWood)
                 {
-                    EventCenter.Instance.EventTrigger<IArgs>(EventType.ClickWoodResource,new EventParameter<ResourceManager>(resourceManager));
-                    resourceManager.GetContentObj().gameObject.GetComponent<Button_Sprite>().enabled = false;
+                    TaskCenter.Instance.BuildTask(_item.Position, TaskType.GatherWood);
+                    _item.SetWhetherInTask(true);
                 }
                 break;
         }
