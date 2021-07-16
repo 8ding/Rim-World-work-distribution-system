@@ -13,13 +13,13 @@ public class PathManager : BaseManager<PathManager>
 
     private static MyGrid<PathNode> _m_myGrid;
     private static PathFinding _m_pathFinding;
-    private static List<GameHandler.ItemManager> _m_ItemManagerOnGroundList;
+    private static List<Item> _m_ItemManagerOnGroundList;
 
     public static void  Init()
     {
         _m_myGrid = ResMgr.Instance.Load<GridSetting>("New Grid Setting").grid;
         _m_pathFinding = new PathFinding(_m_myGrid);
-        _m_ItemManagerOnGroundList = new List<GameHandler.ItemManager>();
+        _m_ItemManagerOnGroundList = new List<Item>();
     }
     /// <summary>
     /// 自动寻路接口
@@ -87,49 +87,22 @@ public class PathManager : BaseManager<PathManager>
         return _m_pathFinding.GetNode(xy.GetX() + x, xy.GetY() + y).worldPosition; 
     }
     
-    public GameHandler.ResourceManager GetResourceManager(Vector3 _position)
-    {
-        PathNode pathNode= _m_pathFinding.GetNode(_position);
-        return pathNode.resourceManager;
-    }
-
-
-    public void NewResource(Vector3 _position)
-    {
-        _m_pathFinding.GetNode(_position).NewResourceManager();
-    }
-
-    public void NewItem(Vector3 _position)
-    {
-        _m_pathFinding.GetNode(_position).NeWItemManager();
-    }
-    public GameHandler.ItemManager GetItemManager(Vector3 _position)
-    {
-        return _m_pathFinding.GetNode(_position).itemManager;
-    }
-
-    public void AddItemManagerOnGround(GameHandler.ItemManager _itemManager)
-    {
-        _m_ItemManagerOnGroundList.Add(_itemManager);
-        TaskCenter.Instance.BuildTask(GameObject.Find("Crate").gameObject.transform.position,TaskType.CarryItem);
-    }
-
     public bool IsHaveItemOnGround()
     {
         return _m_ItemManagerOnGroundList.Count > 0;
     }
 
-    public GameHandler.ItemManager GetNearestItem(Vector3 _computePosition)
+    public Item GetNearestItem(Vector3 _computePosition)
     {
         float distance = float.MaxValue;
-        GameHandler.ItemManager res = null;
+        Item res = null;
         for (int i = 0; i < _m_ItemManagerOnGroundList.Count; i++)
         {
             if(_m_ItemManagerOnGroundList[i] != null)
             {
-                if(Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition) < distance)
+                if(Vector3.Distance(_m_ItemManagerOnGroundList[i].Position, _computePosition) < distance)
                 {
-                    distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition);
+                    distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].Position, _computePosition);
                     res = _m_ItemManagerOnGroundList[i];
                 }
             }
@@ -137,18 +110,18 @@ public class PathManager : BaseManager<PathManager>
         return res;
     }
 
-    public GameHandler.ItemManager GetNearestItem(Vector3 _computePosition,ItemType _itemType)
+    public Item GetNearestItem(Vector3 _computePosition,int _itemCode)
     {
         float distance = float.MaxValue;
-        GameHandler.ItemManager res = null;
+        Item res = null;
         int index = 0;
         for (int i = 0; i < _m_ItemManagerOnGroundList.Count; i++)
         {
-            if(_m_ItemManagerOnGroundList[i] != null && _m_ItemManagerOnGroundList[i].itemType == _itemType)
+            if(_m_ItemManagerOnGroundList[i] != null && _m_ItemManagerOnGroundList[i].ItemCode == _itemCode)
             {
-                if(Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition) < distance)
+                if(Vector3.Distance(_m_ItemManagerOnGroundList[i].Position, _computePosition) < distance)
                 {
-                    distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].position, _computePosition);
+                    distance = Vector3.Distance(_m_ItemManagerOnGroundList[i].Position, _computePosition);
                     res = _m_ItemManagerOnGroundList[i];
                     index = i;
                 }
@@ -173,6 +146,11 @@ public class PathManager : BaseManager<PathManager>
         _item.gameObject.transform.position = pathNode.worldPosition;
         _item.Position = pathNode.worldPosition;
         _item.itemState = ItemState.OnGround;
+        if(InventoryManager.Instance().GetItemDeatails(_item.ItemCode).canBeCarried)
+        {
+            TaskCenter.Instance.BuildTask(Vector3.zero, TaskType.CarryItem);
+            _m_ItemManagerOnGroundList.Add(_item);
+        }
     }
 
     public void RemoveItemOnGrid(Vector3 _Position)

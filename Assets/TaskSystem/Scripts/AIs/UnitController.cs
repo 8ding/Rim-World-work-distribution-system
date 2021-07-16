@@ -188,24 +188,24 @@ public class UnitController : AIBase
 
     private void interrupt()
     {
-        if(task != null)
-        {
-           switch (task.taskType)
-               {
-                   case TaskType.GatherGold:
-                   case TaskType.GatherWood:
-                       GameHandler.ResourceManager resourceManager = PathManager.Instance.GetResourceManager((task as GatherResourceTask).ResourcePosition);
-                       if(resourceManager.IsHasContent())
-                       { 
-                           //资源点仍剩余资源,重新构建任务
-                           TaskCenter.Instance.BuildTask((task as GatherResourceTask).ResourcePosition,task.taskType);
-                       }
-                       break;
-                   case TaskType.GoToPlace:
-                       Idle();
-                       break;
-               } 
-        }
+        // if(task != null)
+        // {
+        //    switch (task.taskType)
+        //        {
+        //            case TaskType.GatherGold:
+        //            case TaskType.GatherWood:
+        //                GameHandler.ResourceManager resourceManager = PathManager.Instance.GetResourceManager((task as GatherResourceTask).ResourcePosition);
+        //                if(resourceManager.IsHasContent())
+        //                { 
+        //                    //资源点仍剩余资源,重新构建任务
+        //                    TaskCenter.Instance.BuildTask((task as GatherResourceTask).ResourcePosition,task.taskType);
+        //                }
+        //                break;
+        //            case TaskType.GoToPlace:
+        //                Idle();
+        //                break;
+        //        } 
+        // }
     }
     
     private void ChangeControlWay(IArgs _args)
@@ -271,18 +271,19 @@ public class UnitController : AIBase
     {
         if(PathManager.Instance.IsHaveItemOnGround())
         {
-            GameHandler.ItemManager itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position);
+            Item item = PathManager.Instance.GetNearestItem(gameObject.transform.position);
             Vector3 storePosition = _task.StorePosition;
-            ItemType itemType = itemManager.itemType;
-            while (unitData.itemManager.GetAmountLeft() > 0)
+            int itemCode = item.ItemCode;
+            ItemDetails itemDetails = InventoryManager.Instance().GetItemDeatails(itemCode);
+            while (unitData.Item == null || unitData.Item.ItemQuantity < itemDetails.MaxItemQuantity) 
             {
-                itemManager = PathManager.Instance.GetNearestItem(gameObject.transform.position,itemType);
-                if(itemManager == null)
+                item = PathManager.Instance.GetNearestItem(gameObject.transform.position, itemCode);
+                if(item == null)
                 {
                     break;
                 }
                 bool notGrabDone = true;
-                Vector3 position = itemManager.position;
+                Vector3 position = item.Position;
                 moveTo(position,(() =>
                 {
                     Grab(position,(() =>
@@ -472,11 +473,25 @@ public class UnitController : AIBase
     public void Grab(Vector3 _position, Action OnGrabEnd = null)
     {
 
-        GameHandler.ItemManager itemManagerGround = PathManager.Instance.GetItemManager(_position);
-        if(itemManagerGround != null && itemManagerGround.IsHasContent())
+        Item itemInGrid = PathManager.Instance.GetItemInGrid(_position);
+        if(itemInGrid != null && itemInGrid.IsHasContent())
         {
-            GameHandler.ItemManager itemManagerUnit = unitData.itemManager;
-            itemManagerGround.GiveAmountToAnother(gameObject, itemManagerUnit);
+            Item itemOnUnit = unitData.Item;
+            if(itemOnUnit == null)
+            {
+                Item newItem = InventoryManager.Instance().CreateItem(itemInGrid.ItemCode, itemInGrid.ItemQuantity);
+                unitData.SetItemOnUnit(newItem);
+                itemInGrid.RemoveQuantity(itemInGrid.ItemQuantity);
+            }
+            else
+            {
+                int left = unitData.Item.AddQuantity(itemInGrid.ItemQuantity);
+                itemInGrid.RemoveQuantity(itemInGrid.ItemQuantity- left);
+                if(left > 0)
+                {
+                    PathManager.Instance.SetItemOnGrid(itemInGrid,itemInGrid.Position);
+                }
+            }
         }
         OnGrabEnd?.Invoke();
     }
@@ -485,9 +500,7 @@ public class UnitController : AIBase
 
     public void Drop(Action OnDropEnd = null)
     {
-        unitData.itemManager.MinusItemContent(unitData.itemManager.ContentAmount);
-//        unitData.ClearCarry();
-//        OnDropEnd?.Invoke();
+        unitData.Item.RemoveQuantity(InventoryManager.Instance().GetItemDeatails(unitData.Item.ItemCode).MaxItemQuantity);
         OnDropEnd?.Invoke();
     }
     

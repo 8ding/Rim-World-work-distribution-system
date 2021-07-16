@@ -9,15 +9,6 @@ public class UnitData : MonoBehaviour
     private float speed;
     private Item item;
 
-
-    public GameHandler.ItemManager itemManager;
-
-    private void Awake()
-    {
-        itemManager = new GameHandler.ItemManager();
-    
-    }
-
     private void OnEnable()
     {
         EventCenter.Instance.AddEventListener<int>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
@@ -51,11 +42,25 @@ public class UnitData : MonoBehaviour
         }
     }
 
+    public Item Item
+    {
+        get
+        {
+            return item;
+        }
+        set
+        {
+            item = value;
+        }
+    }
+
     public void SetItemOnUnit(Item _item)
     {
         item = _item;
         _item.UnitCode = characterId;
         _item.itemState = ItemState.OnUnit;
+        _item.gameObject.transform.SetParent(this.gameObject.transform);
+        _item.gameObject.transform.localPosition = Vector3.zero;
     }
 
     public Item GetItemOnUnit()
@@ -63,7 +68,7 @@ public class UnitData : MonoBehaviour
         return item;
     }
 
-    public void RemovItemOnUnit(int unitCode)
+    public void RemovItemOnUnit(int unitCode) 
     {
         if(unitCode == characterId)
         {

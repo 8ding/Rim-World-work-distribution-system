@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PathNode
 {
-    public GameHandler.ItemManager itemManager;
-    public GameHandler.ResourceManager resourceManager;
     public Item item;
     public bool isWalkable;
     public int gCost;
@@ -31,14 +29,4 @@ public class PathNode
         this.isWalkable = isWalkable;
     }
 
-    public void NewResourceManager()
-    {
-        resourceManager = new GameHandler.ResourceManager();
-    }
-
-    public void NeWItemManager()
-    {
-        itemManager = new GameHandler.ItemManager();
-    }
-    
 }
