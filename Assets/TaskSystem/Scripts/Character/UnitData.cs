@@ -15,6 +15,17 @@ public class UnitData : MonoBehaviour
     private void Awake()
     {
         itemManager = new GameHandler.ItemManager();
+    
+    }
+
+    private void OnEnable()
+    {
+        EventCenter.Instance.AddEventListener<IArgs>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
+    }
+
+    private void OnDisable()
+    {
+        EventCenter.Instance.RemoveEventListener<IArgs>(EventType.ItemRemoveFromUnit,RemovItemOnUnit);
     }
 
     public int CharacterId
@@ -43,6 +54,7 @@ public class UnitData : MonoBehaviour
     public void SetItemOnUnit(Item _item)
     {
         item = _item;
+        _item.UnitCode = characterId;
         _item.itemState = ItemState.OnUnit;
     }
 
@@ -51,9 +63,12 @@ public class UnitData : MonoBehaviour
         return item;
     }
 
-    public void RemovItemOnUnit()
+    public void RemovItemOnUnit(IArgs _iArgs)
     {
-        item = null;
+        if((_iArgs as EventParameter<int>).t == characterId)
+        {
+            item = null;
+        }
     }
 //    public int GetMaxCarryAmount()
 //    {
